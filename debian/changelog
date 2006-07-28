@@ -1,0 +1,33 @@
+paramiko (1.5.2-0.1) unstable; urgency=low
+
+  [ Wouter van Heyst ]
+  * Non-maintainer upload.
+  * New upstream release.
+    + Drop python_script_fix.patch and pathmangle.sh, no longer needed.
+  * Merge some ubuntu changes.
+    + Add watch file.
+    + Update copyright file.
+
+ -- Robert Collins <robertc@robertcollins.net>  Fri, 28 Jul 2006 14:26:29 +1000
+
+paramiko (1.5-1.1) unstable; urgency=low
+
+  * Non-maintainer upload.
+  * Fix B-D-I/B-D glitches.
+  * Update package to the new python policy (Closes: #373472).
+
+ -- Pierre Habouzit <madcoder@debian.org>  Thu, 29 Jun 2006 23:00:34 +0200
+
+paramiko (1.5-1) unstable; urgency=low
+
+  * New upstream release.
+  * Initial package upload (Closes: #292942).
+
+ -- Jeremy T. Bouse <jbouse@debian.org>  Tue, 18 Oct 2005 14:57:46 -0700
+
+paramiko (1.1-1) unstable; urgency=low
+
+  * Initial Release.
+
+ -- Guido Guenther <agx@debian.org>  Mon, 31 Jan 2005 11:24:37 +0100
+
