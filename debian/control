@@ -1,0 +1,21 @@
+Source: paramiko
+Section: python
+Priority: optional
+Maintainer: Jeremy T. Bouse <jbouse@debian.org>
+Uploaders: Guido Guenther <agx@debian.org>
+Build-Depends: cdbs (>= 0.4.43), debhelper (>= 5.0.37.2), python-all-dev (>= 2.3.5-11)
+Build-Depends-Indep: python-support (>= 0.3)
+Standards-Version: 3.7.2
+
+Package: python-paramiko
+Architecture: all
+Depends: ${misc:Depends}, ${python:Depends}, python-crypto
+Provides: ${python:Provides}
+Replaces: python2.3-paramiko (<< 1.5-1.1), python2.4-paramiko (<< 1.5-1.1)
+Conflicts: python2.3-paramiko (<< 1.5-1.1), python2.4-paramiko (<< 1.5-1.1)
+XB-Python-Version: ${python:Versions}
+Description: make SSH2 connections with python
+ This is a library for making SSH2 connections (client or server).
+ Emphasis is on using SSH2 as an alternative to SSL for making secure
+ connections between python scripts.  All major ciphers and hash methods
+ are supported.  SFTP client and server mode are both supported too.
