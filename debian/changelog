@@ -1,3 +1,49 @@
+paramiko (1.7.4-0.1) unstable; urgency=medium
+
+  * NMU.
+  * New upstream version.
+    - Fix random number regression (stop using RandomPool). Closes: #490961.
+
+ -- Matthias Klose <doko@debian.org>  Fri, 18 Jul 2008 14:16:08 +0200
+
+paramiko (1.7.3-1) unstable; urgency=low
+
+  * New upstream version
+    Closes: #475505.
+  * Acknowledge NMU changes
+  * Missing examples included
+    Closes: #455547.
+  * Confirmed new upstream version corrected FutureWarning
+    Closes: #405552.
+
+ -- Jeremy T. Bouse <jbouse@debian.org>  Sun, 04 May 2008 11:41:27 -0400
+
+paramiko (1.7.2-0.1) unstable; urgency=low
+
+  * Non-maintainer upload to DELAYED/14-day. (¹)
+  * New upstream release. (Closes: #415060)
+  * Drop the patch introduced in 1.6.4-1.1, as it's part of 1.7.2.
+
+    (¹) Counting since the initial 1.7.1-0.1 upload in Jan 13th.
+
+ -- Adeodato Simó <dato@net.com.org.es>  Thu, 24 Jan 2008 13:54:18 +0100
+
+paramiko (1.6.4-1.1) unstable; urgency=high
+
+  * Non-maintainer upload by security team.
+  * Fix insecure use of RandomPool if paramiko is used for threads or multiple
+    forked processes. This enables one session to predict random data of
+    another session using its own random data.
+    (CVE id pending; Closes: #460706).
+
+ -- Nico Golde <nion@debian.org>  Mon, 14 Jan 2008 19:36:40 +0100
+
+paramiko (1.6.4-1) unstable; urgency=low
+
+  * New upstream release (Closes: #344734, #382348).
+
+ -- Jeremy T. Bouse <jbouse@debian.org>  Tue, 26 Dec 2006 15:48:42 -0500
+
 paramiko (1.5.2-0.1) unstable; urgency=low
 
   [ Wouter van Heyst ]
