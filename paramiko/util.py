@@ -1,4 +1,4 @@
-# Copyright (C) 2003-2005 Robey Pointer <robey@lag.net>
+# Copyright (C) 2003-2007  Robey Pointer <robey@lag.net>
 #
 # This file is part of paramiko.
 #
@@ -22,13 +22,14 @@ Useful functions used by the rest of paramiko.
 
 from __future__ import generators
 
-import fnmatch
+from binascii import hexlify, unhexlify
 import sys
 import struct
 import traceback
 import threading
 
 from paramiko.common import *
+from paramiko.config import SSHConfig
 
 
 # Change by RogerB - python < 2.3 doesn't have enumerate so we implement it
@@ -115,12 +116,10 @@ def format_binary_line(data):
     return '%-50s %s' % (left, right)
 
 def hexify(s):
-    "turn a string into a hex sequence"
-    return ''.join(['%02X' % ord(c) for c in s])
+    return hexlify(s).upper()
 
 def unhexify(s):
-    "turn a hex sequence back into a string"
-    return ''.join([chr(int(s[i:i+2], 16)) for i in range(0, len(s), 2)])
+    return unhexlify(s)
 
 def safe_string(s):
     out = ''
@@ -168,12 +167,12 @@ def generate_key_bytes(hashclass, salt, key, nbytes):
     if len(salt) > 8:
         salt = salt[:8]
     while nbytes > 0:
-        hash = hashclass.new()
+        hash_obj = hashclass.new()
         if len(digest) > 0:
-            hash.update(digest)
-        hash.update(key)
-        hash.update(salt)
-        digest = hash.digest()
+            hash_obj.update(digest)
+        hash_obj.update(key)
+        hash_obj.update(salt)
+        digest = hash_obj.digest()
         size = min(nbytes, len(digest))
         keydata += digest[:size]
         nbytes -= size
@@ -189,117 +188,29 @@ def load_host_keys(filename):
     This type of file unfortunately doesn't exist on Windows, but on posix,
     it will usually be stored in C{os.path.expanduser("~/.ssh/known_hosts")}.
     
+    Since 1.5.3, this is just a wrapper around L{HostKeys}.
+
     @param filename: name of the file to read host keys from
     @type filename: str
     @return: dict of host keys, indexed by hostname and then keytype
     @rtype: dict(hostname, dict(keytype, L{PKey <paramiko.pkey.PKey>}))
     """
-    import base64
-    from rsakey import RSAKey
-    from dsskey import DSSKey
-    
-    keys = {}
-    f = file(filename, 'r')
-    for line in f:
-        line = line.strip()
-        if (len(line) == 0) or (line[0] == '#'):
-            continue
-        keylist = line.split(' ')
-        if len(keylist) != 3:
-            continue
-        hostlist, keytype, key = keylist
-        hosts = hostlist.split(',')
-        for host in hosts:
-            if not keys.has_key(host):
-                keys[host] = {}
-            if keytype == 'ssh-rsa':
-                keys[host][keytype] = RSAKey(data=base64.decodestring(key))
-            elif keytype == 'ssh-dss':
-                keys[host][keytype] = DSSKey(data=base64.decodestring(key))
-    f.close()
-    return keys
+    from paramiko.hostkeys import HostKeys
+    return HostKeys(filename)
 
 def parse_ssh_config(file_obj):
     """
-    Parse a config file of the format used by OpenSSH, and return an object
-    that can be used to make queries to L{lookup_ssh_host_config}.  The
-    format is described in OpenSSH's C{ssh_config} man page.  This method is
-    provided primarily as a convenience to posix users (since the OpenSSH
-    format is a de-facto standard on posix) but should work fine on Windows
-    too.
-
-    The return value is currently a list of dictionaries, each containing
-    host-specific configuration, but this is considered an implementation
-    detail and may be subject to change in later versions.
-
-    @param file_obj: a file-like object to read the config file from
-    @type file_obj: file
-    @return: opaque configuration object
-    @rtype: object
+    Provided only as a backward-compatible wrapper around L{SSHConfig}.
     """
-    ret = []
-    config = { 'host': '*' }
-    ret.append(config)
-
-    for line in file_obj:
-        line = line.rstrip('\n').lstrip()
-        if (line == '') or (line[0] == '#'):
-            continue
-        if '=' in line:
-            key, value = line.split('=', 1)
-            key = key.strip().lower()
-        else:
-            # find first whitespace, and split there
-            i = 0
-            while (i < len(line)) and not line[i].isspace():
-                i += 1
-            if i == len(line):
-                raise Exception('Unparsable line: %r' % line)
-            key = line[:i].lower()
-            value = line[i:].lstrip()
-
-        if key == 'host':
-            # do we have a pre-existing host config to append to?
-            matches = [c for c in ret if c['host'] == value]
-            if len(matches) > 0:
-                config = matches[0]
-            else:
-                config = { 'host': value }
-                ret.append(config)
-        else:
-            config[key] = value
-
-    return ret
+    config = SSHConfig()
+    config.parse(file_obj)
+    return config
 
 def lookup_ssh_host_config(hostname, config):
     """
-    Return a dict of config options for a given hostname.  The C{config} object
-    must come from L{parse_ssh_config}.
-
-    The host-matching rules of OpenSSH's C{ssh_config} man page are used, which
-    means that all configuration options from matching host specifications are
-    merged, with more specific hostmasks taking precedence.  In other words, if
-    C{"Port"} is set under C{"Host *"} and also C{"Host *.example.com"}, and
-    the lookup is for C{"ssh.example.com"}, then the port entry for
-    C{"Host *.example.com"} will win out.
-
-    The keys in the returned dict are all normalized to lowercase (look for
-    C{"port"}, not C{"Port"}.  No other processing is done to the keys or
-    values.
-
-    @param hostname: the hostname to lookup
-    @type hostname: str
-    @param config: the config object to search
-    @type config: object
+    Provided only as a backward-compatible wrapper around L{SSHConfig}.
     """
-    matches = [x for x in config if fnmatch.fnmatch(hostname, x['host'])]
-    # sort in order of shortest match (usually '*') to longest
-    matches.sort(key=lambda x: len(x['host']))
-    ret = {}
-    for m in matches:
-        ret.update(m)
-    del ret['host']
-    return ret
+    return config.lookup(hostname)
 
 def mod_inverse(x, m):
     # it's crazy how small python can make this function.
@@ -355,3 +266,5 @@ def get_logger(name):
     l = logging.getLogger(name)
     l.addFilter(_pfilter)
     return l
+
+

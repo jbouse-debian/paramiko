@@ -1,4 +1,4 @@
-# Copyright (C) 2003-2005 Robey Pointer <robey@lag.net>
+# Copyright (C) 2003-2007  Robey Pointer <robey@lag.net>
 #
 # This file is part of paramiko.
 #
@@ -21,7 +21,7 @@ Common constants and global variables.
 """
 
 MSG_DISCONNECT, MSG_IGNORE, MSG_UNIMPLEMENTED, MSG_DEBUG, MSG_SERVICE_REQUEST, \
-	MSG_SERVICE_ACCEPT = range(1, 7)
+    MSG_SERVICE_ACCEPT = range(1, 7)
 MSG_KEXINIT, MSG_NEWKEYS = range(20, 22)
 MSG_USERAUTH_REQUEST, MSG_USERAUTH_FAILURE, MSG_USERAUTH_SUCCESS, \
         MSG_USERAUTH_BANNER = range(50, 54)
@@ -29,9 +29,9 @@ MSG_USERAUTH_PK_OK = 60
 MSG_USERAUTH_INFO_REQUEST, MSG_USERAUTH_INFO_RESPONSE = range(60, 62)
 MSG_GLOBAL_REQUEST, MSG_REQUEST_SUCCESS, MSG_REQUEST_FAILURE = range(80, 83)
 MSG_CHANNEL_OPEN, MSG_CHANNEL_OPEN_SUCCESS, MSG_CHANNEL_OPEN_FAILURE, \
-	MSG_CHANNEL_WINDOW_ADJUST, MSG_CHANNEL_DATA, MSG_CHANNEL_EXTENDED_DATA, \
-	MSG_CHANNEL_EOF, MSG_CHANNEL_CLOSE, MSG_CHANNEL_REQUEST, \
-	MSG_CHANNEL_SUCCESS, MSG_CHANNEL_FAILURE = range(90, 101)
+    MSG_CHANNEL_WINDOW_ADJUST, MSG_CHANNEL_DATA, MSG_CHANNEL_EXTENDED_DATA, \
+    MSG_CHANNEL_EOF, MSG_CHANNEL_CLOSE, MSG_CHANNEL_REQUEST, \
+    MSG_CHANNEL_SUCCESS, MSG_CHANNEL_FAILURE = range(90, 101)
 
 
 # for debugging:
@@ -95,21 +95,10 @@ CONNECTION_FAILED_CODE = {
 DISCONNECT_SERVICE_NOT_AVAILABLE, DISCONNECT_AUTH_CANCELLED_BY_USER, \
     DISCONNECT_NO_MORE_AUTH_METHODS_AVAILABLE = 7, 13, 14
 
-
-from Crypto.Util.randpool import PersistentRandomPool, RandomPool
+from rng import StrongLockingRandomPool
 
 # keep a crypto-strong PRNG nearby
-try:
-    randpool = PersistentRandomPool(os.path.join(os.path.expanduser('~'), '/.randpool'))
-except:
-    # the above will likely fail on Windows - fall back to non-persistent random pool
-    randpool = RandomPool()
-
-try:
-    randpool.randomize()
-except:
-    # earlier versions of pyCrypto (pre-2.0) don't have randomize()
-    pass
+randpool = StrongLockingRandomPool()
 
 import sys
 if sys.version_info < (2, 3):
@@ -128,6 +117,7 @@ if sys.version_info < (2, 3):
 else:
     import logging
     PY22 = False
+
 
 DEBUG = logging.DEBUG
 INFO = logging.INFO

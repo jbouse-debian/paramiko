@@ -1,6 +1,4 @@
-from distutils.core import setup
-
-# Copyright (C) 2003-2005 Robey Pointer <robey@lag.net>
+# Copyright (C) 2003-2008  Robey Pointer <robey@lag.net>
 #
 # This file is part of paramiko.
 #
@@ -26,17 +24,37 @@ connections between python scripts.  All major ciphers and hash methods
 are supported.  SFTP client and server mode are both supported too.
 
 Required packages:
-    pyCrypt
+    pyCrypto
 '''
 
+# if someday we want to *require* setuptools, uncomment this:
+# (it will cause setuptools to be automatically downloaded)
+#import ez_setup
+#ez_setup.use_setuptools()
+
+import sys
+try:
+    from setuptools import setup
+    kw = {
+        'install_requires': 'pycrypto >= 1.9',
+    }
+except ImportError:
+    from distutils.core import setup
+    kw = {}
+    
+if sys.platform == 'darwin':
+	import setup_helper
+	setup_helper.install_custom_make_tarball()
+
+
 setup(name = "paramiko",
-      version = "1.5.2",
+      version = "1.7.4",
       description = "SSH2 protocol library",
       author = "Robey Pointer",
       author_email = "robey@lag.net",
       url = "http://www.lag.net/paramiko/",
       packages = [ 'paramiko' ],
-      download_url = 'http://www.lag.net/paramiko/download/paramiko-1.5.2.zip',
+      download_url = 'http://www.lag.net/paramiko/download/paramiko-1.7.4.zip',
       license = 'LGPL',
       platforms = 'Posix; MacOS X; Windows',
       classifiers = [ 'Development Status :: 5 - Production/Stable',
@@ -46,4 +64,5 @@ setup(name = "paramiko",
                       'Topic :: Internet',
                       'Topic :: Security :: Cryptography' ],
       long_description = longdesc,
+      **kw
       )

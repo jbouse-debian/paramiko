@@ -1,4 +1,4 @@
-# Copyright (C) 2003-2005 Robey Pointer <robey@lag.net>
+# Copyright (C) 2003-2007  Robey Pointer <robey@lag.net>
 #
 # This file is part of paramiko.
 #
@@ -21,6 +21,7 @@ L{AuthHandler}
 """
 
 import threading
+import weakref
 
 # this helps freezing utils
 import encodings.utf_8
@@ -28,7 +29,8 @@ import encodings.utf_8
 from paramiko.common import *
 from paramiko import util
 from paramiko.message import Message
-from paramiko.ssh_exception import SSHException, BadAuthenticationType, PartialAuthentication
+from paramiko.ssh_exception import SSHException, AuthenticationException, \
+    BadAuthenticationType, PartialAuthentication
 from paramiko.server import InteractiveQuery
 
 
@@ -38,13 +40,15 @@ class AuthHandler (object):
     """
     
     def __init__(self, transport):
-        self.transport = transport
+        self.transport = weakref.proxy(transport)
         self.username = None
         self.authenticated = False
         self.auth_event = None
         self.auth_method = ''
         self.password = None
         self.private_key = None
+        self.interactive_handler = None
+        self.submethods = None
         # for server mode:
         self.auth_username = None
         self.auth_fail_count = 0
@@ -154,15 +158,15 @@ class AuthHandler (object):
             event.wait(0.1)
             if not self.transport.is_active():
                 e = self.transport.get_exception()
-                if e is None:
-                    e = SSHException('Authentication failed.')
+                if (e is None) or issubclass(e.__class__, EOFError):
+                    e = AuthenticationException('Authentication failed.')
                 raise e
             if event.isSet():
                 break
         if not self.is_authenticated():
             e = self.transport.get_exception()
             if e is None:
-                e = SSHException('Authentication failed.')
+                e = AuthenticationException('Authentication failed.')
             # this is horrible.  python Exception isn't yet descended from
             # object, so type(e) won't work. :(
             if issubclass(e.__class__, PartialAuthentication):
@@ -193,7 +197,10 @@ class AuthHandler (object):
             m.add_string(self.auth_method)
             if self.auth_method == 'password':
                 m.add_boolean(False)
-                m.add_string(self.password.encode('UTF-8'))
+                password = self.password
+                if isinstance(password, unicode):
+                    password = password.encode('UTF-8')
+                m.add_string(password)
             elif self.auth_method == 'publickey':
                 m.add_boolean(True)
                 m.add_string(self.private_key.get_name())
@@ -276,12 +283,22 @@ class AuthHandler (object):
             result = self.transport.server_object.check_auth_none(username)
         elif method == 'password':
             changereq = m.get_boolean()
-            password = m.get_string().decode('UTF-8', 'replace')
+            password = m.get_string()
+            try:
+                password = password.decode('UTF-8')
+            except UnicodeError:
+                # some clients/servers expect non-utf-8 passwords!
+                # in this case, just return the raw byte string.
+                pass
             if changereq:
                 # always treated as failure, since we don't support changing passwords, but collect
                 # the list of valid auth types from the callback anyway
                 self.transport._log(DEBUG, 'Auth request to change passwords (rejected)')
-                newpassword = m.get_string().decode('UTF-8', 'replace')
+                newpassword = m.get_string()
+                try:
+                    newpassword = newpassword.decode('UTF-8', 'replace')
+                except UnicodeError:
+                    pass
                 result = AUTH_FAILED
             else:
                 result = self.transport.server_object.check_auth_password(username, password)
@@ -332,7 +349,7 @@ class AuthHandler (object):
         self._send_auth_result(username, method, result)
 
     def _parse_userauth_success(self, m):
-        self.transport._log(INFO, 'Authentication successful!')
+        self.transport._log(INFO, 'Authentication (%s) successful!' % self.auth_method)
         self.authenticated = True
         self.transport._auth_trigger()
         if self.auth_event != None:
@@ -346,11 +363,11 @@ class AuthHandler (object):
             self.transport._log(DEBUG, 'Methods: ' + str(authlist))
             self.transport.saved_exception = PartialAuthentication(authlist)
         elif self.auth_method not in authlist:
-            self.transport._log(INFO, 'Authentication type not permitted.')
+            self.transport._log(INFO, 'Authentication type (%s) not permitted.' % self.auth_method)
             self.transport._log(DEBUG, 'Allowed methods: ' + str(authlist))
             self.transport.saved_exception = BadAuthenticationType('Bad authentication type', authlist)
         else:
-            self.transport._log(INFO, 'Authentication failed.')
+            self.transport._log(INFO, 'Authentication (%s) failed.' % self.auth_method)
         self.authenticated = False
         self.username = None
         if self.auth_event != None:
@@ -406,5 +423,4 @@ class AuthHandler (object):
         MSG_USERAUTH_INFO_REQUEST: _parse_userauth_info_request,
         MSG_USERAUTH_INFO_RESPONSE: _parse_userauth_info_response,
     }
-
 

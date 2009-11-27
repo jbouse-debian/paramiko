@@ -1,4 +1,4 @@
-# Copyright (C) 2003-2005 Robey Pointer <robey@lag.net>
+# Copyright (C) 2003-2007  Robey Pointer <robey@lag.net>
 #
 # This file is part of paramiko.
 #
@@ -41,6 +41,8 @@ class InteractiveQuery (object):
         @type name: str
         @param instructions: user instructions (usually short) about this query
         @type instructions: str
+        @param prompts: one or more authentication prompts
+        @type prompts: str
         """
         self.name = name
         self.instructions = instructions
@@ -90,6 +92,7 @@ class ServerInterface (object):
             - L{check_channel_shell_request}
             - L{check_channel_subsystem_request}
             - L{check_channel_window_change_request}
+            - L{check_channel_x11_request}
 
         The C{chanid} parameter is a small number that uniquely identifies the
         channel within a L{Transport}.  A L{Channel} object is not created
@@ -273,6 +276,42 @@ class ServerInterface (object):
         """
         return AUTH_FAILED
         
+    def check_port_forward_request(self, address, port):
+        """
+        Handle a request for port forwarding.  The client is asking that
+        connections to the given address and port be forwarded back across
+        this ssh connection.  An address of C{"0.0.0.0"} indicates a global
+        address (any address associated with this server) and a port of C{0}
+        indicates that no specific port is requested (usually the OS will pick
+        a port).
+        
+        The default implementation always returns C{False}, rejecting the
+        port forwarding request.  If the request is accepted, you should return
+        the port opened for listening.
+        
+        @param address: the requested address
+        @type address: str
+        @param port: the requested port
+        @type port: int
+        @return: the port number that was opened for listening, or C{False} to
+            reject
+        @rtype: int
+        """
+        return False
+    
+    def cancel_port_forward_request(self, address, port):
+        """
+        The client would like to cancel a previous port-forwarding request.
+        If the given address and port is being forwarded across this ssh
+        connection, the port should be closed.
+        
+        @param address: the forwarded address
+        @type address: str
+        @param port: the forwarded port
+        @type port: int
+        """
+        pass
+        
     def check_global_request(self, kind, msg):
         """
         Handle a global request of the given C{kind}.  This method is called
@@ -291,6 +330,9 @@ class ServerInterface (object):
 
         The default implementation always returns C{False}, indicating that it
         does not support any global requests.
+        
+        @note: Port forwarding requests are handled separately, in
+            L{check_port_forward_request}.
 
         @param kind: the kind of global request being made.
         @type kind: str
@@ -426,6 +468,71 @@ class ServerInterface (object):
         @rtype: bool
         """
         return False
+    
+    def check_channel_x11_request(self, channel, single_connection, auth_protocol, auth_cookie, screen_number):
+        """
+        Determine if the client will be provided with an X11 session.  If this
+        method returns C{True}, X11 applications should be routed through new
+        SSH channels, using L{Transport.open_x11_channel}.
+        
+        The default implementation always returns C{False}.
+        
+        @param channel: the L{Channel} the X11 request arrived on
+        @type channel: L{Channel}
+        @param single_connection: C{True} if only a single X11 channel should
+            be opened
+        @type single_connection: bool
+        @param auth_protocol: the protocol used for X11 authentication
+        @type auth_protocol: str
+        @param auth_cookie: the cookie used to authenticate to X11
+        @type auth_cookie: str
+        @param screen_number: the number of the X11 screen to connect to
+        @type screen_number: int
+        @return: C{True} if the X11 session was opened; C{False} if not
+        @rtype: bool
+        """
+        return False
+    
+    def check_channel_direct_tcpip_request(self, chanid, origin, destination):
+        """
+        Determine if a local port forwarding channel will be granted, and
+        return C{OPEN_SUCCEEDED} or an error code.  This method is
+        called in server mode when the client requests a channel, after
+        authentication is complete.
+
+        The C{chanid} parameter is a small number that uniquely identifies the
+        channel within a L{Transport}.  A L{Channel} object is not created
+        unless this method returns C{OPEN_SUCCEEDED} -- once a
+        L{Channel} object is created, you can call L{Channel.get_id} to
+        retrieve the channel ID.
+
+        The origin and destination parameters are (ip_address, port) tuples
+        that correspond to both ends of the TCP connection in the forwarding
+        tunnel.
+
+        The return value should either be C{OPEN_SUCCEEDED} (or
+        C{0}) to allow the channel request, or one of the following error
+        codes to reject it:
+            - C{OPEN_FAILED_ADMINISTRATIVELY_PROHIBITED}
+            - C{OPEN_FAILED_CONNECT_FAILED}
+            - C{OPEN_FAILED_UNKNOWN_CHANNEL_TYPE}
+            - C{OPEN_FAILED_RESOURCE_SHORTAGE}
+        
+        The default implementation always returns
+        C{OPEN_FAILED_ADMINISTRATIVELY_PROHIBITED}.
+
+        @param chanid: ID of the channel
+        @type chanid: int
+        @param origin: 2-tuple containing the IP address and port of the
+            originator (client side)
+        @type origin: tuple
+        @param destination: 2-tuple containing the IP address and port of the
+            destination (server side)
+        @type destination: tuple
+        @return: a success or failure code (listed above)
+        @rtype: int
+        """
+        return OPEN_FAILED_ADMINISTRATIVELY_PROHIBITED
 
 
 class SubsystemHandler (threading.Thread):
@@ -443,8 +550,6 @@ class SubsystemHandler (threading.Thread):
     authenticated and requests subsytem C{"mp3"}, an object of class
     C{MP3Handler} will be created, and L{start_subsystem} will be called on
     it from a new thread.
-
-    @since: ivysaur
     """
     def __init__(self, channel, name, server):
         """

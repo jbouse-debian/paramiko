@@ -1,4 +1,4 @@
-# Copyright (C) 2003-2005 John Rochester <john@jrochester.org>
+# Copyright (C) 2003-2007  John Rochester <john@jrochester.org>
 #
 # This file is part of paramiko.
 #
@@ -55,20 +55,33 @@ class Agent:
         @raise SSHException: if an SSH agent is found, but speaks an
             incompatible protocol
         """
+        self.keys = ()
         if ('SSH_AUTH_SOCK' in os.environ) and (sys.platform != 'win32'):
             conn = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
-            conn.connect(os.environ['SSH_AUTH_SOCK'])
+            try:
+                conn.connect(os.environ['SSH_AUTH_SOCK'])
+            except:
+                # probably a dangling env var: the ssh agent is gone
+                return
             self.conn = conn
-            type, result = self._send_message(chr(SSH2_AGENTC_REQUEST_IDENTITIES))
-            if type != SSH2_AGENT_IDENTITIES_ANSWER:
-                raise SSHException('could not get keys from ssh-agent')
-            keys = []
-            for i in range(result.get_int()):
-                keys.append(AgentKey(self, result.get_string()))
-                result.get_string()
-            self.keys = tuple(keys)
+        elif sys.platform == 'win32':
+            import win_pageant
+            if win_pageant.can_talk_to_agent():
+                self.conn = win_pageant.PageantConnection()
+            else:
+                return
         else:
-            self.keys = ()
+            # no agent support
+            return
+            
+        ptype, result = self._send_message(chr(SSH2_AGENTC_REQUEST_IDENTITIES))
+        if ptype != SSH2_AGENT_IDENTITIES_ANSWER:
+            raise SSHException('could not get keys from ssh-agent')
+        keys = []
+        for i in range(result.get_int()):
+            keys.append(AgentKey(self, result.get_string()))
+            result.get_string()
+        self.keys = tuple(keys)
 
     def close(self):
         """
@@ -132,7 +145,7 @@ class AgentKey(PKey):
         msg.add_string(self.blob)
         msg.add_string(data)
         msg.add_int(0)
-        type, result = self.agent._send_message(msg)
-        if type != SSH2_AGENT_SIGN_RESPONSE:
+        ptype, result = self.agent._send_message(msg)
+        if ptype != SSH2_AGENT_SIGN_RESPONSE:
             raise SSHException('key cannot be used for signing')
         return result.get_string()

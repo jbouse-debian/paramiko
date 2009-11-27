@@ -1,4 +1,4 @@
-# Copyright (C) 2003-2005 Robey Pointer <robey@lag.net>
+# Copyright (C) 2003-2007  Robey Pointer <robey@lag.net>
 #
 # This file is part of paramiko.
 #
@@ -20,17 +20,30 @@
 Packetizer.
 """
 
+import errno
 import select
 import socket
 import struct
 import threading
 import time
-from Crypto.Hash import HMAC
 
 from paramiko.common import *
 from paramiko import util
 from paramiko.ssh_exception import SSHException
 from paramiko.message import Message
+
+
+got_r_hmac = False
+try:
+    import r_hmac
+    got_r_hmac = True
+except ImportError:
+    pass
+def compute_hmac(key, message, digest_class):
+    if got_r_hmac:
+        return r_hmac.HMAC(key, message, digest_class).digest()
+    from Crypto.Hash import HMAC
+    return HMAC.HMAC(key, message, digest_class).digest()
 
 
 class NeedRekeyException (Exception):
@@ -54,6 +67,7 @@ class Packetizer (object):
         self.__dump_packets = False
         self.__need_rekey = False
         self.__init_count = 0
+        self.__remainder = ''
         
         # used for noticing when to re-key:
         self.__sent_bytes = 0
@@ -86,13 +100,6 @@ class Packetizer (object):
         self.__keepalive_last = time.time()
         self.__keepalive_callback = None
         
-    def __del__(self):
-        # this is not guaranteed to be called, but we should try.
-        try:
-            self.__socket.close()
-        except:
-            pass
-
     def set_log(self, log):
         """
         Set the python log object to use for logging.
@@ -142,6 +149,7 @@ class Packetizer (object):
         
     def close(self):
         self.__closed = True
+        self.__socket.close()
 
     def set_hexdump(self, hexdump):
         self.__dump_packets = hexdump
@@ -186,10 +194,16 @@ class Packetizer (object):
         @raise EOFError: if the socket was closed before all the bytes could
             be read
         """
-        if PY22:
-            return self._py22_read_all(n)
         out = ''
+        # handle over-reading from reading the banner line
+        if len(self.__remainder) > 0:
+            out = self.__remainder[:n]
+            self.__remainder = self.__remainder[n:]
+            n -= len(out)
+        if PY22:
+            return self._py22_read_all(n, out)
         while n > 0:
+            got_timeout = False
             try:
                 x = self.__socket.recv(n)
                 if len(x) == 0:
@@ -197,6 +211,21 @@ class Packetizer (object):
                 out += x
                 n -= len(x)
             except socket.timeout:
+                got_timeout = True
+            except socket.error, e:
+                # on Linux, sometimes instead of socket.timeout, we get
+                # EAGAIN.  this is a bug in recent (> 2.6.9) kernels but
+                # we need to work around it.
+                if (type(e.args) is tuple) and (len(e.args) > 0) and (e.args[0] == errno.EAGAIN):
+                    got_timeout = True
+                elif (type(e.args) is tuple) and (len(e.args) > 0) and (e.args[0] == errno.EINTR):
+                    # syscall interrupted; try again
+                    pass
+                elif self.__closed:
+                    raise EOFError()
+                else:
+                    raise
+            if got_timeout:
                 if self.__closed:
                     raise EOFError()
                 if check_rekey and (len(out) == 0) and self.__need_rekey:
@@ -207,32 +236,44 @@ class Packetizer (object):
     def write_all(self, out):
         self.__keepalive_last = time.time()
         while len(out) > 0:
+            got_timeout = False
             try:
                 n = self.__socket.send(out)
             except socket.timeout:
-                n = 0
-                if self.__closed:
+                got_timeout = True
+            except socket.error, e:
+                if (type(e.args) is tuple) and (len(e.args) > 0) and (e.args[0] == errno.EAGAIN):
+                    got_timeout = True
+                elif (type(e.args) is tuple) and (len(e.args) > 0) and (e.args[0] == errno.EINTR):
+                    # syscall interrupted; try again
+                    pass
+                else:
                     n = -1
             except Exception:
                 # could be: (32, 'Broken pipe')
                 n = -1
+            if got_timeout:
+                n = 0
+                if self.__closed:
+                    n = -1
             if n < 0:
                 raise EOFError()
             if n == len(out):
-                return
+                break
             out = out[n:]
         return
         
     def readline(self, timeout):
         """
-        Read a line from the socket.  This is done in a fairly inefficient
-        way, but is only used for initial banner negotiation so it's not worth
-        optimising.
+        Read a line from the socket.  We assume no data is pending after the
+        line, so it's okay to attempt large reads.
         """
         buf = ''
         while not '\n' in buf:
             buf += self._read_timeout(timeout)
-        buf = buf[:-1]
+        n = buf.index('\n')
+        self.__remainder += buf[n+1:]
+        buf = buf[:n]
         if (len(buf) > 0) and (buf[-1] == '\r'):
             buf = buf[:-1]
         return buf
@@ -242,21 +283,21 @@ class Packetizer (object):
         Write a block of data using the current cipher, as an SSH block.
         """
         # encrypt this sucka
-        randpool.stir()
         data = str(data)
         cmd = ord(data[0])
         if cmd in MSG_NAMES:
             cmd_name = MSG_NAMES[cmd]
         else:
             cmd_name = '$%x' % cmd
-        self._log(DEBUG, 'Write packet <%s>, length %d' % (cmd_name, len(data)))
-        if self.__compress_engine_out is not None:
-            data = self.__compress_engine_out(data)
-        packet = self._build_packet(data)
-        if self.__dump_packets:
-            self._log(DEBUG, util.format_binary(packet, 'OUT: '))
+        orig_len = len(data)
         self.__write_lock.acquire()
         try:
+            if self.__compress_engine_out is not None:
+                data = self.__compress_engine_out(data)
+            packet = self._build_packet(data)
+            if self.__dump_packets:
+                self._log(DEBUG, 'Write packet <%s>, length %d' % (cmd_name, orig_len))
+                self._log(DEBUG, util.format_binary(packet, 'OUT: '))
             if self.__block_engine_out != None:
                 out = self.__block_engine_out.encrypt(packet)
             else:
@@ -264,12 +305,15 @@ class Packetizer (object):
             # + mac
             if self.__block_engine_out != None:
                 payload = struct.pack('>I', self.__sequence_number_out) + packet
-                out += HMAC.HMAC(self.__mac_key_out, payload, self.__mac_engine_out).digest()[:self.__mac_size_out]
+                out += compute_hmac(self.__mac_key_out, payload, self.__mac_engine_out)[:self.__mac_size_out]
             self.__sequence_number_out = (self.__sequence_number_out + 1) & 0xffffffffL
             self.write_all(out)
 
             self.__sent_bytes += len(out)
             self.__sent_packets += 1
+            if (self.__sent_packets % 100) == 0:
+                # stirring the randpool takes 30ms on my ibook!!
+                randpool.stir()
             if ((self.__sent_packets >= self.REKEY_PACKETS) or (self.__sent_bytes >= self.REKEY_BYTES)) \
                    and not self.__need_rekey:
                 # only ask once for rekeying
@@ -310,12 +354,12 @@ class Packetizer (object):
         if self.__mac_size_in > 0:
             mac = post_packet[:self.__mac_size_in]
             mac_payload = struct.pack('>II', self.__sequence_number_in, packet_size) + packet
-            my_mac = HMAC.HMAC(self.__mac_key_in, mac_payload, self.__mac_engine_in).digest()[:self.__mac_size_in]
+            my_mac = compute_hmac(self.__mac_key_in, mac_payload, self.__mac_engine_in)[:self.__mac_size_in]
             if my_mac != mac:
                 raise SSHException('Mismatched MAC')
         padding = ord(packet[0])
         payload = packet[1:packet_size - padding]
-        randpool.add_event(packet[packet_size - padding])
+        randpool.add_event()
         if self.__dump_packets:
             self._log(DEBUG, 'Got payload (%d bytes, %d padding)' % (packet_size, padding))
 
@@ -348,7 +392,8 @@ class Packetizer (object):
             cmd_name = MSG_NAMES[cmd]
         else:
             cmd_name = '$%x' % cmd
-        self._log(DEBUG, 'Read packet <%s>, length %d' % (cmd_name, len(payload)))
+        if self.__dump_packets:
+            self._log(DEBUG, 'Read packet <%s>, length %d' % (cmd_name, len(payload)))
         return cmd, msg
 
 
@@ -374,8 +419,7 @@ class Packetizer (object):
             self.__keepalive_callback()
             self.__keepalive_last = now
     
-    def _py22_read_all(self, n):
-        out = ''
+    def _py22_read_all(self, n, out):
         while n > 0:
             r, w, e = select.select([self.__socket], [], [], 0.1)
             if self.__socket not in r:
@@ -398,23 +442,24 @@ class Packetizer (object):
                 x = self.__socket.recv(1)
                 if len(x) == 0:
                     raise EOFError()
-                return x
+                break
             if self.__closed:
                 raise EOFError()
             now = time.time()
             if now - start >= timeout:
                 raise socket.timeout()
+        return x
 
     def _read_timeout(self, timeout):
         if PY22:
-            return self._py22_read_timeout(n)
+            return self._py22_read_timeout(timeout)
         start = time.time()
         while True:
             try:
-                x = self.__socket.recv(1)
+                x = self.__socket.recv(128)
                 if len(x) == 0:
                     raise EOFError()
-                return x
+                break
             except socket.timeout:
                 pass
             if self.__closed:
@@ -422,6 +467,7 @@ class Packetizer (object):
             now = time.time()
             if now - start >= timeout:
                 raise socket.timeout()
+        return x
 
     def _build_packet(self, payload):
         # pad up at least 4 bytes, to nearest block-size (usually 8)

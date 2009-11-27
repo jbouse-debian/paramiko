@@ -1,4 +1,4 @@
-# Copyright (C) 2003-2005 Robey Pointer <robey@lag.net>
+# Copyright (C) 2003-2007  Robey Pointer <robey@lag.net>
 #
 # This file is part of paramiko.
 #
@@ -37,7 +37,15 @@ class DSSKey (PKey):
     data.
     """
 
-    def __init__(self, msg=None, data=None, filename=None, password=None, vals=None):
+    def __init__(self, msg=None, data=None, filename=None, password=None, vals=None, file_obj=None):
+        self.p = None
+        self.q = None
+        self.g = None
+        self.y = None
+        self.x = None
+        if file_obj is not None:
+            self._from_private_key(file_obj, password)
+            return
         if filename is not None:
             self._from_private_key_file(filename, password)
             return
@@ -81,7 +89,7 @@ class DSSKey (PKey):
         return self.size
         
     def can_sign(self):
-        return hasattr(self, 'x')
+        return self.x is not None
 
     def sign_ssh_data(self, rpool, data):
         digest = SHA.new(data).digest()
@@ -123,14 +131,22 @@ class DSSKey (PKey):
         dss = DSA.construct((long(self.y), long(self.g), long(self.p), long(self.q)))
         return dss.verify(sigM, (sigR, sigS))
 
-    def write_private_key_file(self, filename, password=None):
+    def _encode_key(self):
+        if self.x is None:
+            raise SSHException('Not enough key information')
         keylist = [ 0, self.p, self.q, self.g, self.y, self.x ]
         try:
             b = BER()
             b.encode(keylist)
         except BERException:
             raise SSHException('Unable to create ber encoding of key')
-        self._write_private_key_file('DSA', filename, str(b), password)
+        return str(b)
+
+    def write_private_key_file(self, filename, password=None):
+        self._write_private_key_file('DSA', filename, self._encode_key(), password)
+
+    def write_private_key(self, file_obj, password=None):
+        self._write_private_key('DSA', file_obj, self._encode_key(), password)
 
     def generate(bits=1024, progress_func=None):
         """
@@ -144,8 +160,6 @@ class DSSKey (PKey):
         @type progress_func: function
         @return: new private key
         @rtype: L{DSSKey}
-
-        @since: fearow
         """
         randpool.stir()
         dsa = DSA.generate(bits, randpool.get_bytes, progress_func)
@@ -159,9 +173,16 @@ class DSSKey (PKey):
 
 
     def _from_private_key_file(self, filename, password):
+        data = self._read_private_key_file('DSA', filename, password)
+        self._decode_key(data)
+    
+    def _from_private_key(self, file_obj, password):
+        data = self._read_private_key('DSA', file_obj, password)
+        self._decode_key(data)
+    
+    def _decode_key(self, data):
         # private key file contains:
         # DSAPrivateKey = { version = 0, p, q, g, y, x }
-        data = self._read_private_key_file('DSA', filename, password)
         try:
             keylist = BER(data).decode()
         except BERException, x:

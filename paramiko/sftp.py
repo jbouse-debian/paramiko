@@ -1,4 +1,4 @@
-# Copyright (C) 2003-2005 Robey Pointer <robey@lag.net>
+# Copyright (C) 2003-2007  Robey Pointer <robey@lag.net>
 #
 # This file is part of paramiko.
 #
@@ -16,6 +16,7 @@
 # along with Paramiko; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA.
 
+import select
 import socket
 import struct
 
@@ -113,24 +114,22 @@ class BaseSFTP (object):
         return version
 
     def _send_server_version(self):
+        # winscp will freak out if the server sends version info before the
+        # client finishes sending INIT.
+        t, data = self._read_packet()
+        if t != CMD_INIT:
+            raise SFTPError('Incompatible sftp protocol')
+        version = struct.unpack('>I', data[:4])[0]
         # advertise that we support "check-file"
         extension_pairs = [ 'check-file', 'md5,sha1' ]
         msg = Message()
         msg.add_int(_VERSION)
         msg.add(*extension_pairs)
         self._send_packet(CMD_VERSION, str(msg))
-        t, data = self._read_packet()
-        if t != CMD_INIT:
-            raise SFTPError('Incompatible sftp protocol')
-        version = struct.unpack('>I', data[:4])[0]
         return version
         
-    def _log(self, level, msg):
-        if issubclass(type(msg), list):
-            for m in msg:
-                self.logger.log(level, m)
-        else:
-            self.logger.log(level, msg)
+    def _log(self, level, msg, *args):
+        self.logger.log(level, msg, *args)
 
     def _write_all(self, out):
         while len(out) > 0:
@@ -145,7 +144,20 @@ class BaseSFTP (object):
     def _read_all(self, n):
         out = ''
         while n > 0:
-            x = self.sock.recv(n)
+            if isinstance(self.sock, socket.socket):
+                # sometimes sftp is used directly over a socket instead of
+                # through a paramiko channel.  in this case, check periodically
+                # if the socket is closed.  (for some reason, recv() won't ever
+                # return or raise an exception, but calling select on a closed
+                # socket will.)
+                while True:
+                    read, write, err = select.select([ self.sock ], [], [], 0.1)
+                    if len(read) > 0:
+                        x = self.sock.recv(n)
+                        break
+            else:
+                x = self.sock.recv(n)
+                
             if len(x) == 0:
                 raise EOFError()
             out += x
@@ -153,16 +165,24 @@ class BaseSFTP (object):
         return out
 
     def _send_packet(self, t, packet):
+        #self._log(DEBUG2, 'write: %s (len=%d)' % (CMD_NAMES.get(t, '0x%02x' % t), len(packet)))
         out = struct.pack('>I', len(packet) + 1) + chr(t) + packet
         if self.ultra_debug:
             self._log(DEBUG, util.format_binary(out, 'OUT: '))
         self._write_all(out)
 
     def _read_packet(self):
-        size = struct.unpack('>I', self._read_all(4))[0]
+        x = self._read_all(4)
+        # most sftp servers won't accept packets larger than about 32k, so
+        # anything with the high byte set (> 16MB) is just garbage.
+        if x[0] != '\x00':
+            raise SFTPError('Garbage packet received')
+        size = struct.unpack('>I', x)[0]
         data = self._read_all(size)
         if self.ultra_debug:
             self._log(DEBUG, util.format_binary(data, 'IN: '));
         if size > 0:
-            return ord(data[0]), data[1:]
+            t = ord(data[0])
+            #self._log(DEBUG2, 'read: %s (len=%d)' % (CMD_NAMES.get(t), '0x%02x' % t, len(data)-1))
+            return t, data[1:]
         return 0, ''

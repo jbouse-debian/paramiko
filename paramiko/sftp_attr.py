@@ -1,4 +1,4 @@
-# Copyright (C) 2003-2005 Robey Pointer <robey@lag.net>
+# Copyright (C) 2003-2006 Robey Pointer <robey@lag.net>
 #
 # This file is part of paramiko.
 #
@@ -51,6 +51,12 @@ class SFTPAttributes (object):
         Create a new (empty) SFTPAttributes object.  All fields will be empty.
         """
         self._flags = 0
+        self.st_size = None
+        self.st_uid = None
+        self.st_gid = None
+        self.st_mode = None
+        self.st_atime = None
+        self.st_mtime = None
         self.attr = {}
 
     def from_stat(cls, obj, filename=None):
@@ -80,18 +86,17 @@ class SFTPAttributes (object):
     def __repr__(self):
         return '<SFTPAttributes: %s>' % self._debug_str()
 
-    def __str__(self):
-        return self._debug_str()
-        
 
     ###  internals...
 
     
-    def _from_msg(cls, msg, filename=None):
+    def _from_msg(cls, msg, filename=None, longname=None):
         attr = cls()
         attr._unpack(msg)
         if filename is not None:
             attr.filename = filename
+        if longname is not None:
+            attr.longname = longname
         return attr
     _from_msg = classmethod(_from_msg)
 
@@ -114,13 +119,13 @@ class SFTPAttributes (object):
 
     def _pack(self, msg):
         self._flags = 0
-        if hasattr(self, 'st_size'):
+        if self.st_size is not None:
             self._flags |= self.FLAG_SIZE
-        if hasattr(self, 'st_uid') or hasattr(self, 'st_gid'):
+        if (self.st_uid is not None) and (self.st_gid is not None):
             self._flags |= self.FLAG_UIDGID
-        if hasattr(self, 'st_mode'):
+        if self.st_mode is not None:
             self._flags |= self.FLAG_PERMISSIONS
-        if hasattr(self, 'st_atime') or hasattr(self, 'st_mtime'):
+        if (self.st_atime is not None) and (self.st_mtime is not None):
             self._flags |= self.FLAG_AMTIME
         if len(self.attr) > 0:
             self._flags |= self.FLAG_EXTENDED
@@ -128,13 +133,14 @@ class SFTPAttributes (object):
         if self._flags & self.FLAG_SIZE:
             msg.add_int64(self.st_size)
         if self._flags & self.FLAG_UIDGID:
-            msg.add_int(getattr(self, 'st_uid', 0))
-            msg.add_int(getattr(self, 'st_gid', 0))
+            msg.add_int(self.st_uid)
+            msg.add_int(self.st_gid)
         if self._flags & self.FLAG_PERMISSIONS:
             msg.add_int(self.st_mode)
         if self._flags & self.FLAG_AMTIME:
-            msg.add_int(getattr(self, 'st_atime', 0))
-            msg.add_int(getattr(self, 'st_mtime', 0))
+            # throw away any fractional seconds
+            msg.add_int(long(self.st_atime))
+            msg.add_int(long(self.st_mtime))
         if self._flags & self.FLAG_EXTENDED:
             msg.add_int(len(self.attr))
             for key, val in self.attr.iteritems():
@@ -144,15 +150,14 @@ class SFTPAttributes (object):
 
     def _debug_str(self):
         out = '[ '
-        if hasattr(self, 'st_size'):
+        if self.st_size is not None:
             out += 'size=%d ' % self.st_size
-        if hasattr(self, 'st_uid') or hasattr(self, 'st_gid'):
-            out += 'uid=%d gid=%d ' % (getattr(self, 'st_uid', 0), getattr(self, 'st_gid', 0))
-        if hasattr(self, 'st_mode'):
+        if (self.st_uid is not None) and (self.st_gid is not None):
+            out += 'uid=%d gid=%d ' % (self.st_uid, self.st_gid)
+        if self.st_mode is not None:
             out += 'mode=' + oct(self.st_mode) + ' '
-        if hasattr(self, 'st_atime') or hasattr(self, 'st_mtime'):
-            out += 'atime=%d mtime=%d ' % (getattr(self, 'st_atime', 0),
-                                           getattr(self, 'st_mtime', 0))
+        if (self.st_atime is not None) and (self.st_mtime is not None):
+            out += 'atime=%d mtime=%d ' % (self.st_atime, self.st_mtime)
         for k, v in self.attr.iteritems():
             out += '"%s"=%r ' % (str(k), v)
         out += ']'
@@ -171,7 +176,7 @@ class SFTPAttributes (object):
 
     def __str__(self):
         "create a unix-style long description of the file (like ls -l)"
-        if hasattr(self, 'st_mode'):
+        if self.st_mode is not None:
             kind = stat.S_IFMT(self.st_mode)
             if kind == stat.S_IFIFO:
                 ks = 'p'
@@ -194,15 +199,25 @@ class SFTPAttributes (object):
             ks += self._rwx(self.st_mode & 7, self.st_mode & stat.S_ISVTX, True)
         else:
             ks = '?---------'
-        uid = getattr(self, 'st_uid', -1)
-        gid = getattr(self, 'st_gid', -1)
-        size = getattr(self, 'st_size', -1)
-        mtime = getattr(self, 'st_mtime', 0)
         # compute display date
-        if abs(time.time() - mtime) > 15552000:
-            # (15552000 = 6 months)
-            datestr = time.strftime('%d %b %Y', time.localtime(mtime))
+        if (self.st_mtime is None) or (self.st_mtime == 0xffffffff):
+            # shouldn't really happen
+            datestr = '(unknown date)'
         else:
-            datestr = time.strftime('%d %b %H:%M', time.localtime(mtime))
+            if abs(time.time() - self.st_mtime) > 15552000:
+                # (15552000 = 6 months)
+                datestr = time.strftime('%d %b %Y', time.localtime(self.st_mtime))
+            else:
+                datestr = time.strftime('%d %b %H:%M', time.localtime(self.st_mtime))
         filename = getattr(self, 'filename', '?')
-        return '%s   1 %-8d %-8d %8d %-12s %s' % (ks, uid, gid, size, datestr, filename)
+        
+        # not all servers support uid/gid
+        uid = self.st_uid
+        gid = self.st_gid
+        if uid is None:
+            uid = 0
+        if gid is None:
+            gid = 0
+            
+        return '%s   1 %-8d %-8d %8d %-12s %s' % (ks, uid, gid, self.st_size, datestr, filename)
+
