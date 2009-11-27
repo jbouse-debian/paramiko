@@ -1,4 +1,4 @@
-# Copyright (C) 2003-2007  Robey Pointer <robey@lag.net>
+# Copyright (C) 2003-2007  Robey Pointer <robeypointer@gmail.com>
 #
 # This file is part of paramiko.
 #
@@ -111,7 +111,7 @@ class Message (object):
         """
         b = self.packet.read(n)
         if len(b) < n:
-            return '\x00'*n
+            return b + '\x00' * (n - len(b))
         return b
 
     def get_byte(self):

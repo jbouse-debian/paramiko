@@ -54,24 +54,24 @@
 </table>
 <h1 class="epydoc">Source Code for <a href="paramiko.resource-module.html" onclick="show_private();">Module paramiko.resource</a></h1>
 <pre class="py-src">
-<a name="L1"></a><tt class="py-lineno"> 1</tt>  <tt class="py-line"><tt class="py-comment"># Copyright (C) 2003-2007  Robey Pointer &lt;robey@lag.net&gt;</tt> </tt>
-<a name="L2"></a><tt class="py-lineno"> 2</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment">#</tt> </tt>
-<a name="L3"></a><tt class="py-lineno"> 3</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># This file is part of paramiko.</tt> </tt>
-<a name="L4"></a><tt class="py-lineno"> 4</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment">#</tt> </tt>
-<a name="L5"></a><tt class="py-lineno"> 5</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># Paramiko is free software; you can redistribute it and/or modify it under the</tt> </tt>
-<a name="L6"></a><tt class="py-lineno"> 6</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># terms of the GNU Lesser General Public License as published by the Free</tt> </tt>
-<a name="L7"></a><tt class="py-lineno"> 7</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># Software Foundation; either version 2.1 of the License, or (at your option)</tt> </tt>
-<a name="L8"></a><tt class="py-lineno"> 8</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># any later version.</tt> </tt>
-<a name="L9"></a><tt class="py-lineno"> 9</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment">#</tt> </tt>
-<a name="L10"></a><tt class="py-lineno">10</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># Paramiko is distrubuted in the hope that it will be useful, but WITHOUT ANY</tt> </tt>
-<a name="L11"></a><tt class="py-lineno">11</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR</tt> </tt>
-<a name="L12"></a><tt class="py-lineno">12</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more</tt> </tt>
-<a name="L13"></a><tt class="py-lineno">13</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># details.</tt> </tt>
-<a name="L14"></a><tt class="py-lineno">14</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment">#</tt> </tt>
-<a name="L15"></a><tt class="py-lineno">15</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># You should have received a copy of the GNU Lesser General Public License</tt> </tt>
-<a name="L16"></a><tt class="py-lineno">16</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># along with Paramiko; if not, write to the Free Software Foundation, Inc.,</tt> </tt>
-<a name="L17"></a><tt class="py-lineno">17</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA.</tt> </tt>
-<a name="L18"></a><tt class="py-lineno">18</tt>  <tt class="py-line"><tt class="py-comment"></tt> </tt>
+<a name="L1"></a><tt class="py-lineno"> 1</tt>  <tt class="py-line"><tt class="py-comment"># Copyright (C) 2003-2007  Robey Pointer &lt;robeypointer@gmail.com&gt;</tt> </tt>
+<a name="L2"></a><tt class="py-lineno"> 2</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L3"></a><tt class="py-lineno"> 3</tt>  <tt class="py-line"><tt class="py-comment"># This file is part of paramiko.</tt> </tt>
+<a name="L4"></a><tt class="py-lineno"> 4</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L5"></a><tt class="py-lineno"> 5</tt>  <tt class="py-line"><tt class="py-comment"># Paramiko is free software; you can redistribute it and/or modify it under the</tt> </tt>
+<a name="L6"></a><tt class="py-lineno"> 6</tt>  <tt class="py-line"><tt class="py-comment"># terms of the GNU Lesser General Public License as published by the Free</tt> </tt>
+<a name="L7"></a><tt class="py-lineno"> 7</tt>  <tt class="py-line"><tt class="py-comment"># Software Foundation; either version 2.1 of the License, or (at your option)</tt> </tt>
+<a name="L8"></a><tt class="py-lineno"> 8</tt>  <tt class="py-line"><tt class="py-comment"># any later version.</tt> </tt>
+<a name="L9"></a><tt class="py-lineno"> 9</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L10"></a><tt class="py-lineno">10</tt>  <tt class="py-line"><tt class="py-comment"># Paramiko is distrubuted in the hope that it will be useful, but WITHOUT ANY</tt> </tt>
+<a name="L11"></a><tt class="py-lineno">11</tt>  <tt class="py-line"><tt class="py-comment"># WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR</tt> </tt>
+<a name="L12"></a><tt class="py-lineno">12</tt>  <tt class="py-line"><tt class="py-comment"># A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more</tt> </tt>
+<a name="L13"></a><tt class="py-lineno">13</tt>  <tt class="py-line"><tt class="py-comment"># details.</tt> </tt>
+<a name="L14"></a><tt class="py-lineno">14</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L15"></a><tt class="py-lineno">15</tt>  <tt class="py-line"><tt class="py-comment"># You should have received a copy of the GNU Lesser General Public License</tt> </tt>
+<a name="L16"></a><tt class="py-lineno">16</tt>  <tt class="py-line"><tt class="py-comment"># along with Paramiko; if not, write to the Free Software Foundation, Inc.,</tt> </tt>
+<a name="L17"></a><tt class="py-lineno">17</tt>  <tt class="py-line"><tt class="py-comment"># 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA.</tt> </tt>
+<a name="L18"></a><tt class="py-lineno">18</tt>  <tt class="py-line"> </tt>
 <a name="L19"></a><tt class="py-lineno">19</tt>  <tt class="py-line"><tt class="py-docstring">"""</tt> </tt>
 <a name="L20"></a><tt class="py-lineno">20</tt>  <tt class="py-line"><tt class="py-docstring">Resource manager.</tt> </tt>
 <a name="L21"></a><tt class="py-lineno">21</tt>  <tt class="py-line"><tt class="py-docstring">"""</tt> </tt>
@@ -131,12 +131,12 @@ paramiko.win_pageant.PageantConnection.close" class="py-name" href="#" onclick="
 <a name="L64"></a><tt class="py-lineno">64</tt>  <tt class="py-line">            <tt class="py-keyword">del</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_table</tt><tt class="py-op">[</tt><tt class="py-name">id</tt><tt class="py-op">(</tt><tt id="link-2" class="py-name"><a title="paramiko.resource" class="py-name" href="#" onclick="return doclink('link-2', 'resource', 'link-0');">resource</a></tt><tt class="py-op">)</tt><tt class="py-op">]</tt> </tt>
 </div><a name="L65"></a><tt class="py-lineno">65</tt>  <tt class="py-line"> </tt>
 <a name="L66"></a><tt class="py-lineno">66</tt>  <tt class="py-line">        <tt class="py-comment"># keep the weakref in a table so it sticks around long enough to get</tt> </tt>
-<a name="L67"></a><tt class="py-lineno">67</tt>  <tt class="py-line"><tt class="py-comment"></tt>        <tt class="py-comment"># its callback called. :)</tt> </tt>
-<a name="L68"></a><tt class="py-lineno">68</tt>  <tt class="py-line"><tt class="py-comment"></tt>        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_table</tt><tt class="py-op">[</tt><tt class="py-name">id</tt><tt class="py-op">(</tt><tt id="link-3" class="py-name"><a title="paramiko.resource" class="py-name" href="#" onclick="return doclink('link-3', 'resource', 'link-0');">resource</a></tt><tt class="py-op">)</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">weakref</tt><tt class="py-op">.</tt><tt class="py-name">ref</tt><tt class="py-op">(</tt><tt class="py-name">obj</tt><tt class="py-op">,</tt> <tt class="py-name">callback</tt><tt class="py-op">)</tt> </tt>
+<a name="L67"></a><tt class="py-lineno">67</tt>  <tt class="py-line">        <tt class="py-comment"># its callback called. :)</tt> </tt>
+<a name="L68"></a><tt class="py-lineno">68</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_table</tt><tt class="py-op">[</tt><tt class="py-name">id</tt><tt class="py-op">(</tt><tt id="link-3" class="py-name"><a title="paramiko.resource" class="py-name" href="#" onclick="return doclink('link-3', 'resource', 'link-0');">resource</a></tt><tt class="py-op">)</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">weakref</tt><tt class="py-op">.</tt><tt class="py-name">ref</tt><tt class="py-op">(</tt><tt class="py-name">obj</tt><tt class="py-op">,</tt> <tt class="py-name">callback</tt><tt class="py-op">)</tt> </tt>
 </div></div><a name="L69"></a><tt class="py-lineno">69</tt>  <tt class="py-line"> </tt>
 <a name="L70"></a><tt class="py-lineno">70</tt>  <tt class="py-line"> </tt>
 <a name="L71"></a><tt class="py-lineno">71</tt>  <tt class="py-line"><tt class="py-comment"># singleton</tt> </tt>
-<a name="L72"></a><tt class="py-lineno">72</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt id="link-4" class="py-name" targets="Variable paramiko.resource.ResourceManager=paramiko.resource-module.html#ResourceManager"><a title="paramiko.resource.ResourceManager" class="py-name" href="#" onclick="return doclink('link-4', 'ResourceManager', 'link-4');">ResourceManager</a></tt> <tt class="py-op">=</tt> <tt id="link-5" class="py-name"><a title="paramiko.resource.ResourceManager" class="py-name" href="#" onclick="return doclink('link-5', 'ResourceManager', 'link-4');">ResourceManager</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L72"></a><tt class="py-lineno">72</tt>  <tt class="py-line"><tt id="link-4" class="py-name" targets="Variable paramiko.resource.ResourceManager=paramiko.resource-module.html#ResourceManager"><a title="paramiko.resource.ResourceManager" class="py-name" href="#" onclick="return doclink('link-4', 'ResourceManager', 'link-4');">ResourceManager</a></tt> <tt class="py-op">=</tt> <tt id="link-5" class="py-name"><a title="paramiko.resource.ResourceManager" class="py-name" href="#" onclick="return doclink('link-5', 'ResourceManager', 'link-4');">ResourceManager</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
 <a name="L73"></a><tt class="py-lineno">73</tt>  <tt class="py-line"> </tt><script type="text/javascript">
 <!--
 expandto(location.href);
@@ -170,7 +170,7 @@ expandto(location.href);
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Sun Jul  6 18:30:35 2008
+    Generated by Epydoc 3.0.1 on Sun Nov  1 22:14:20 2009
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

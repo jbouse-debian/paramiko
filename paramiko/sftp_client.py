@@ -1,4 +1,4 @@
-# Copyright (C) 2003-2007  Robey Pointer <robey@lag.net>
+# Copyright (C) 2003-2007  Robey Pointer <robeypointer@gmail.com>
 #
 # This file is part of paramiko.
 #
@@ -23,6 +23,7 @@ Client-mode SFTP support.
 from binascii import hexlify
 import errno
 import os
+import stat
 import threading
 import time
 import weakref
@@ -104,27 +105,31 @@ class SFTPClient (BaseSFTP):
         chan.invoke_subsystem('sftp')
         return cls(chan)
     from_transport = classmethod(from_transport)
-    
+
     def _log(self, level, msg, *args):
-        super(SFTPClient, self)._log(level, "[chan %s] " + msg, *([ self.sock.get_name() ] + list(args)))
+        if isinstance(msg, list):
+            for m in msg:
+                super(SFTPClient, self)._log(level, "[chan %s] " + m, *([ self.sock.get_name() ] + list(args)))
+        else:
+            super(SFTPClient, self)._log(level, "[chan %s] " + msg, *([ self.sock.get_name() ] + list(args)))
 
     def close(self):
         """
         Close the SFTP session and its underlying channel.
-        
+
         @since: 1.4
         """
         self._log(INFO, 'sftp session closed.')
         self.sock.close()
-    
+
     def get_channel(self):
         """
         Return the underlying L{Channel} object for this SFTP session.  This
         might be useful for doing things like setting a timeout on the channel.
-        
+
         @return: the SSH channel
         @rtype: L{Channel}
-        
+
         @since: 1.7.1
         """
         return self.sock
@@ -143,14 +148,14 @@ class SFTPClient (BaseSFTP):
         @rtype: list of str
         """
         return [f.filename for f in self.listdir_attr(path)]
-        
+
     def listdir_attr(self, path='.'):
         """
         Return a list containing L{SFTPAttributes} objects corresponding to
         files in the given C{path}.  The list is in arbitrary order.  It does
         not include the special entries C{'.'} and C{'..'} even if they are
         present in the folder.
-        
+
         The returned L{SFTPAttributes} objects will each have an additional
         field: C{longname}, which may contain a formatted string of the file's
         attributes, in unix format.  The content of this string will probably
@@ -160,7 +165,7 @@ class SFTPClient (BaseSFTP):
         @type path: str
         @return: list of attributes
         @rtype: list of L{SFTPAttributes}
-        
+
         @since: 1.2
         """
         path = self._adjust_cwd(path)
@@ -201,7 +206,7 @@ class SFTPClient (BaseSFTP):
         existing file), C{'a+'} for reading/appending.  The python C{'b'} flag
         is ignored, since SSH treats all files as binary.  The C{'U'} flag is
         supported in a compatible way.
-        
+
         Since 1.5.2, an C{'x'} flag indicates that the operation should only
         succeed if the file was created and did not previously exist.  This has
         no direct mapping to python's file flags, but is commonly known as the
@@ -271,7 +276,7 @@ class SFTPClient (BaseSFTP):
         @type oldpath: str
         @param newpath: new name for the file or folder
         @type newpath: str
-        
+
         @raise IOError: if C{newpath} is a folder, or something else goes
             wrong
         """
@@ -384,7 +389,7 @@ class SFTPClient (BaseSFTP):
         attr = SFTPAttributes()
         attr.st_mode = mode
         self._request(CMD_SETSTAT, path, attr)
-        
+
     def chown(self, path, uid, gid):
         """
         Change the owner (C{uid}) and group (C{gid}) of a file.  As with
@@ -433,7 +438,7 @@ class SFTPClient (BaseSFTP):
         Change the size of the file specified by C{path}.  This usually extends
         or shrinks the size of the file, just like the C{truncate()} method on
         python file objects.
-        
+
         @param path: path of the file to modify
         @type path: str
         @param size: the new size of the file
@@ -479,7 +484,7 @@ class SFTPClient (BaseSFTP):
         @type path: str
         @return: normalized form of the given path
         @rtype: str
-        
+
         @raise IOError: if the path can't be resolved on the server
         """
         path = self._adjust_cwd(path)
@@ -491,45 +496,51 @@ class SFTPClient (BaseSFTP):
         if count != 1:
             raise SFTPError('Realpath returned %d results' % count)
         return _to_unicode(msg.get_string())
-    
+
     def chdir(self, path):
         """
         Change the "current directory" of this SFTP session.  Since SFTP
         doesn't really have the concept of a current working directory, this
         is emulated by paramiko.  Once you use this method to set a working
         directory, all operations on this SFTPClient object will be relative
-        to that path.
-        
+        to that path. You can pass in C{None} to stop using a current working
+        directory.
+
         @param path: new current working directory
         @type path: str
-        
+
         @raise IOError: if the requested path doesn't exist on the server
-        
+
         @since: 1.4
         """
-        self._cwd = self.normalize(path)
-    
+        if path is None:
+            self._cwd = None
+            return
+        if not stat.S_ISDIR(self.stat(path).st_mode):
+            raise SFTPError(errno.ENOTDIR, "%s: %s" % (os.strerror(errno.ENOTDIR), path))
+        self._cwd = self.normalize(path).encode('utf-8')
+
     def getcwd(self):
         """
         Return the "current working directory" for this SFTP session, as
         emulated by paramiko.  If no directory has been set with L{chdir},
         this method will return C{None}.
-        
+
         @return: the current working directory on the server, or C{None}
         @rtype: str
-        
+
         @since: 1.4
         """
         return self._cwd
-    
+
     def put(self, localpath, remotepath, callback=None):
         """
         Copy a local file (C{localpath}) to the SFTP server as C{remotepath}.
         Any exception raised by operations will be passed through.  This
         method is primarily provided as a convenience.
-        
+
         The SFTP operations use pipelining for speed.
-        
+
         @param localpath: the local file to copy
         @type localpath: str
         @param remotepath: the destination path on the SFTP server
@@ -541,35 +552,39 @@ class SFTPClient (BaseSFTP):
         @return: an object containing attributes about the given file
             (since 1.7.4)
         @rtype: SFTPAttributes
-        
+
         @since: 1.4
         """
         file_size = os.stat(localpath).st_size
         fl = file(localpath, 'rb')
-        fr = self.file(remotepath, 'wb')
-        fr.set_pipelined(True)
-        size = 0
-        while True:
-            data = fl.read(32768)
-            if len(data) == 0:
-                break
-            fr.write(data)
-            size += len(data)
-            if callback is not None:
-                callback(size, file_size)
-        fl.close()
-        fr.close()
+        try:
+            fr = self.file(remotepath, 'wb')
+            fr.set_pipelined(True)
+            size = 0
+            try:
+                while True:
+                    data = fl.read(32768)
+                    if len(data) == 0:
+                        break
+                    fr.write(data)
+                    size += len(data)
+                    if callback is not None:
+                        callback(size, file_size)
+            finally:
+                fr.close()
+        finally:
+            fl.close()
         s = self.stat(remotepath)
         if s.st_size != size:
             raise IOError('size mismatch in put!  %d != %d' % (s.st_size, size))
         return s
-    
+
     def get(self, remotepath, localpath, callback=None):
         """
         Copy a remote file (C{remotepath}) from the SFTP server to the local
         host as C{localpath}.  Any exception raised by operations will be
         passed through.  This method is primarily provided as a convenience.
-        
+
         @param remotepath: the remote file to copy
         @type remotepath: str
         @param localpath: the destination path on the local host
@@ -578,24 +593,28 @@ class SFTPClient (BaseSFTP):
             transferred so far and the total bytes to be transferred
             (since 1.7.4)
         @type callback: function(int, int)
-        
+
         @since: 1.4
         """
         fr = self.file(remotepath, 'rb')
         file_size = self.stat(remotepath).st_size
         fr.prefetch()
-        fl = file(localpath, 'wb')
-        size = 0
-        while True:
-            data = fr.read(32768)
-            if len(data) == 0:
-                break
-            fl.write(data)
-            size += len(data)
-            if callback is not None:
-                callback(size, file_size)
-        fl.close()
-        fr.close()
+        try:
+            fl = file(localpath, 'wb')
+            try:
+                size = 0
+                while True:
+                    data = fr.read(32768)
+                    if len(data) == 0:
+                        break
+                    fl.write(data)
+                    size += len(data)
+                    if callback is not None:
+                        callback(size, file_size)
+            finally:
+                fl.close()
+        finally:
+            fr.close()
         s = os.stat(localpath)
         if s.st_size != size:
             raise IOError('size mismatch in get!  %d != %d' % (s.st_size, size))
@@ -607,7 +626,7 @@ class SFTPClient (BaseSFTP):
     def _request(self, t, *arg):
         num = self._async_request(type(None), t, *arg)
         return self._read_response(num)
-    
+
     def _async_request(self, fileobj, t, *arg):
         # this method may be called from other threads (prefetch)
         self._lock.acquire()
@@ -684,7 +703,7 @@ class SFTPClient (BaseSFTP):
             raise IOError(errno.EACCES, text)
         else:
             raise IOError(text)
-    
+
     def _adjust_cwd(self, path):
         """
         Return an adjusted path if we're emulating a "current working
