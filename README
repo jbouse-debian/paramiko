@@ -1,0 +1,248 @@
+paramiko 1.5.2
+"rhydon" release, 04 dec 2005
+
+Copyright (c) 2003-2005 Robey Pointer <robey@lag.net>
+
+http://www.lag.net/paramiko/
+
+
+***  WHAT
+
+"paramiko" is a combination of the esperanto words for "paranoid" and
+"friend".  it's a module for python 2.2+ that implements the SSH2 protocol
+for secure (encrypted and authenticated) connections to remote machines.
+unlike SSL (aka TLS), SSH2 protocol does not require heirarchical
+certificates signed by a powerful central authority. you may know SSH2 as
+the protocol that replaced telnet and rsh for secure access to remote
+shells, but the protocol also includes the ability to open arbitrary
+channels to remote services across the encrypted tunnel (this is how sftp
+works, for example).
+
+it is written entirely in python (no C or platform-dependent code) and is
+released under the GNU LGPL (lesser GPL). 
+
+the package and its API is fairly well documented in the "doc/" folder
+that should have come with this archive.
+
+
+***  REQUIREMENTS
+
+python 2.3	<http://www.python.org/>
+    (python 2.2 is also supported, but not recommended)
+pycrypto 1.9+	<http://www.amk.ca/python/code/crypto.html>
+    (2.0 works too)
+
+pycrypto compiled for Win32 can be downloaded from the HashTar homepage:
+    http://nitace.bsd.uchicago.edu:8080/hashtar
+you can also build it yourself using the free MinGW tools and this command
+line (thanks to Roger Binns for the info):
+    python setup.py build --compiler=mingw32 bdist_wininst
+
+
+***  PORTABILITY
+
+i code and test this library on Linux and MacOS X.  for that reason, i'm
+pretty sure that it works for all posix platforms, including MacOS.  i
+also think it will work on Windows, though i've never tested it there.  if
+you run into Windows problems, send me a patch: portability is important
+to me.
+
+python 2.2 may work, thanks to some patches from Roger Binns.  things to
+watch out for:
+* sockets in 2.2 don't support timeouts, so the 'select' module is
+  imported to do polling.  
+* logging is mostly stubbed out.  it works just enough to let paramiko
+  create log files for debugging, if you want them.  to get real logging,
+  you can backport python 2.3's logging package.  Roger has done that
+  already:
+  http://sourceforge.net/project/showfiles.php?group_id=75211&package_id=113804
+
+you really should upgrade to python 2.3.  laziness is no excuse! :)
+
+some python distributions don't include the utf-8 string encodings, for
+reasons of space (misdirected as that is).  if your distribution is
+missing encodings, you'll see an error like this:
+
+LookupError: no codec search functions registered: can't find encoding
+
+this means you need to copy string encodings over from a working system.
+(it probably only happens on embedded systems, not normal python
+installls.)
+Valeriy Pogrebitskiy says the best place to look is
+'.../lib/python*/encodings/__init__.py'.
+
+
+***  DEMO
+
+several demo scripts come with paramiko to demonstrate how to use it.
+probably the simplest demo of all is this:
+
+    import paramiko, base64
+    key = paramiko.RSAKey(data=base64.decodestring('AAA...'))
+    t = paramiko.Transport('ssh.example.com')
+    t.connect(username='strongbad', password='thecheat', hostkey=key)
+    chan = t.open_session()
+    chan.exec_command('ls')
+    for line in chan.makefile('r+'):
+        print '... ' + line.strip('\n')
+    chan.close()
+    t.close()
+
+...which prints out the results of executing 'ls' on a remote server.
+(the host key 'AAA...' should of course be replaced by the actual base64
+encoding of the host key.  if you skip host key verification, the
+connection is not secure!)
+
+the following example scripts get progressively more detailed:
+
+demo_simple.py
+    calls invoke_shell() and emulates a terminal/tty through which you can
+    execute commands interactively on a remote server.  think of it as a
+    poor man's ssh command-line client.
+
+demo.py
+    same as demo_simple.py, but allows you to authenticiate using a
+    private key, attempts to use an SSH-agent if present, and uses the long
+    form of some of the API calls.
+
+forward.py
+    command-line script to set up port-forwarding across an ssh transport.
+    (requires python 2.3.)
+
+demo_server.py
+    an ssh server that listens on port 2200 and accepts a login for
+    'robey' (password 'foo'), and pretends to be a BBS.  meant to be a
+    very simple demo of writing an ssh server.
+
+
+***  USE
+
+the demo scripts are probably the best example of how to use this package.
+there is also a lot of documentation, generated with epydoc, in the doc/
+folder.  point your browser there.  seriously, do it.  mad props to
+epydoc, which actually motivated me to write more documentation than i
+ever would have before.
+
+there are also unit tests here:
+    $ python ./test.py
+which will verify that some of the core components are working correctly.
+not much is tested yet, but it's a start.  the tests for SFTP are probably
+the best and easiest examples of how to use the SFTP class.
+
+
+***  WHAT'S NEW
+
+highlights of what's new in each release:
+
+v1.5.2 RHYDON
+* compression support (opt-in via Transport.use_compression)
+* sftp files may be opened with mode flag 'x' for O_EXCL (exclusive-open)
+  behavior, which has no direct python equivalent
+* added experimental util functions for parsing openssh config files
+* fixed a few bugs (and potential deadlocks) with key renegotiation
+* fixed a bug that caused SFTPFile.prefetch to occasionally lock up
+* fixed an sftp bug which affected van dyke sftp servers
+* fixed the behavior of select()ing on a closed channel, such that it will
+  always trigger as readable
+
+v1.5.1 QUILAVA
+* SFTPFile.prefetch() added to dramatically speed up downloads (automatically
+  turned on in SFTPClient.get())
+* fixed bug where garbage-collected Channels could trigger the Transport to
+  close the session (reported by gordon good)
+* fixed a deadlock in rekeying (reported by wendell wood)
+* fixed some windows bugs and SFTPAttributes.__str__() (reported by grzegorz
+  makarewicz)
+* better sftp error reporting by adding fake "errno" info to IOErrors
+
+v1.5 PARAS
+* added support for "keyboard-interactive" authentication
+* added mode (on by default) where password authentication will try to
+  fallback to "keyboard-interactive" if it's supported
+* added pipelining to SFTPFile.write and SFTPClient.put
+* fixed bug with SFTPFile.close() not guarding against being called more
+  than once (thanks to Nathaniel Smith)
+* fixed broken 'a' flag in SFTPClient.file() (thanks to Nathaniel Smith)
+* fixed up epydocs to look nicer
+* reorganized auth_transport into auth_handler, which seems to be a cleaner
+  separation
+* demo scripts fixed to have a better chance of loading the host keys
+  correctly on windows/cygwin
+  
+v1.4 ODDISH
+* added SSH-agent support (for posix) from john rochester
+* added chdir() and getcwd() to SFTPClient, to emulate a "working directory"
+* added get() and put() to SFTPClient, to emulate ftp whole-file transfers
+* added check() to SFTPFile (a file hashing protocol extension)
+* fixed Channels and SFTPFiles (among others) to auto-close when GC'd
+* fixed Channel.fileno() for Windows, this time really
+* don't log socket errors as "unknown exception"
+* some misc. backward-compatible API improvements (like allowing
+  Transport.start_client() and start_server() to be called in a blocking way)
+
+v1.3.1 NIDORAN
+* added SFTPClient.close()
+* fixed up some outdated documentation
+* made SFTPClient.file() an alias for open()
+* added Transport.open_sftp_client() for convenience
+* refactored packetizing out of Transport
+* fixed bug (reported by alain s.) where connecting to a non-SSH host could
+  cause paramiko to freeze up
+* fixed Channel.fileno() for Windows (again)
+* some more unit tests
+
+v1.3 MAROWAK
+* fixed a bug where packets larger than about 12KB would cause the session
+  to die on all platforms except osx
+* added a potential workaround for windows to let Channel.fileno() (and
+  therefore the select module) work!
+* changed API for subsystem handlers (sorry!) to pass more info and make it
+  easier to write a functional SFTP server
+
+v1.2 LAPRAS
+* added SFTPClient.listdir_attr() for fetching a list of files and their
+  attributes in one call
+* added Channel.recv_exit_status() and Channel.send_exit_status() for
+  manipulating the exit status of a command from either client or server
+  mode
+* moved check_global_request into ServerInterface, where it should've been
+  all along (oops)
+* SFTPHandle's default implementations are fleshed out more
+* made logging a bit more consistent, and started logging thread ids
+* fixed a few race conditions, one of which would sometimes cause a Transport
+  to fail to start on slow machines
+* more unit tests
+
+v1.1 KABUTO
+* server-side SFTP support
+* added support for stderr streams on client & server channels
+* added a new distinct exception for failed client authentication
+  when caused by the server rejecting that *type* of auth
+* added support for multi-part authentication
+* fixed bug where get_username() wasn't working in server mode
+
+v1.0 JIGGLYPUFF
+* fixed bug that broke server-mode authentication by private key
+* fixed bug where closing a Channel could end up killing the entire
+  Transport
+* actually include demo_windows.py this time (oops!)
+* fixed recently-introduced bug in group-exchange key negotiation that
+  would generate the wrong hash (and therefore fail the initial handshake)
+* server-mode subsystem handler is a bit more flexible
+
+
+***  MISSING LINKS
+
+* host-based auth (yuck!)
+* SFTP implicit file locking?
+* ChannelException like the java version has
+* would be nice to have windows putty "pagent" support -- looks very hard
+
+* ctr forms of ciphers are missing (blowfish-ctr, aes128-ctr, aes256-ctr)
+* sftp protocol 6 support (ugh....) -- once it settles down more
+
+* make a simple example demonstrating use of SocketServer (besides forward.py?)
+
+* make a function to parse .ssh/config files:
+	User, Hostname, Port, ProxyCommand, IdentityFile, HostKeyAlias
+	ProxyCommand: %h = host, %p = port, "none" = disable
