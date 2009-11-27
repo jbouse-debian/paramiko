@@ -1,4 +1,4 @@
-# Copyright (C) 2003-2005 Robey Pointer <robey@lag.net>
+# Copyright (C) 2003-2007  Robey Pointer <robey@lag.net>
 #
 # This file is part of paramiko.
 #
@@ -19,6 +19,9 @@
 """
 Abstraction of a one-way pipe where the read end can be used in select().
 Normally this is trivial, but Windows makes it nearly impossible.
+
+The pipe acts like an Event, which can be set or cleared. When set, the pipe
+will trigger as readable in select().
 """
 
 import sys
@@ -28,8 +31,10 @@ import socket
 
 def make_pipe ():
     if sys.platform[:3] != 'win':
-        return PosixPipe()
-    return WindowsPipe()
+        p = PosixPipe()
+    else:
+        p = WindowsPipe()
+    return p
 
 
 class PosixPipe (object):
@@ -37,10 +42,13 @@ class PosixPipe (object):
         self._rfd, self._wfd = os.pipe()
         self._set = False
         self._forever = False
+        self._closed = False
     
     def close (self):
         os.close(self._rfd)
         os.close(self._wfd)
+        # used for unit tests:
+        self._closed = True
     
     def fileno (self):
         return self._rfd
@@ -52,7 +60,7 @@ class PosixPipe (object):
         self._set = False
     
     def set (self):
-        if self._set:
+        if self._set or self._closed:
             return
         self._set = True
         os.write(self._wfd, '*')
@@ -80,10 +88,13 @@ class WindowsPipe (object):
         serv.close()
         self._set = False
         self._forever = False
+        self._closed = False
     
     def close (self):
         self._rsock.close()
         self._wsock.close()
+        # used for unit tests:
+        self._closed = True
     
     def fileno (self):
         return self._rsock.fileno()
@@ -95,7 +106,7 @@ class WindowsPipe (object):
         self._set = False
     
     def set (self):
-        if self._set:
+        if self._set or self._closed:
             return
         self._set = True
         self._wsock.send('*')
@@ -103,3 +114,34 @@ class WindowsPipe (object):
     def set_forever (self):
         self._forever = True
         self.set()
+
+
+class OrPipe (object):
+    def __init__(self, pipe):
+        self._set = False
+        self._partner = None
+        self._pipe = pipe
+    
+    def set(self):
+        self._set = True
+        if not self._partner._set:
+            self._pipe.set()
+    
+    def clear(self):
+        self._set = False
+        if not self._partner._set:
+            self._pipe.clear()
+
+
+def make_or_pipe(pipe):
+    """
+    wraps a pipe into two pipe-like objects which are "or"d together to
+    affect the real pipe. if either returned pipe is set, the wrapped pipe
+    is set. when both are cleared, the wrapped pipe is cleared.
+    """
+    p1 = OrPipe(pipe)
+    p2 = OrPipe(pipe)
+    p1._partner = p2
+    p2._partner = p1
+    return p1, p2
+

@@ -1,4 +1,4 @@
-# Copyright (C) 2003-2005 Robey Pointer <robey@lag.net>
+# Copyright (C) 2003-2007  Robey Pointer <robey@lag.net>
 #
 # This file is part of paramiko.
 #
@@ -23,15 +23,6 @@ BufferedFile.
 from cStringIO import StringIO
 
 
-_FLAG_READ = 0x1
-_FLAG_WRITE = 0x2
-_FLAG_APPEND = 0x4
-_FLAG_BINARY = 0x10
-_FLAG_BUFFERED = 0x20
-_FLAG_LINE_BUFFERED = 0x40
-_FLAG_UNIVERSAL_NEWLINE = 0x80
-
-
 class BufferedFile (object):
     """
     Reusable base class to implement python-style file buffering around a
@@ -44,7 +35,16 @@ class BufferedFile (object):
     SEEK_CUR = 1
     SEEK_END = 2
 
+    FLAG_READ = 0x1
+    FLAG_WRITE = 0x2
+    FLAG_APPEND = 0x4
+    FLAG_BINARY = 0x10
+    FLAG_BUFFERED = 0x20
+    FLAG_LINE_BUFFERED = 0x40
+    FLAG_UNIVERSAL_NEWLINE = 0x80
+
     def __init__(self):
+        self.newlines = None
         self._flags = 0
         self._bufsize = self._DEFAULT_BUFSIZE
         self._wbuffer = StringIO()
@@ -55,6 +55,8 @@ class BufferedFile (object):
         # realpos - position according the OS
         # (these may be different because we buffer for line reading)
         self._pos = self._realpos = 0
+        # size only matters for seekable files
+        self._size = 0
 
     def __del__(self):
         self.close()
@@ -112,16 +114,16 @@ class BufferedFile (object):
         file first).  If the C{size} argument is negative or omitted, read all
         the remaining data in the file.
 
-        @param size: maximum number of bytes to read.
+        @param size: maximum number of bytes to read
         @type size: int
         @return: data read from the file, or an empty string if EOF was
-            encountered immediately.
+            encountered immediately
         @rtype: str
         """
         if self._closed:
             raise IOError('File is closed')
-        if not (self._flags & _FLAG_READ):
-            raise IOError('File not open for reading')
+        if not (self._flags & self.FLAG_READ):
+            raise IOError('File is not open for reading')
         if (size is None) or (size < 0):
             # go for broke
             result = self._rbuffer
@@ -144,8 +146,11 @@ class BufferedFile (object):
             self._pos += len(result)
             return result
         while len(self._rbuffer) < size:
+            read_size = size - len(self._rbuffer)
+            if self._flags & self.FLAG_BUFFERED:
+                read_size = max(self._bufsize, read_size)
             try:
-                new_data = self._read(max(self._bufsize, size - len(self._rbuffer)))
+                new_data = self._read(read_size)
             except EOFError:
                 new_data = None
             if (new_data is None) or (len(new_data) == 0):
@@ -178,11 +183,11 @@ class BufferedFile (object):
         # it's almost silly how complex this function is.
         if self._closed:
             raise IOError('File is closed')
-        if not (self._flags & _FLAG_READ):
+        if not (self._flags & self.FLAG_READ):
             raise IOError('File not open for reading')
         line = self._rbuffer
         while True:
-            if self._at_trailing_cr and (self._flags & _FLAG_UNIVERSAL_NEWLINE) and (len(line) > 0):
+            if self._at_trailing_cr and (self._flags & self.FLAG_UNIVERSAL_NEWLINE) and (len(line) > 0):
                 # edge case: the newline may be '\r\n' and we may have read
                 # only the first '\r' last time.
                 if line[0] == '\n':
@@ -202,8 +207,8 @@ class BufferedFile (object):
                     return line
                 n = size - len(line)
             else:
-                n = self._DEFAULT_BUFSIZE
-            if ('\n' in line) or ((self._flags & _FLAG_UNIVERSAL_NEWLINE) and ('\r' in line)):
+                n = self._bufsize
+            if ('\n' in line) or ((self._flags & self.FLAG_UNIVERSAL_NEWLINE) and ('\r' in line)):
                 break
             try:
                 new_data = self._read(n)
@@ -217,7 +222,7 @@ class BufferedFile (object):
             self._realpos += len(new_data)
         # find the newline
         pos = line.find('\n')
-        if self._flags & _FLAG_UNIVERSAL_NEWLINE:
+        if self._flags & self.FLAG_UNIVERSAL_NEWLINE:
             rpos = line.find('\r')
             if (rpos >= 0) and ((rpos < pos) or (pos < 0)):
                 pos = rpos
@@ -250,7 +255,7 @@ class BufferedFile (object):
         """
         lines = []
         bytes = 0
-        while 1:
+        while True:
             line = self.readline()
             if len(line) == 0:
                 break
@@ -303,13 +308,13 @@ class BufferedFile (object):
         """
         if self._closed:
             raise IOError('File is closed')
-        if not (self._flags & _FLAG_WRITE):
+        if not (self._flags & self.FLAG_WRITE):
             raise IOError('File not open for writing')
-        if not (self._flags & _FLAG_BUFFERED):
+        if not (self._flags & self.FLAG_BUFFERED):
             self._write_all(data)
             return
         self._wbuffer.write(data)
-        if self._flags & _FLAG_LINE_BUFFERED:
+        if self._flags & self.FLAG_LINE_BUFFERED:
             # only scan the new data for linefeed, to avoid wasting time.
             last_newline_pos = data.rfind('\n')
             if last_newline_pos >= 0:
@@ -387,26 +392,37 @@ class BufferedFile (object):
         """
         Subclasses call this method to initialize the BufferedFile.
         """
+        # set bufsize in any event, because it's used for readline().
+        self._bufsize = self._DEFAULT_BUFSIZE
+        if bufsize < 0:
+            # do no buffering by default, because otherwise writes will get
+            # buffered in a way that will probably confuse people.
+            bufsize = 0
         if bufsize == 1:
             # apparently, line buffering only affects writes.  reads are only
             # buffered if you call readline (directly or indirectly: iterating
             # over a file will indirectly call readline).
-            self._flags |= _FLAG_BUFFERED | _FLAG_LINE_BUFFERED
+            self._flags |= self.FLAG_BUFFERED | self.FLAG_LINE_BUFFERED
         elif bufsize > 1:
             self._bufsize = bufsize
-            self._flags |= _FLAG_BUFFERED
+            self._flags |= self.FLAG_BUFFERED
+            self._flags &= ~self.FLAG_LINE_BUFFERED
+        elif bufsize == 0:
+            # unbuffered
+            self._flags &= ~(self.FLAG_BUFFERED | self.FLAG_LINE_BUFFERED)
+
         if ('r' in mode) or ('+' in mode):
-            self._flags |= _FLAG_READ
+            self._flags |= self.FLAG_READ
         if ('w' in mode) or ('+' in mode):
-            self._flags |= _FLAG_WRITE
+            self._flags |= self.FLAG_WRITE
         if ('a' in mode):
-            self._flags |= _FLAG_WRITE | _FLAG_APPEND
+            self._flags |= self.FLAG_WRITE | self.FLAG_APPEND
             self._size = self._get_size()
             self._pos = self._realpos = self._size
         if ('b' in mode):
-            self._flags |= _FLAG_BINARY
+            self._flags |= self.FLAG_BINARY
         if ('U' in mode):
-            self._flags |= _FLAG_UNIVERSAL_NEWLINE
+            self._flags |= self.FLAG_UNIVERSAL_NEWLINE
             # built-in file objects have this attribute to store which kinds of
             # line terminations they've seen:
             # <http://www.python.org/doc/current/lib/built-in-funcs.html>
@@ -418,7 +434,7 @@ class BufferedFile (object):
         while len(data) > 0:
             count = self._write(data)
             data = data[count:]
-            if self._flags & _FLAG_APPEND:
+            if self._flags & self.FLAG_APPEND:
                 self._size += count
                 self._pos = self._realpos = self._size
             else:
@@ -430,7 +446,7 @@ class BufferedFile (object):
         # silliness about tracking what kinds of newlines we've seen.
         # i don't understand why it can be None, a string, or a tuple, instead
         # of just always being a tuple, but we'll emulate that behavior anyway.
-        if not (self._flags & _FLAG_UNIVERSAL_NEWLINE):
+        if not (self._flags & self.FLAG_UNIVERSAL_NEWLINE):
             return
         if self.newlines is None:
             self.newlines = newline

@@ -1,4 +1,4 @@
-# Copyright (C) 2003-2005 Robey Pointer <robey@lag.net>
+# Copyright (C) 2003-2007  Robey Pointer <robey@lag.net>
 #
 # This file is part of paramiko.
 #
@@ -66,15 +66,21 @@ class SFTPServer (BaseSFTP, SubsystemHandler):
         BaseSFTP.__init__(self)
         SubsystemHandler.__init__(self, channel, name, server)
         transport = channel.get_transport()
-        self.logger = util.get_logger(transport.get_log_channel() + '.' +
-                                      channel.get_name() + '.sftp')
+        self.logger = util.get_logger(transport.get_log_channel() + '.sftp')
         self.ultra_debug = transport.get_hexdump()
         self.next_handle = 1
         # map of handle-string to SFTPHandle for files & folders:
         self.file_table = { }
         self.folder_table = { }
         self.server = sftp_si(server, *largs, **kwargs)
-
+        
+    def _log(self, level, msg):
+        if issubclass(type(msg), list):
+            for m in msg:
+                super(SFTPServer, self)._log(level, "[chan " + self.sock.get_name() + "] " + m)
+        else:
+            super(SFTPServer, self)._log(level, "[chan " + self.sock.get_name() + "] " + msg)
+        
     def start_subsystem(self, name, transport, channel):
         self.sock = channel
         self._log(DEBUG, 'Started sftp server on channel %s' % repr(channel))
@@ -92,10 +98,20 @@ class SFTPServer (BaseSFTP, SubsystemHandler):
                 return
             msg = Message(data)
             request_number = msg.get_int()
-            self._process(t, request_number, msg)
+            try:
+                self._process(t, request_number, msg)
+            except Exception, e:
+                self._log(DEBUG, 'Exception in server processing: ' + str(e))
+                self._log(DEBUG, util.tb_strings())
+                # send some kind of failure message, at least
+                try:
+                    self._send_status(request_number, SFTP_FAILURE)
+                except:
+                    pass
 
     def finish_subsystem(self):
         self.server.session_ended()
+        super(SFTPServer, self).finish_subsystem()
         # close any file handles that were left open (so we can return them to the OS quickly)
         for f in self.file_table.itervalues():
             f.close()
@@ -118,7 +134,7 @@ class SFTPServer (BaseSFTP, SubsystemHandler):
         if e == errno.EACCES:
             # permission denied
             return SFTP_PERMISSION_DENIED
-        elif e == errno.ENOENT:
+        elif (e == errno.ENOENT) or (e == errno.ENOTDIR):
             # no such file
             return SFTP_NO_SUCH_FILE
         else:
@@ -141,12 +157,16 @@ class SFTPServer (BaseSFTP, SubsystemHandler):
         @param attr: attributes to change.
         @type attr: L{SFTPAttributes}
         """
-        if attr._flags & attr.FLAG_PERMISSIONS:
-            os.chmod(filename, attr.st_mode)
-        if attr._flags & attr.FLAG_UIDGID:
-            os.chown(filename, attr.st_uid, attr.st_gid)
+        if sys.platform != 'win32':
+            # mode operations are meaningless on win32
+            if attr._flags & attr.FLAG_PERMISSIONS:
+                os.chmod(filename, attr.st_mode)
+            if attr._flags & attr.FLAG_UIDGID:
+                os.chown(filename, attr.st_uid, attr.st_gid)
         if attr._flags & attr.FLAG_AMTIME:
             os.utime(filename, (attr.st_atime, attr.st_mtime))
+        if attr._flags & attr.FLAG_SIZE:
+            open(filename, 'w+').truncate(attr.st_size)
     set_file_attr = staticmethod(set_file_attr)
 
 
@@ -184,8 +204,12 @@ class SFTPServer (BaseSFTP, SubsystemHandler):
 
     def _send_status(self, request_number, code, desc=None):
         if desc is None:
-            desc = SFTP_DESC[code]
-        self._response(request_number, CMD_STATUS, code, desc)
+            try:
+                desc = SFTP_DESC[code]
+            except IndexError:
+                desc = 'Unknown'
+        # some clients expect a "langauge" tag at the end (but don't mind it being blank)
+        self._response(request_number, CMD_STATUS, code, desc, '')
 
     def _open_folder(self, request_number, path):
         resp = self.server.list_folder(path)
@@ -222,7 +246,7 @@ class SFTPServer (BaseSFTP, SubsystemHandler):
         start = msg.get_int64()
         length = msg.get_int64()
         block_size = msg.get_int()
-        if not self.file_table.has_key(handle):
+        if handle not in self.file_table:
             self._send_status(request_number, SFTP_BAD_MESSAGE, 'Invalid handle')
             return
         f = self.file_table[handle]
@@ -246,29 +270,29 @@ class SFTPServer (BaseSFTP, SubsystemHandler):
             self._send_status(request_number, SFTP_FAILURE, 'Block size too small')
             return
 
-        sum = ''
+        sum_out = ''
         offset = start
         while offset < start + length:
             blocklen = min(block_size, start + length - offset)
             # don't try to read more than about 64KB at a time
             chunklen = min(blocklen, 65536)
             count = 0
-            hash = alg.new()
+            hash_obj = alg.new()
             while count < blocklen:
                 data = f.read(offset, chunklen)
                 if not type(data) is str:
                     self._send_status(request_number, data, 'Unable to hash file')
                     return
-                hash.update(data)
+                hash_obj.update(data)
                 count += len(data)
                 offset += count
-            sum += hash.digest()
+            sum_out += hash_obj.digest()
 
         msg = Message()
         msg.add_int(request_number)
         msg.add_string('check-file')
         msg.add_string(algname)
-        msg.add_bytes(sum)
+        msg.add_bytes(sum_out)
         self._send_packet(CMD_EXTENDED_REPLY, str(msg))
     
     def _convert_pflags(self, pflags):
@@ -298,11 +322,11 @@ class SFTPServer (BaseSFTP, SubsystemHandler):
             self._send_handle_response(request_number, self.server.open(path, flags, attr))
         elif t == CMD_CLOSE:
             handle = msg.get_string()
-            if self.folder_table.has_key(handle):
+            if handle in self.folder_table:
                 del self.folder_table[handle]
                 self._send_status(request_number, SFTP_OK)
                 return
-            if self.file_table.has_key(handle):
+            if handle in self.file_table:
                 self.file_table[handle].close()
                 del self.file_table[handle]
                 self._send_status(request_number, SFTP_OK)
@@ -312,7 +336,7 @@ class SFTPServer (BaseSFTP, SubsystemHandler):
             handle = msg.get_string()
             offset = msg.get_int64()
             length = msg.get_int()
-            if not self.file_table.has_key(handle):
+            if handle not in self.file_table:
                 self._send_status(request_number, SFTP_BAD_MESSAGE, 'Invalid handle')
                 return
             data = self.file_table[handle].read(offset, length)
@@ -327,7 +351,7 @@ class SFTPServer (BaseSFTP, SubsystemHandler):
             handle = msg.get_string()
             offset = msg.get_int64()
             data = msg.get_string()
-            if not self.file_table.has_key(handle):
+            if handle not in self.file_table:
                 self._send_status(request_number, SFTP_BAD_MESSAGE, 'Invalid handle')
                 return
             self._send_status(request_number, self.file_table[handle].write(offset, data))
@@ -351,7 +375,7 @@ class SFTPServer (BaseSFTP, SubsystemHandler):
             return
         elif t == CMD_READDIR:
             handle = msg.get_string()
-            if not self.folder_table.has_key(handle):
+            if handle not in self.folder_table:
                 self._send_status(request_number, SFTP_BAD_MESSAGE, 'Invalid handle')
                 return
             folder = self.folder_table[handle]
@@ -372,7 +396,7 @@ class SFTPServer (BaseSFTP, SubsystemHandler):
                 self._send_status(request_number, resp)
         elif t == CMD_FSTAT:
             handle = msg.get_string()
-            if not self.file_table.has_key(handle):
+            if handle not in self.file_table:
                 self._send_status(request_number, SFTP_BAD_MESSAGE, 'Invalid handle')
                 return
             resp = self.file_table[handle].stat()
@@ -387,7 +411,7 @@ class SFTPServer (BaseSFTP, SubsystemHandler):
         elif t == CMD_FSETSTAT:
             handle = msg.get_string()
             attr = SFTPAttributes._from_msg(msg)
-            if not self.file_table.has_key(handle):
+            if handle not in self.file_table:
                 self._response(request_number, SFTP_BAD_MESSAGE, 'Invalid handle')
                 return
             self._send_status(request_number, self.file_table[handle].chattr(attr))
@@ -412,7 +436,7 @@ class SFTPServer (BaseSFTP, SubsystemHandler):
             if tag == 'check-file':
                 self._check_file(request_number, msg)
             else:
-                send._send_status(request_number, SFTP_OP_UNSUPPORTED)
+                self._send_status(request_number, SFTP_OP_UNSUPPORTED)
         else:
             self._send_status(request_number, SFTP_OP_UNSUPPORTED)
 

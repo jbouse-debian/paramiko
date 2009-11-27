@@ -1,4 +1,4 @@
-# Copyright (C) 2003-2005 Robey Pointer <robey@lag.net>
+# Copyright (C) 2003-2007  Robey Pointer <robey@lag.net>
 #
 # This file is part of paramiko.
 #
@@ -36,6 +36,9 @@ class SFTPServerInterface (object):
     SFTP sessions).  However, raising an exception will usually cause the SFTP
     session to abruptly end, so you will usually want to catch exceptions and
     return an appropriate error code.
+    
+    All paths are in string form instead of unicode because not all SFTP
+    clients & servers obey the requirement that paths be encoded in UTF-8.
     """
     
     def __init__ (self, server, *largs, **kwargs):
@@ -268,9 +271,13 @@ class SFTPServerInterface (object):
         The default implementation returns C{os.path.normpath('/' + path)}.
         """
         if os.path.isabs(path):
-            return os.path.normpath(path)
+            out = os.path.normpath(path)
         else:
-            return os.path.normpath('/' + path)
+            out = os.path.normpath('/' + path)
+        if sys.platform == 'win32':
+            # on windows, normalize backslashes to sftp/posix format
+            out = out.replace('\\', '/')
+        return out
     
     def readlink(self, path):
         """

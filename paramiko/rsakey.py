@@ -1,4 +1,4 @@
-# Copyright (C) 2003-2005 Robey Pointer <robey@lag.net>
+# Copyright (C) 2003-2007  Robey Pointer <robey@lag.net>
 #
 # This file is part of paramiko.
 #
@@ -38,7 +38,15 @@ class RSAKey (PKey):
     data.
     """
 
-    def __init__(self, msg=None, data=None, filename=None, password=None, vals=None):
+    def __init__(self, msg=None, data=None, filename=None, password=None, vals=None, file_obj=None):
+        self.n = None
+        self.e = None
+        self.d = None
+        self.p = None
+        self.q = None
+        if file_obj is not None:
+            self._from_private_key(file_obj, password)
+            return
         if filename is not None:
             self._from_private_key_file(filename, password)
             return
@@ -75,7 +83,7 @@ class RSAKey (PKey):
         return self.size
 
     def can_sign(self):
-        return hasattr(self, 'd')
+        return self.d is not None
 
     def sign_ssh_data(self, rpool, data):
         digest = SHA.new(data).digest()
@@ -93,11 +101,13 @@ class RSAKey (PKey):
         # verify the signature by SHA'ing the data and encrypting it using the
         # public key.  some wackiness ensues where we "pkcs1imify" the 20-byte
         # hash into a string as long as the RSA key.
-        hash = util.inflate_long(self._pkcs1imify(SHA.new(data).digest()), True)
+        hash_obj = util.inflate_long(self._pkcs1imify(SHA.new(data).digest()), True)
         rsa = RSA.construct((long(self.n), long(self.e)))
-        return rsa.verify(hash, (sig,))
+        return rsa.verify(hash_obj, (sig,))
 
-    def write_private_key_file(self, filename, password=None):
+    def _encode_key(self):
+        if (self.p is None) or (self.q is None):
+            raise SSHException('Not enough key info to write private key file')
         keylist = [ 0, self.n, self.e, self.d, self.p, self.q,
                     self.d % (self.p - 1), self.d % (self.q - 1),
                     util.mod_inverse(self.q, self.p) ]
@@ -106,7 +116,13 @@ class RSAKey (PKey):
             b.encode(keylist)
         except BERException:
             raise SSHException('Unable to create ber encoding of key')
-        self._write_private_key_file('RSA', filename, str(b), password)
+        return str(b)
+
+    def write_private_key_file(self, filename, password=None):
+        self._write_private_key_file('RSA', filename, self._encode_key(), password)
+        
+    def write_private_key(self, file_obj, password=None):
+        self._write_private_key('RSA', file_obj, self._encode_key(), password)
 
     def generate(bits, progress_func=None):
         """
@@ -120,8 +136,6 @@ class RSAKey (PKey):
         @type progress_func: function
         @return: new private key
         @rtype: L{RSAKey}
-
-        @since: fearow
         """
         randpool.stir()
         rsa = RSA.generate(bits, randpool.get_bytes, progress_func)
@@ -147,9 +161,16 @@ class RSAKey (PKey):
         return '\x00\x01' + filler + '\x00' + SHA1_DIGESTINFO + data
 
     def _from_private_key_file(self, filename, password):
+        data = self._read_private_key_file('RSA', filename, password)
+        self._decode_key(data)
+    
+    def _from_private_key(self, file_obj, password):
+        data = self._read_private_key('RSA', file_obj, password)
+        self._decode_key(data)
+    
+    def _decode_key(self, data):
         # private key file contains:
         # RSAPrivateKey = { version = 0, n, e, d, p, q, d mod p-1, d mod q-1, q**-1 mod p }
-        data = self._read_private_key_file('RSA', filename, password)
         try:
             keylist = BER(data).decode()
         except BERException:

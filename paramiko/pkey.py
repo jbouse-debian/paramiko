@@ -1,4 +1,4 @@
-# Copyright (C) 2003-2005 Robey Pointer <robey@lag.net>
+# Copyright (C) 2003-2007  Robey Pointer <robey@lag.net>
 #
 # This file is part of paramiko.
 #
@@ -21,6 +21,7 @@ Common API for all public keys.
 """
 
 import base64
+from binascii import hexlify, unhexlify
 import os
 
 from Crypto.Hash import MD5
@@ -139,8 +140,6 @@ class PKey (object):
 
         @return: a base64 string containing the public part of the key.
         @rtype: str
-
-        @since: fearow
         """
         return base64.encodestring(str(self)).replace('\n', '')
 
@@ -173,7 +172,7 @@ class PKey (object):
         """
         return False
    
-    def from_private_key_file(cl, filename, password=None):
+    def from_private_key_file(cls, filename, password=None):
         """
         Create a key object by reading a private key file.  If the private
         key is encrypted and C{password} is not C{None}, the given password
@@ -182,41 +181,76 @@ class PKey (object):
         exist in all subclasses of PKey (such as L{RSAKey} or L{DSSKey}), but
         is useless on the abstract PKey class.
 
-        @param filename: name of the file to read.
+        @param filename: name of the file to read
         @type filename: str
         @param password: an optional password to use to decrypt the key file,
             if it's encrypted
         @type password: str
-        @return: a new key object based on the given private key.
+        @return: a new key object based on the given private key
         @rtype: L{PKey}
 
-        @raise IOError: if there was an error reading the file.
+        @raise IOError: if there was an error reading the file
         @raise PasswordRequiredException: if the private key file is
-            encrypted, and C{password} is C{None}.
-        @raise SSHException: if the key file is invalid.
-
-        @since: fearow
+            encrypted, and C{password} is C{None}
+        @raise SSHException: if the key file is invalid
         """
-        key = cl(filename=filename, password=password)
+        key = cls(filename=filename, password=password)
         return key
     from_private_key_file = classmethod(from_private_key_file)
+
+    def from_private_key(cls, file_obj, password=None):
+        """
+        Create a key object by reading a private key from a file (or file-like)
+        object.  If the private key is encrypted and C{password} is not C{None},
+        the given password will be used to decrypt the key (otherwise
+        L{PasswordRequiredException} is thrown).
+        
+        @param file_obj: the file to read from
+        @type file_obj: file
+        @param password: an optional password to use to decrypt the key, if it's
+            encrypted
+        @type password: str
+        @return: a new key object based on the given private key
+        @rtype: L{PKey}
+        
+        @raise IOError: if there was an error reading the key
+        @raise PasswordRequiredException: if the private key file is encrypted,
+            and C{password} is C{None}
+        @raise SSHException: if the key file is invalid
+        """
+        key = cls(file_obj=file_obj, password=password)
+        return key
+    from_private_key = classmethod(from_private_key)
 
     def write_private_key_file(self, filename, password=None):
         """
         Write private key contents into a file.  If the password is not
         C{None}, the key is encrypted before writing.
 
-        @param filename: name of the file to write.
+        @param filename: name of the file to write
         @type filename: str
-        @param password: an optional password to use to encrypt the key file.
+        @param password: an optional password to use to encrypt the key file
         @type password: str
 
-        @raise IOError: if there was an error writing the file.
-        @raise SSHException: if the key is invalid.
-
-        @since: fearow
+        @raise IOError: if there was an error writing the file
+        @raise SSHException: if the key is invalid
         """
-        raise exception('Not implemented in PKey')
+        raise Exception('Not implemented in PKey')
+    
+    def write_private_key(self, file_obj, password=None):
+        """
+        Write private key contents into a file (or file-like) object.  If the
+        password is not C{None}, the key is encrypted before writing.
+        
+        @param file_obj: the file object to write into
+        @type file_obj: file
+        @param password: an optional password to use to encrypt the key
+        @type password: str
+        
+        @raise IOError: if there was an error writing to the file
+        @raise SSHException: if the key is invalid
+        """
+        raise Exception('Not implemented in PKey')
 
     def _read_private_key_file(self, tag, filename, password=None):
         """
@@ -242,8 +276,12 @@ class PKey (object):
         @raise SSHException: if the key file is invalid.
         """
         f = open(filename, 'r')
-        lines = f.readlines()
+        data = self._read_private_key(tag, f, password)
         f.close()
+        return data
+    
+    def _read_private_key(self, tag, f, password=None):
+        lines = f.readlines()
         start = 0
         while (start < len(lines)) and (lines[start].strip() != '-----BEGIN ' + tag + ' PRIVATE KEY-----'):
             start += 1
@@ -265,9 +303,9 @@ class PKey (object):
         # if we trudged to the end of the file, just try to cope.
         try:
             data = base64.decodestring(''.join(lines[start:end]))
-        except binascii.Error, e:
+        except base64.binascii.Error, e:
             raise SSHException('base64 decoding error: ' + str(e))
-        if not headers.has_key('proc-type'):
+        if 'proc-type' not in headers:
             # unencryped: done
             return data
         # encrypted keyfile: will need a password
@@ -277,7 +315,7 @@ class PKey (object):
             encryption_type, saltstr = headers['dek-info'].split(',')
         except:
             raise SSHException('Can\'t parse DEK-info in private key file')
-        if not self._CIPHER_TABLE.has_key(encryption_type):
+        if encryption_type not in self._CIPHER_TABLE:
             raise SSHException('Unknown private key cipher "%s"' % encryption_type)
         # if no password was passed in, raise an exception pointing out that we need one
         if password is None:
@@ -285,7 +323,7 @@ class PKey (object):
         cipher = self._CIPHER_TABLE[encryption_type]['cipher']
         keysize = self._CIPHER_TABLE[encryption_type]['keysize']
         mode = self._CIPHER_TABLE[encryption_type]['mode']
-        salt = util.unhexify(saltstr)
+        salt = unhexlify(saltstr)
         key = util.generate_key_bytes(MD5, salt, password, keysize)
         return cipher.new(key, mode, salt).decrypt(data)
 
@@ -310,6 +348,10 @@ class PKey (object):
         f = open(filename, 'w', 0600)
         # grrr... the mode doesn't always take hold
         os.chmod(filename, 0600)
+        self._write_private_key(tag, f, data, password)
+        f.close()
+    
+    def _write_private_key(self, tag, f, data, password=None):
         f.write('-----BEGIN %s PRIVATE KEY-----\n' % tag)
         if password is not None:
             # since we only support one cipher here, use it
@@ -327,7 +369,7 @@ class PKey (object):
                 data += '\0' * n
             data = cipher.new(key, mode, salt).encrypt(data)
             f.write('Proc-Type: 4,ENCRYPTED\n')
-            f.write('DEK-Info: %s,%s\n' % (cipher_name, util.hexify(salt)))
+            f.write('DEK-Info: %s,%s\n' % (cipher_name, hexlify(salt).upper()))
             f.write('\n')
         s = base64.encodestring(data)
         # re-wrap to 64-char lines
@@ -336,4 +378,3 @@ class PKey (object):
         f.write(s)
         f.write('\n')
         f.write('-----END %s PRIVATE KEY-----\n' % tag)
-        f.close()

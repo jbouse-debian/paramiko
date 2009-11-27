@@ -1,6 +1,4 @@
-#!/usr/bin/python
-
-# Copyright (C) 2003-2005 Robey Pointer <robey@lag.net>
+# Copyright (C) 2003-2007  Robey Pointer <robey@lag.net>
 #
 # This file is part of paramiko.
 #
@@ -48,6 +46,7 @@ class StubSFTPHandle (SFTPHandle):
         # use the stored filename
         try:
             SFTPServer.set_file_attr(self.filename, attr)
+            return SFTP_OK
         except OSError, e:
             return SFTPServer.convert_errno(e.errno)
 
@@ -90,23 +89,38 @@ class StubSFTPServer (SFTPServerInterface):
     def open(self, path, flags, attr):
         path = self._realpath(path)
         try:
-            fd = os.open(path, flags)
+            binary_flag = getattr(os, 'O_BINARY',  0)
+            flags |= binary_flag
+            mode = getattr(attr, 'st_mode', None)
+            if mode is not None:
+                fd = os.open(path, flags, mode)
+            else:
+                # os.open() defaults to 0777 which is
+                # an odd default mode for files
+                fd = os.open(path, flags, 0666)
         except OSError, e:
             return SFTPServer.convert_errno(e.errno)
         if (flags & os.O_CREAT) and (attr is not None):
+            attr._flags &= ~attr.FLAG_PERMISSIONS
             SFTPServer.set_file_attr(path, attr)
         if flags & os.O_WRONLY:
-            fstr = 'w'
+            if flags & os.O_APPEND:
+                fstr = 'ab'
+            else:
+                fstr = 'wb'
         elif flags & os.O_RDWR:
-            fstr = 'r+'
+            if flags & os.O_APPEND:
+                fstr = 'a+b'
+            else:
+                fstr = 'r+b'
         else:
             # O_RDONLY (== 0)
-            fstr = 'r'
+            fstr = 'rb'
         try:
             f = os.fdopen(fd, fstr)
         except OSError, e:
             return SFTPServer.convert_errno(e.errno)
-        fobj = StubSFTPHandle()
+        fobj = StubSFTPHandle(flags)
         fobj.filename = path
         fobj.readfile = f
         fobj.writefile = f
@@ -171,7 +185,7 @@ class StubSFTPServer (SFTPServerInterface):
                 target_path = '<error>'
         try:
             os.symlink(target_path, path)
-        except:
+        except OSError, e:
             return SFTPServer.convert_errno(e.errno)
         return SFTP_OK
 

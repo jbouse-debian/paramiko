@@ -1,4 +1,4 @@
-# Copyright (C) 2003-2005 Robey Pointer <robey@lag.net>
+# Copyright (C) 2003-2008  Robey Pointer <robey@lag.net>
 #
 # This file is part of paramiko.
 #
@@ -26,8 +26,9 @@ replaced C{telnet} and C{rsh} for secure access to remote shells, but the
 protocol also includes the ability to open arbitrary channels to remote
 services across an encrypted tunnel.  (This is how C{sftp} works, for example.)
 
-To use this package, pass a socket (or socket-like object) to a L{Transport},
-and use L{start_server <Transport.start_server>} or
+The high-level client API starts with creation of an L{SSHClient} object.
+For more direct control, pass a socket (or socket-like object) to a
+L{Transport}, and use L{start_server <Transport.start_server>} or
 L{start_client <Transport.start_client>} to negoatite
 with the remote host as either a server or client.  As a client, you are
 responsible for authenticating using a password or private key, and checking
@@ -46,7 +47,7 @@ released under the GNU Lesser General Public License (LGPL).
 
 Website: U{http://www.lag.net/paramiko/}
 
-@version: 1.5.2 (rhydon)
+@version: 1.7.4 (Desmond)
 @author: Robey Pointer
 @contact: robey@lag.net
 @license: GNU Lesser General Public License (LGPL)
@@ -59,20 +60,19 @@ if sys.version_info < (2, 2):
 
 
 __author__ = "Robey Pointer <robey@lag.net>"
-__date__ = "04 Dec 2005"
-__version__ = "1.5.2 (rhydon)"
-__version_info__ = (1, 5, 2)
+__date__ = "06 Jul 2008"
+__version__ = "1.7.4 (Desmond)"
+__version_info__ = (1, 7, 4)
 __license__ = "GNU Lesser General Public License (LGPL)"
 
 
-import transport, auth_handler, channel, rsakey, dsskey, message
-import ssh_exception, file, packet, agent, server, util
-import sftp_client, sftp_attr, sftp_handle, sftp_server, sftp_si
-
 from transport import randpool, SecurityOptions, Transport
+from client import SSHClient, MissingHostKeyPolicy, AutoAddPolicy, RejectPolicy, WarningPolicy
 from auth_handler import AuthHandler
 from channel import Channel, ChannelFile
-from ssh_exception import SSHException, PasswordRequiredException, BadAuthenticationType
+from ssh_exception import SSHException, PasswordRequiredException, \
+    BadAuthenticationType, ChannelException, BadHostKeyException, \
+    AuthenticationException
 from server import ServerInterface, SubsystemHandler, InteractiveQuery
 from rsakey import RSAKey
 from dsskey import DSSKey
@@ -88,15 +88,15 @@ from packet import Packetizer
 from file import BufferedFile
 from agent import Agent, AgentKey
 from pkey import PKey
+from hostkeys import HostKeys
+from config import SSHConfig
 
 # fix module names for epydoc
-for x in [Transport, SecurityOptions, Channel, SFTPServer, SSHException, \
-          PasswordRequiredException, BadAuthenticationType, ChannelFile, \
-          SubsystemHandler, AuthHandler, RSAKey, DSSKey, SFTPError, \
-          SFTP, SFTPClient, SFTPServer, Message, Packetizer, SFTPAttributes, \
-          SFTPHandle, SFTPServerInterface, BufferedFile, Agent, AgentKey, \
-          PKey, BaseSFTP, SFTPFile, ServerInterface]:
-    x.__module__ = 'paramiko'
+for c in locals().values():
+    if issubclass(type(c), type) or type(c).__name__ == 'classobj':
+        # classobj for exceptions :/
+        c.__module__ = __name__
+del c
 
 from common import AUTH_SUCCESSFUL, AUTH_PARTIALLY_SUCCESSFUL, AUTH_FAILED, \
      OPEN_SUCCEEDED, OPEN_FAILED_ADMINISTRATIVELY_PROHIBITED,  OPEN_FAILED_CONNECT_FAILED, \
@@ -106,16 +106,24 @@ from sftp import SFTP_OK, SFTP_EOF, SFTP_NO_SUCH_FILE, SFTP_PERMISSION_DENIED, S
      SFTP_BAD_MESSAGE, SFTP_NO_CONNECTION, SFTP_CONNECTION_LOST, SFTP_OP_UNSUPPORTED
 
 __all__ = [ 'Transport',
+            'SSHClient',
+            'MissingHostKeyPolicy',
+            'AutoAddPolicy',
+            'RejectPolicy',
+            'WarningPolicy',
             'SecurityOptions',
             'SubsystemHandler',
             'Channel',
+            'PKey',
             'RSAKey',
             'DSSKey',
-            'Agent',
             'Message',
             'SSHException',
+            'AuthenticationException',
             'PasswordRequiredException',
             'BadAuthenticationType',
+            'ChannelException',
+            'BadHostKeyException',
             'SFTP',
             'SFTPFile',
             'SFTPHandle',
@@ -123,24 +131,11 @@ __all__ = [ 'Transport',
             'SFTPServer',
             'SFTPError',
             'SFTPAttributes',
-            'SFTPServerInterface'
+            'SFTPServerInterface',
             'ServerInterface',
             'BufferedFile',
             'Agent',
             'AgentKey',
-            'rsakey',
-            'dsskey',
-            'pkey',
-            'message',
-            'transport',
-            'sftp',
-            'sftp_client',
-            'sftp_server',
-            'sftp_attr',
-            'sftp_file',
-            'sftp_si',
-            'sftp_handle',
-            'server',
-            'file',
-            'agent',
+            'HostKeys',
+            'SSHConfig',
             'util' ]
