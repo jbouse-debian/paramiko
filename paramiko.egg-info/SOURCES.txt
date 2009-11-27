@@ -155,6 +155,7 @@ docs/paramiko.transport-pysrc.html
 docs/paramiko.transport.ChannelMap-class.html
 docs/paramiko.util-module.html
 docs/paramiko.util-pysrc.html
+docs/paramiko.util.Counter-class.html
 docs/paramiko.util.PFilter-class.html
 docs/paramiko.util.enumerate-class.html
 docs/paramiko.win_pageant-module.html

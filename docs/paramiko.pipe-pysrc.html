@@ -54,24 +54,24 @@
 </table>
 <h1 class="epydoc">Source Code for <a href="paramiko.pipe-module.html" onclick="show_private();">Module paramiko.pipe</a></h1>
 <pre class="py-src">
-<a name="L1"></a><tt class="py-lineno">  1</tt>  <tt class="py-line"><tt class="py-comment"># Copyright (C) 2003-2007  Robey Pointer &lt;robey@lag.net&gt;</tt> </tt>
-<a name="L2"></a><tt class="py-lineno">  2</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment">#</tt> </tt>
-<a name="L3"></a><tt class="py-lineno">  3</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># This file is part of paramiko.</tt> </tt>
-<a name="L4"></a><tt class="py-lineno">  4</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment">#</tt> </tt>
-<a name="L5"></a><tt class="py-lineno">  5</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># Paramiko is free software; you can redistribute it and/or modify it under the</tt> </tt>
-<a name="L6"></a><tt class="py-lineno">  6</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># terms of the GNU Lesser General Public License as published by the Free</tt> </tt>
-<a name="L7"></a><tt class="py-lineno">  7</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># Software Foundation; either version 2.1 of the License, or (at your option)</tt> </tt>
-<a name="L8"></a><tt class="py-lineno">  8</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># any later version.</tt> </tt>
-<a name="L9"></a><tt class="py-lineno">  9</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment">#</tt> </tt>
-<a name="L10"></a><tt class="py-lineno"> 10</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># Paramiko is distrubuted in the hope that it will be useful, but WITHOUT ANY</tt> </tt>
-<a name="L11"></a><tt class="py-lineno"> 11</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR</tt> </tt>
-<a name="L12"></a><tt class="py-lineno"> 12</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more</tt> </tt>
-<a name="L13"></a><tt class="py-lineno"> 13</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># details.</tt> </tt>
-<a name="L14"></a><tt class="py-lineno"> 14</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment">#</tt> </tt>
-<a name="L15"></a><tt class="py-lineno"> 15</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># You should have received a copy of the GNU Lesser General Public License</tt> </tt>
-<a name="L16"></a><tt class="py-lineno"> 16</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># along with Paramiko; if not, write to the Free Software Foundation, Inc.,</tt> </tt>
-<a name="L17"></a><tt class="py-lineno"> 17</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA.</tt> </tt>
-<a name="L18"></a><tt class="py-lineno"> 18</tt>  <tt class="py-line"><tt class="py-comment"></tt> </tt>
+<a name="L1"></a><tt class="py-lineno">  1</tt>  <tt class="py-line"><tt class="py-comment"># Copyright (C) 2003-2007  Robey Pointer &lt;robeypointer@gmail.com&gt;</tt> </tt>
+<a name="L2"></a><tt class="py-lineno">  2</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L3"></a><tt class="py-lineno">  3</tt>  <tt class="py-line"><tt class="py-comment"># This file is part of paramiko.</tt> </tt>
+<a name="L4"></a><tt class="py-lineno">  4</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L5"></a><tt class="py-lineno">  5</tt>  <tt class="py-line"><tt class="py-comment"># Paramiko is free software; you can redistribute it and/or modify it under the</tt> </tt>
+<a name="L6"></a><tt class="py-lineno">  6</tt>  <tt class="py-line"><tt class="py-comment"># terms of the GNU Lesser General Public License as published by the Free</tt> </tt>
+<a name="L7"></a><tt class="py-lineno">  7</tt>  <tt class="py-line"><tt class="py-comment"># Software Foundation; either version 2.1 of the License, or (at your option)</tt> </tt>
+<a name="L8"></a><tt class="py-lineno">  8</tt>  <tt class="py-line"><tt class="py-comment"># any later version.</tt> </tt>
+<a name="L9"></a><tt class="py-lineno">  9</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L10"></a><tt class="py-lineno"> 10</tt>  <tt class="py-line"><tt class="py-comment"># Paramiko is distrubuted in the hope that it will be useful, but WITHOUT ANY</tt> </tt>
+<a name="L11"></a><tt class="py-lineno"> 11</tt>  <tt class="py-line"><tt class="py-comment"># WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR</tt> </tt>
+<a name="L12"></a><tt class="py-lineno"> 12</tt>  <tt class="py-line"><tt class="py-comment"># A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more</tt> </tt>
+<a name="L13"></a><tt class="py-lineno"> 13</tt>  <tt class="py-line"><tt class="py-comment"># details.</tt> </tt>
+<a name="L14"></a><tt class="py-lineno"> 14</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L15"></a><tt class="py-lineno"> 15</tt>  <tt class="py-line"><tt class="py-comment"># You should have received a copy of the GNU Lesser General Public License</tt> </tt>
+<a name="L16"></a><tt class="py-lineno"> 16</tt>  <tt class="py-line"><tt class="py-comment"># along with Paramiko; if not, write to the Free Software Foundation, Inc.,</tt> </tt>
+<a name="L17"></a><tt class="py-lineno"> 17</tt>  <tt class="py-line"><tt class="py-comment"># 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA.</tt> </tt>
+<a name="L18"></a><tt class="py-lineno"> 18</tt>  <tt class="py-line"> </tt>
 <a name="L19"></a><tt class="py-lineno"> 19</tt>  <tt class="py-line"><tt class="py-docstring">"""</tt> </tt>
 <a name="L20"></a><tt class="py-lineno"> 20</tt>  <tt class="py-line"><tt class="py-docstring">Abstraction of a one-way pipe where the read end can be used in select().</tt> </tt>
 <a name="L21"></a><tt class="py-lineno"> 21</tt>  <tt class="py-line"><tt class="py-docstring">Normally this is trivial, but Windows makes it nearly impossible.</tt> </tt>
@@ -126,7 +126,7 @@ paramiko.pipe.PosixPipe.close
 paramiko.pipe.WindowsPipe.close
 paramiko.win_pageant.PageantConnection.close" class="py-name" href="#" onclick="return doclink('link-4', 'close', 'link-3');">close</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_wfd</tt><tt class="py-op">)</tt> </tt>
 <a name="L50"></a><tt class="py-lineno"> 50</tt>  <tt class="py-line">        <tt class="py-comment"># used for unit tests:</tt> </tt>
-<a name="L51"></a><tt class="py-lineno"> 51</tt>  <tt class="py-line"><tt class="py-comment"></tt>        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_closed</tt> <tt class="py-op">=</tt> <tt class="py-name">True</tt> </tt>
+<a name="L51"></a><tt class="py-lineno"> 51</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_closed</tt> <tt class="py-op">=</tt> <tt class="py-name">True</tt> </tt>
 </div><a name="L52"></a><tt class="py-lineno"> 52</tt>  <tt class="py-line">     </tt>
 <a name="PosixPipe.fileno"></a><div id="PosixPipe.fileno-def"><a name="L53"></a><tt class="py-lineno"> 53</tt> <a class="py-toggle" href="#" id="PosixPipe.fileno-toggle" onclick="return toggle('PosixPipe.fileno');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="paramiko.pipe.PosixPipe-class.html#fileno">fileno</a> <tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
 </div><div id="PosixPipe.fileno-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="PosixPipe.fileno-expanded"><a name="L54"></a><tt class="py-lineno"> 54</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_rfd</tt> </tt>
@@ -164,7 +164,7 @@ paramiko.pipe.WindowsPipe.set" class="py-name" href="#" onclick="return doclink(
 <a name="L81"></a><tt class="py-lineno"> 81</tt>  <tt class="py-line">        <tt class="py-name">serv</tt><tt class="py-op">.</tt><tt class="py-name">listen</tt><tt class="py-op">(</tt><tt class="py-number">1</tt><tt class="py-op">)</tt> </tt>
 <a name="L82"></a><tt class="py-lineno"> 82</tt>  <tt class="py-line">     </tt>
 <a name="L83"></a><tt class="py-lineno"> 83</tt>  <tt class="py-line">        <tt class="py-comment"># need to save sockets in _rsock/_wsock so they don't get closed</tt> </tt>
-<a name="L84"></a><tt class="py-lineno"> 84</tt>  <tt class="py-line"><tt class="py-comment"></tt>        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_rsock</tt> <tt class="py-op">=</tt> <tt class="py-name">socket</tt><tt class="py-op">.</tt><tt class="py-name">socket</tt><tt class="py-op">(</tt><tt class="py-name">socket</tt><tt class="py-op">.</tt><tt class="py-name">AF_INET</tt><tt class="py-op">,</tt> <tt class="py-name">socket</tt><tt class="py-op">.</tt><tt class="py-name">SOCK_STREAM</tt><tt class="py-op">)</tt> </tt>
+<a name="L84"></a><tt class="py-lineno"> 84</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_rsock</tt> <tt class="py-op">=</tt> <tt class="py-name">socket</tt><tt class="py-op">.</tt><tt class="py-name">socket</tt><tt class="py-op">(</tt><tt class="py-name">socket</tt><tt class="py-op">.</tt><tt class="py-name">AF_INET</tt><tt class="py-op">,</tt> <tt class="py-name">socket</tt><tt class="py-op">.</tt><tt class="py-name">SOCK_STREAM</tt><tt class="py-op">)</tt> </tt>
 <a name="L85"></a><tt class="py-lineno"> 85</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_rsock</tt><tt class="py-op">.</tt><tt id="link-8" class="py-name" targets="Method paramiko.SSHClient.connect()=paramiko.SSHClient-class.html#connect,Method paramiko.Transport.connect()=paramiko.Transport-class.html#connect"><a title="paramiko.SSHClient.connect
 paramiko.Transport.connect" class="py-name" href="#" onclick="return doclink('link-8', 'connect', 'link-8');">connect</a></tt><tt class="py-op">(</tt><tt class="py-op">(</tt><tt class="py-string">'127.0.0.1'</tt><tt class="py-op">,</tt> <tt class="py-name">serv</tt><tt class="py-op">.</tt><tt class="py-name">getsockname</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">]</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
 <a name="L86"></a><tt class="py-lineno"> 86</tt>  <tt class="py-line">     </tt>
@@ -211,7 +211,7 @@ paramiko.pipe.PosixPipe.close
 paramiko.pipe.WindowsPipe.close
 paramiko.win_pageant.PageantConnection.close" class="py-name" href="#" onclick="return doclink('link-12', 'close', 'link-3');">close</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
 <a name="L96"></a><tt class="py-lineno"> 96</tt>  <tt class="py-line">        <tt class="py-comment"># used for unit tests:</tt> </tt>
-<a name="L97"></a><tt class="py-lineno"> 97</tt>  <tt class="py-line"><tt class="py-comment"></tt>        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_closed</tt> <tt class="py-op">=</tt> <tt class="py-name">True</tt> </tt>
+<a name="L97"></a><tt class="py-lineno"> 97</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_closed</tt> <tt class="py-op">=</tt> <tt class="py-name">True</tt> </tt>
 </div><a name="L98"></a><tt class="py-lineno"> 98</tt>  <tt class="py-line">     </tt>
 <a name="WindowsPipe.fileno"></a><div id="WindowsPipe.fileno-def"><a name="L99"></a><tt class="py-lineno"> 99</tt> <a class="py-toggle" href="#" id="WindowsPipe.fileno-toggle" onclick="return toggle('WindowsPipe.fileno');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="paramiko.pipe.WindowsPipe-class.html#fileno">fileno</a> <tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
 </div><div id="WindowsPipe.fileno-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="WindowsPipe.fileno-expanded"><a name="L100"></a><tt class="py-lineno">100</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_rsock</tt><tt class="py-op">.</tt><tt id="link-13" class="py-name" targets="Method paramiko.Channel.fileno()=paramiko.Channel-class.html#fileno,Method paramiko.pipe.PosixPipe.fileno()=paramiko.pipe.PosixPipe-class.html#fileno,Method paramiko.pipe.WindowsPipe.fileno()=paramiko.pipe.WindowsPipe-class.html#fileno"><a title="paramiko.Channel.fileno
@@ -305,7 +305,7 @@ expandto(location.href);
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Sun Jul  6 18:30:35 2008
+    Generated by Epydoc 3.0.1 on Sun Nov  1 22:14:19 2009
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

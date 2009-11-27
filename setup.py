@@ -1,4 +1,4 @@
-# Copyright (C) 2003-2008  Robey Pointer <robey@lag.net>
+# Copyright (C) 2003-2008  Robey Pointer <robeypointer@gmail.com>
 #
 # This file is part of paramiko.
 #
@@ -41,20 +41,20 @@ try:
 except ImportError:
     from distutils.core import setup
     kw = {}
-    
+
 if sys.platform == 'darwin':
 	import setup_helper
 	setup_helper.install_custom_make_tarball()
 
 
 setup(name = "paramiko",
-      version = "1.7.4",
+      version = "1.7.6",
       description = "SSH2 protocol library",
       author = "Robey Pointer",
-      author_email = "robey@lag.net",
+      author_email = "robeypointer@gmail.com",
       url = "http://www.lag.net/paramiko/",
       packages = [ 'paramiko' ],
-      download_url = 'http://www.lag.net/paramiko/download/paramiko-1.7.4.zip',
+      download_url = 'http://www.lag.net/paramiko/download/paramiko-1.7.6.zip',
       license = 'LGPL',
       platforms = 'Posix; MacOS X; Windows',
       classifiers = [ 'Development Status :: 5 - Production/Stable',

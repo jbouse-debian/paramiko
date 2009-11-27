@@ -3,7 +3,7 @@
           "DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-  <title>paramiko.MissingHostKeyPolicy</title>
+  <title>paramiko.util.Counter</title>
   <link rel="stylesheet" href="epydoc.css" type="text/css" />
   <script type="text/javascript" src="epydoc.js"></script>
 </head>
@@ -38,7 +38,8 @@
     <td width="100%">
       <span class="breadcrumbs">
         <a href="paramiko-module.html">Package&nbsp;paramiko</a> ::
-        Class&nbsp;MissingHostKeyPolicy
+        <a href="paramiko.util-module.html">Module&nbsp;util</a> ::
+        Class&nbsp;Counter
       </span>
     </td>
     <td>
@@ -46,39 +47,22 @@
         <!-- hide/show private -->
         <tr><td align="right"><span class="options"
             >[<a href="frames.html" target="_top">frames</a
-            >]&nbsp;|&nbsp;<a href="paramiko.MissingHostKeyPolicy-class.html"
+            >]&nbsp;|&nbsp;<a href="paramiko.util.Counter-class.html"
             target="_top">no&nbsp;frames</a>]</span></td></tr>
       </table>
     </td>
   </tr>
 </table>
 <!-- ==================== CLASS DESCRIPTION ==================== -->
-<h1 class="epydoc">Class MissingHostKeyPolicy</h1><p class="nomargin-top"><span class="codelink"><a href="paramiko-pysrc.html#MissingHostKeyPolicy">source&nbsp;code</a></span></p>
+<h1 class="epydoc">Class Counter</h1><p class="nomargin-top"><span class="codelink"><a href="paramiko.util-pysrc.html#Counter">source&nbsp;code</a></span></p>
 <pre class="base-tree">
 object --+
          |
-        <strong class="uidshort">MissingHostKeyPolicy</strong>
+        <strong class="uidshort">Counter</strong>
 </pre>
 
-<dl><dt>Known Subclasses:</dt>
-<dd>
-      <ul class="subclass-list">
-<li><a href="paramiko.AutoAddPolicy-class.html">AutoAddPolicy</a></li><li>, <a href="paramiko.RejectPolicy-class.html">RejectPolicy</a></li><li>, <a href="paramiko.WarningPolicy-class.html">WarningPolicy</a></li>  </ul>
-</dd></dl>
-
 <hr />
-<p>Interface for defining the policy that <a 
-  href="paramiko.SSHClient-class.html" class="link">SSHClient</a> should 
-  use when the SSH server's hostname is not in either the system host keys 
-  or the application's keys.  Pre-made classes implement policies for 
-  automatically adding the key to the application's <a 
-  href="paramiko.HostKeys-class.html" class="link">HostKeys</a> object (<a 
-  href="paramiko.AutoAddPolicy-class.html" class="link">AutoAddPolicy</a>),
-  and for automatically rejecting the key (<a 
-  href="paramiko.RejectPolicy-class.html" 
-  class="link">RejectPolicy</a>).</p>
-  <p>This function may be used to ask the user to verify the key, for 
-  example.</p>
+<p>Stateful counter for CTR mode crypto</p>
 
 <!-- ==================== INSTANCE METHODS ==================== -->
 <a name="section-InstanceMethods"></a>
@@ -94,16 +78,30 @@ object --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="paramiko.MissingHostKeyPolicy-class.html#missing_host_key" class="summary-sig-name">missing_host_key</a>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">client</span>,
-        <span class="summary-sig-arg">hostname</span>,
-        <span class="summary-sig-arg">key</span>)</span><br />
-      Called when an <a href="paramiko.SSHClient-class.html" 
-      class="link">SSHClient</a> receives a server key for a server that 
-      isn't in either the system or local <a 
-      href="paramiko.HostKeys-class.html" class="link">HostKeys</a> object.</td>
+          <td><span class="summary-sig"><a href="paramiko.util.Counter-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">nbits</span>,
+        <span class="summary-sig-arg">initial_value</span>=<span class="summary-sig-default">1</span>,
+        <span class="summary-sig-arg">overflow</span>=<span class="summary-sig-default">0</span>)</span><br />
+      x.__init__(...) initializes x; see x.__class__.__doc__ for signature</td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="paramiko.client-pysrc.html">source&nbsp;code</a></span>
+            <span class="codelink"><a href="paramiko.util-pysrc.html#Counter.__init__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="__call__"></a><span class="summary-sig-name">__call__</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Increament the counter and return the new value</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="paramiko.util-pysrc.html#Counter.__call__">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -118,7 +116,6 @@ object --+
       <code>__format__</code>,
       <code>__getattribute__</code>,
       <code>__hash__</code>,
-      <code>__init__</code>,
       <code>__new__</code>,
       <code>__reduce__</code>,
       <code>__reduce_ex__</code>,
@@ -128,6 +125,34 @@ object --+
       <code>__str__</code>,
       <code>__subclasshook__</code>
       </p>
+    </td>
+  </tr>
+</table>
+<!-- ==================== CLASS METHODS ==================== -->
+<a name="section-ClassMethods"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td align="left" colspan="2" class="table-header">
+    <span class="table-header">Class Methods</span></td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="new"></a><span class="summary-sig-name">new</span>(<span class="summary-sig-arg">cls</span>,
+        <span class="summary-sig-arg">nbits</span>,
+        <span class="summary-sig-arg">initial_value</span>=<span class="summary-sig-default">1</span>,
+        <span class="summary-sig-arg">overflow</span>=<span class="summary-sig-default">0</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="paramiko.util-pysrc.html#Counter.new">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
     </td>
   </tr>
 </table>
@@ -156,30 +181,31 @@ object --+
     <span class="table-header">Method Details</span></td>
 </tr>
 </table>
-<a name="missing_host_key"></a>
+<a name="__init__"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">missing_host_key</span>(<span class="sig-arg">self</span>,
-        <span class="sig-arg">client</span>,
-        <span class="sig-arg">hostname</span>,
-        <span class="sig-arg">key</span>)</span>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__init__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">nbits</span>,
+        <span class="sig-arg">initial_value</span>=<span class="sig-default">1</span>,
+        <span class="sig-arg">overflow</span>=<span class="sig-default">0</span>)</span>
+    <br /><em class="fname">(Constructor)</em>
   </h3>
   </td><td align="right" valign="top"
-    ><span class="codelink"><a href="paramiko.client-pysrc.html">source&nbsp;code</a></span>&nbsp;
+    ><span class="codelink"><a href="paramiko.util-pysrc.html#Counter.__init__">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
   
-  <p>Called when an <a href="paramiko.SSHClient-class.html" 
-  class="link">SSHClient</a> receives a server key for a server that isn't 
-  in either the system or local <a href="paramiko.HostKeys-class.html" 
-  class="link">HostKeys</a> object.  To accept the key, simply return.  To 
-  reject, raised an exception (which will be passed to the calling 
-  application).</p>
+  <p>x.__init__(...) initializes x; see x.__class__.__doc__ for 
+  signature</p>
   <dl class="fields">
+    <dt>Overrides:
+        object.__init__
+        <dd><em class="note">(inherited documentation)</em></dd>
+    </dt>
   </dl>
 </td></tr></table>
 </div>
@@ -210,7 +236,7 @@ object --+
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Sun Nov  1 22:14:16 2009
+    Generated by Epydoc 3.0.1 on Sun Nov  1 22:14:17 2009
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

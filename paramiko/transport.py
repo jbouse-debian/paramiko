@@ -1,4 +1,4 @@
-# Copyright (C) 2003-2007  Robey Pointer <robey@lag.net>
+# Copyright (C) 2003-2007  Robey Pointer <robeypointer@gmail.com>
 #
 # This file is part of paramiko.
 #
@@ -50,8 +50,12 @@ from paramiko.ssh_exception import SSHException, BadAuthenticationType, ChannelE
 # i believe this on the standards track.
 # PyCrypt compiled for Win32 can be downloaded from the HashTar homepage:
 #     http://nitace.bsd.uchicago.edu:8080/hashtar
-from Crypto.Cipher import Blowfish, AES, DES3
+from Crypto.Cipher import Blowfish, AES, DES3, ARC4
 from Crypto.Hash import SHA, MD5
+try:
+    from Crypto.Util import Counter
+except ImportError:
+    from paramiko.util import Counter
 
 
 # for thread cleanup
@@ -99,7 +103,7 @@ class SecurityOptions (object):
 
     def _get_kex(self):
         return self._transport._preferred_kex
-        
+
     def _get_compression(self):
         return self._transport._preferred_compression
 
@@ -125,7 +129,7 @@ class SecurityOptions (object):
 
     def _set_kex(self, x):
         self._set('_preferred_kex', '_kex_info', x)
-    
+
     def _set_compression(self, x):
         self._set('_preferred_compression', '_compression_info', x)
 
@@ -152,14 +156,14 @@ class ChannelMap (object):
             self._map[chanid] = chan
         finally:
             self._lock.release()
-            
+
     def get(self, chanid):
         self._lock.acquire()
         try:
             return self._map.get(chanid, None)
         finally:
             self._lock.release()
-    
+
     def delete(self, chanid):
         self._lock.acquire()
         try:
@@ -169,14 +173,14 @@ class ChannelMap (object):
                 pass
         finally:
             self._lock.release()
-    
+
     def values(self):
         self._lock.acquire()
         try:
             return self._map.values()
         finally:
             self._lock.release()
-    
+
     def __len__(self):
         self._lock.acquire()
         try:
@@ -194,19 +198,24 @@ class Transport (threading.Thread):
     """
 
     _PROTO_ID = '2.0'
-    _CLIENT_ID = 'paramiko_1.7.4'
+    _CLIENT_ID = 'paramiko_1.7.6'
 
-    _preferred_ciphers = ( 'aes128-cbc', 'blowfish-cbc', 'aes256-cbc', '3des-cbc' )
+    _preferred_ciphers = ( 'aes128-ctr', 'aes256-ctr', 'aes128-cbc', 'blowfish-cbc', 'aes256-cbc', '3des-cbc',
+        'arcfour128', 'arcfour256' )
     _preferred_macs = ( 'hmac-sha1', 'hmac-md5', 'hmac-sha1-96', 'hmac-md5-96' )
     _preferred_keys = ( 'ssh-rsa', 'ssh-dss' )
     _preferred_kex = ( 'diffie-hellman-group1-sha1', 'diffie-hellman-group-exchange-sha1' )
     _preferred_compression = ( 'none', )
-    
+
     _cipher_info = {
+        'aes128-ctr': { 'class': AES, 'mode': AES.MODE_CTR, 'block-size': 16, 'key-size': 16 },
+        'aes256-ctr': { 'class': AES, 'mode': AES.MODE_CTR, 'block-size': 16, 'key-size': 32 },
         'blowfish-cbc': { 'class': Blowfish, 'mode': Blowfish.MODE_CBC, 'block-size': 8, 'key-size': 16 },
         'aes128-cbc': { 'class': AES, 'mode': AES.MODE_CBC, 'block-size': 16, 'key-size': 16 },
         'aes256-cbc': { 'class': AES, 'mode': AES.MODE_CBC, 'block-size': 16, 'key-size': 32 },
         '3des-cbc': { 'class': DES3, 'mode': DES3.MODE_CBC, 'block-size': 8, 'key-size': 24 },
+        'arcfour128': { 'class': ARC4, 'mode': None, 'block-size': 8, 'key-size': 16 },
+        'arcfour256': { 'class': ARC4, 'mode': None, 'block-size': 8, 'key-size': 32 },
         }
 
     _mac_info = {
@@ -225,7 +234,7 @@ class Transport (threading.Thread):
         'diffie-hellman-group1-sha1': KexGroup1,
         'diffie-hellman-group-exchange-sha1': KexGex,
         }
-    
+
     _compression_info = {
         # zlib@openssh.com is just zlib, but only turned on after a successful
         # authentication.  openssh servers may only offer this type because
@@ -266,7 +275,7 @@ class Transport (threading.Thread):
         @param sock: a socket or socket-like object to create the session over.
         @type sock: socket
         """
-        if type(sock) is str:
+        if isinstance(sock, (str, unicode)):
             # convert "host:port" into (host, port)
             hl = sock.split(':', 1)
             if len(hl) == 1:
@@ -276,10 +285,18 @@ class Transport (threading.Thread):
         if type(sock) is tuple:
             # connect to the given (host, port)
             hostname, port = sock
-            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            for (family, socktype, proto, canonname, sockaddr) in socket.getaddrinfo(hostname, port, socket.AF_UNSPEC, socket.SOCK_STREAM):
+                if socktype == socket.SOCK_STREAM:
+                    af = family
+                    addr = sockaddr
+                    break
+            else:
+                raise SSHException('No suitable address family for %s' % hostname)
+            sock = socket.socket(af, socket.SOCK_STREAM)
             sock.connect((hostname, port))
         # okay, normal socket-ish flow here...
         threading.Thread.__init__(self)
+        self.setDaemon(True)
         self.randpool = randpool
         self.sock = sock
         # Python < 2.3 doesn't have the settimeout method - RogerB
@@ -302,7 +319,7 @@ class Transport (threading.Thread):
         self.session_id = None
         self.host_key_type = None
         self.host_key = None
-        
+
         # state used during negotiation
         self.kex_engine = None
         self.H = None
@@ -328,6 +345,7 @@ class Transport (threading.Thread):
         self.saved_exception = None
         self.clear_to_send = threading.Event()
         self.clear_to_send_lock = threading.Lock()
+        self.clear_to_send_timeout = 30.0
         self.log_name = 'paramiko.transport'
         self.logger = util.get_logger(self.log_name)
         self.packetizer.set_log(self.logger)
@@ -365,7 +383,7 @@ class Transport (threading.Thread):
                 out += ' (connecting)'
         out += '>'
         return out
-    
+
     def atfork(self):
         """
         Terminate this Transport without closing the session.  On posix
@@ -373,7 +391,7 @@ class Transport (threading.Thread):
         and child will share the underlying socket, but only one process can
         use the connection (without corrupting the session).  Use this method
         to clean up a Transport object without disrupting the other process.
-        
+
         @since: 1.5.3
         """
         self.sock.close()
@@ -396,11 +414,11 @@ class Transport (threading.Thread):
         Negotiate a new SSH2 session as a client.  This is the first step after
         creating a new L{Transport}.  A separate thread is created for protocol
         negotiation.
-        
+
         If an event is passed in, this method returns immediately.  When
         negotiation is done (successful or not), the given C{Event} will
         be triggered.  On failure, L{is_active} will return C{False}.
-        
+
         (Since 1.4) If C{event} is C{None}, this method will not return until
         negotation is done.  On success, the method returns normally.
         Otherwise an SSHException is raised.
@@ -410,7 +428,7 @@ class Transport (threading.Thread):
         L{auth_publickey <Transport.auth_publickey>}.
 
         @note: L{connect} is a simpler method for connecting as a client.
-        
+
         @note: After calling this method (or L{start_server} or L{connect}),
             you should no longer directly read from or write to the original
             socket object.
@@ -447,11 +465,11 @@ class Transport (threading.Thread):
         Negotiate a new SSH2 session as a server.  This is the first step after
         creating a new L{Transport} and setting up your server host key(s).  A
         separate thread is created for protocol negotiation.
-        
+
         If an event is passed in, this method returns immediately.  When
         negotiation is done (successful or not), the given C{Event} will
         be triggered.  On failure, L{is_active} will return C{False}.
-        
+
         (Since 1.4) If C{event} is C{None}, this method will not return until
         negotation is done.  On success, the method returns normally.
         Otherwise an SSHException is raised.
@@ -514,7 +532,7 @@ class Transport (threading.Thread):
         we are.  Because this is used for signing, the key must contain private
         key info, not just the public half.  Only one key of each type (RSA or
         DSS) is kept.
-        
+
         @param key: the host key to add, usually an L{RSAKey <rsakey.RSAKey>} or
             L{DSSKey <dsskey.DSSKey>}.
         @type key: L{PKey <pkey.PKey>}
@@ -564,7 +582,7 @@ class Transport (threading.Thread):
         @return: True if a moduli file was successfully loaded; False
             otherwise.
         @rtype: bool
-        
+
         @note: This has no effect when used in client mode.
         """
         Transport._modulus_pack = ModulusPack(randpool)
@@ -605,7 +623,7 @@ class Transport (threading.Thread):
             C{str(key)} for the key string.
 
         @raise SSHException: if no session is currently active.
-        
+
         @return: public key of the remote server
         @rtype: L{PKey <pkey.PKey>}
         """
@@ -630,7 +648,7 @@ class Transport (threading.Thread):
 
         @return: a new L{Channel}
         @rtype: L{Channel}
-        
+
         @raise SSHException: if the request is rejected or the session ends
             prematurely
         """
@@ -646,25 +664,25 @@ class Transport (threading.Thread):
         @type src_addr: (str, int)
         @return: a new L{Channel}
         @rtype: L{Channel}
-        
+
         @raise SSHException: if the request is rejected or the session ends
             prematurely
         """
         return self.open_channel('x11', src_addr=src_addr)
-    
+
     def open_forwarded_tcpip_channel(self, (src_addr, src_port), (dest_addr, dest_port)):
         """
         Request a new channel back to the client, of type C{"forwarded-tcpip"}.
         This is used after a client has requested port forwarding, for sending
         incoming connections back to the client.
-        
+
         @param src_addr: originator's address
         @param src_port: originator's port
         @param dest_addr: local (server) connected address
         @param dest_port: local (server) connected port
         """
         return self.open_channel('forwarded-tcpip', (dest_addr, dest_port), (src_addr, src_port))
-    
+
     def open_channel(self, kind, dest_addr=None, src_addr=None):
         """
         Request a new channel to the server.  L{Channel}s are socket-like
@@ -739,19 +757,19 @@ class Transport (threading.Thread):
         """
         Ask the server to forward TCP connections from a listening port on
         the server, across this SSH session.
-        
+
         If a handler is given, that handler is called from a different thread
         whenever a forwarded connection arrives.  The handler parameters are::
-        
+
             handler(channel, (origin_addr, origin_port), (server_addr, server_port))
-            
+
         where C{server_addr} and C{server_port} are the address and port that
         the server was listening on.
-        
+
         If no handler is set, the default behavior is to send new incoming
         forwarded connections into the accept queue, to be picked up via
         L{accept}.
-        
+
         @param address: the address to bind when forwarding
         @type address: str
         @param port: the port to forward, or 0 to ask the server to allocate
@@ -761,7 +779,7 @@ class Transport (threading.Thread):
         @type handler: function(Channel, (str, int), (str, int))
         @return: the port # allocated by the server
         @rtype: int
-        
+
         @raise SSHException: if the server refused the TCP forward request
         """
         if not self.active:
@@ -785,7 +803,7 @@ class Transport (threading.Thread):
         Ask the server to cancel a previous port-forwarding request.  No more
         connections to the given address & port will be forwarded across this
         ssh connection.
-        
+
         @param address: the address to stop forwarding
         @type address: str
         @param port: the port to stop forwarding
@@ -795,7 +813,7 @@ class Transport (threading.Thread):
             return
         self._tcp_handler = None
         self.global_request('cancel-tcpip-forward', (address, port), wait=True)
-        
+
     def open_sftp_client(self):
         """
         Create an SFTP client channel from an open transport.  On success,
@@ -858,7 +876,7 @@ class Transport (threading.Thread):
         C{interval} seconds without sending any data over the connection, a
         "keepalive" packet will be sent (and ignored by the remote host).  This
         can be useful to keep connections alive over a NAT, for example.
-        
+
         @param interval: seconds to wait before sending a keepalive packet (or
             0 to disable keepalives).
         @type interval: int
@@ -909,7 +927,7 @@ class Transport (threading.Thread):
         Return the next channel opened by the client over this transport, in
         server mode.  If no channel is opened before the given timeout, C{None}
         is returned.
-        
+
         @param timeout: seconds to wait for a channel, or C{None} to wait
             forever
         @type timeout: int
@@ -961,7 +979,7 @@ class Transport (threading.Thread):
         @param pkey: a private key to use for authentication, if you want to
             use private key authentication; otherwise C{None}.
         @type pkey: L{PKey<pkey.PKey>}
-        
+
         @raise SSHException: if the SSH2 negotiation fails, the host key
             supplied by the server is incorrect, or authentication fails.
         """
@@ -989,17 +1007,17 @@ class Transport (threading.Thread):
                 self.auth_publickey(username, pkey)
 
         return
-        
+
     def get_exception(self):
         """
         Return any exception that happened during the last server request.
         This can be used to fetch more specific error information after using
         calls like L{start_client}.  The exception (if any) is cleared after
         this call.
-        
+
         @return: an exception, or C{None} if there is no stored exception.
         @rtype: Exception
-        
+
         @since: 1.1
         """
         self.lock.acquire()
@@ -1031,7 +1049,7 @@ class Transport (threading.Thread):
             self.subsystem_table[name] = (handler, larg, kwarg)
         finally:
             self.lock.release()
-    
+
     def is_authenticated(self):
         """
         Return true if this session is active and authenticated.
@@ -1042,7 +1060,7 @@ class Transport (threading.Thread):
         @rtype: bool
         """
         return self.active and (self.auth_handler is not None) and self.auth_handler.is_authenticated()
-    
+
     def get_username(self):
         """
         Return the username this connection is authenticated for.  If the
@@ -1062,7 +1080,7 @@ class Transport (threading.Thread):
         This will almost always fail.  It may be useful for determining the
         list of authentication types supported by the server, by catching the
         L{BadAuthenticationType} exception raised.
-        
+
         @param username: the username to authenticate as
         @type username: string
         @return: list of auth types permissible for the next stage of
@@ -1073,7 +1091,7 @@ class Transport (threading.Thread):
             by the server for this user
         @raise SSHException: if the authentication failed due to a network
             error
-            
+
         @since: 1.5
         """
         if (not self.active) or (not self.initial_kex_done):
@@ -1087,7 +1105,7 @@ class Transport (threading.Thread):
         """
         Authenticate to the server using a password.  The username and password
         are sent over an encrypted link.
-        
+
         If an C{event} is passed in, this method will return immediately, and
         the event will be triggered once authentication succeeds or fails.  On
         success, L{is_authenticated} will return C{True}.  On failure, you may
@@ -1096,7 +1114,7 @@ class Transport (threading.Thread):
         Since 1.1, if no event is passed, this method will block until the
         authentication succeeds or fails.  On failure, an exception is raised.
         Otherwise, the method simply returns.
-        
+
         Since 1.5, if no event is passed and C{fallback} is C{True} (the
         default), if the server doesn't support plain password authentication
         but does support so-called "keyboard-interactive" mode, an attempt
@@ -1105,11 +1123,11 @@ class Transport (threading.Thread):
         made.  This is useful for some recent Gentoo and Debian distributions,
         which turn off plain password authentication in a misguided belief
         that interactive authentication is "more secure".  (It's not.)
-        
+
         If the server requires multi-step authentication (which is very rare),
         this method will return a list of auth types permissible for the next
         step.  Otherwise, in the normal case, an empty list is returned.
-        
+
         @param username: the username to authenticate as
         @type username: str
         @param password: the password to authenticate with
@@ -1124,7 +1142,7 @@ class Transport (threading.Thread):
         @return: list of auth types permissible for the next stage of
             authentication (normally empty)
         @rtype: list
-        
+
         @raise BadAuthenticationType: if password authentication isn't
             allowed by the server for this user (and no event was passed in)
         @raise AuthenticationException: if the authentication failed (and no
@@ -1170,12 +1188,12 @@ class Transport (threading.Thread):
         """
         Authenticate to the server using a private key.  The key is used to
         sign data from the server, so it must include the private part.
-        
+
         If an C{event} is passed in, this method will return immediately, and
         the event will be triggered once authentication succeeds or fails.  On
         success, L{is_authenticated} will return C{True}.  On failure, you may
         use L{get_exception} to get more detailed error information.
-        
+
         Since 1.1, if no event is passed, this method will block until the
         authentication succeeds or fails.  On failure, an exception is raised.
         Otherwise, the method simply returns.
@@ -1194,7 +1212,7 @@ class Transport (threading.Thread):
         @return: list of auth types permissible for the next stage of
             authentication (normally empty)
         @rtype: list
-        
+
         @raise BadAuthenticationType: if public-key authentication isn't
             allowed by the server for this user (and no event was passed in)
         @raise AuthenticationException: if the authentication failed (and no
@@ -1214,18 +1232,18 @@ class Transport (threading.Thread):
             # caller wants to wait for event themselves
             return []
         return self.auth_handler.wait_for_response(my_event)
-    
+
     def auth_interactive(self, username, handler, submethods=''):
         """
         Authenticate to the server interactively.  A handler is used to answer
         arbitrary questions from the server.  On many servers, this is just a
         dumb wrapper around PAM.
-        
+
         This method will block until the authentication succeeds or fails,
         peroidically calling the handler asynchronously to get answers to
         authentication questions.  The handler may be called more than once
         if the server continues to ask questions.
-        
+
         The handler is expected to be a callable that will handle calls of the
         form: C{handler(title, instructions, prompt_list)}.  The C{title} is
         meant to be a dialog-window title, and the C{instructions} are user
@@ -1233,13 +1251,13 @@ class Transport (threading.Thread):
         prompts, each prompt being a tuple of C{(str, bool)}.  The string is
         the prompt and the boolean indicates whether the user text should be
         echoed.
-        
+
         A sample call would thus be:
         C{handler('title', 'instructions', [('Password:', False)])}.
-        
+
         The handler should return a list or tuple of answers to the server's
         questions.
-        
+
         If the server requires multi-step authentication (which is very rare),
         this method will return a list of auth types permissible for the next
         step.  Otherwise, in the normal case, an empty list is returned.
@@ -1253,12 +1271,12 @@ class Transport (threading.Thread):
         @return: list of auth types permissible for the next stage of
             authentication (normally empty).
         @rtype: list
-        
+
         @raise BadAuthenticationType: if public-key authentication isn't
             allowed by the server for this user
         @raise AuthenticationException: if the authentication failed
         @raise SSHException: if there was a network error
-        
+
         @since: 1.5
         """
         if (not self.active) or (not self.initial_kex_done):
@@ -1307,43 +1325,43 @@ class Transport (threading.Thread):
         @type hexdump: bool
         """
         self.packetizer.set_hexdump(hexdump)
-    
+
     def get_hexdump(self):
         """
         Return C{True} if the transport is currently logging hex dumps of
         protocol traffic.
-        
+
         @return: C{True} if hex dumps are being logged
         @rtype: bool
-        
+
         @since: 1.4
         """
         return self.packetizer.get_hexdump()
-    
+
     def use_compression(self, compress=True):
         """
         Turn on/off compression.  This will only have an affect before starting
         the transport (ie before calling L{connect}, etc).  By default,
         compression is off since it negatively affects interactive sessions.
-        
+
         @param compress: C{True} to ask the remote client/server to compress
             traffic; C{False} to refuse compression
         @type compress: bool
-        
+
         @since: 1.5.2
         """
         if compress:
             self._preferred_compression = ( 'zlib@openssh.com', 'zlib', 'none' )
         else:
             self._preferred_compression = ( 'none', )
-    
+
     def getpeername(self):
         """
         Return the address of the remote side of this Transport, if possible.
         This is effectively a wrapper around C{'getpeername'} on the underlying
         socket.  If the socket-like object has no C{'getpeername'} method,
         then C{("unknown", 0)} is returned.
-        
+
         @return: the address if the remote host, if known
         @rtype: tuple(str, int)
         """
@@ -1359,7 +1377,7 @@ class Transport (threading.Thread):
 
     ###  internals...
 
-    
+
     def _log(self, level, msg, *args):
         if issubclass(type(msg), list):
             for m in msg:
@@ -1392,6 +1410,7 @@ class Transport (threading.Thread):
         send a message, but block if we're in key negotiation.  this is used
         for user-initiated requests.
         """
+        start = time.time()
         while True:
             self.clear_to_send.wait(0.1)
             if not self.active:
@@ -1401,6 +1420,8 @@ class Transport (threading.Thread):
             if self.clear_to_send.isSet():
                 break
             self.clear_to_send_lock.release()
+            if time.time() > start + self.clear_to_send_timeout:
+              raise SSHException('Key-exchange timed out waiting for key negotiation')
         try:
             self._send_message(data)
         finally:
@@ -1422,7 +1443,7 @@ class Transport (threading.Thread):
         if key is None:
             raise SSHException('Unknown host key type')
         if not key.verify_ssh_sig(self.H, Message(sig)):
-            raise SSHException('Signature verification (%s) failed.  Boo.  Robey should debug this.' % self.host_key_type)
+            raise SSHException('Signature verification (%s) failed.' % self.host_key_type)
         self.host_key = key
 
     def _compute_key(self, id, nbytes):
@@ -1446,7 +1467,19 @@ class Transport (threading.Thread):
     def _get_cipher(self, name, key, iv):
         if name not in self._cipher_info:
             raise SSHException('Unknown client cipher ' + name)
-        return self._cipher_info[name]['class'].new(key, self._cipher_info[name]['mode'], iv)
+        if name in ('arcfour128', 'arcfour256'):
+            # arcfour cipher
+            cipher = self._cipher_info[name]['class'].new(key)
+            # as per RFC 4345, the first 1536 bytes of keystream
+            # generated by the cipher MUST be discarded
+            cipher.encrypt(" " * 1536)
+            return cipher
+        elif name.endswith("-ctr"):
+            # CTR modes, we need a counter
+            counter = Counter.new(nbits=self._cipher_info[name]['block-size'] * 8, initial_value=util.inflate_long(iv, True))
+            return self._cipher_info[name]['class'].new(key, self._cipher_info[name]['mode'], iv, counter)
+        else:
+            return self._cipher_info[name]['class'].new(key, self._cipher_info[name]['mode'], iv)
 
     def _set_x11_handler(self, handler):
         # only called if a channel has turned on x11 forwarding
@@ -1465,13 +1498,13 @@ class Transport (threading.Thread):
             self.server_accept_cv.notify()
         finally:
             self.lock.release()
-    
+
     def run(self):
         # (use the exposed "run" method, because if we specify a thread target
         # of a private method, threading.Thread will keep a reference to it
         # indefinitely, creating a GC cycle and not letting Transport ever be
-        # GC'd.  it's a bug in Thread.)
-        
+        # GC'd. it's a bug in Thread.)
+
         # active=True occurs before the thread is launched, to avoid a race
         _active_threads.append(self)
         if self.server_mode:
@@ -1587,7 +1620,7 @@ class Transport (threading.Thread):
 
     def _check_banner(self):
         # this is slow, but we only have to do it once
-        for i in range(5):
+        for i in range(100):
             # give them 15 seconds for the first line, then just 2 seconds
             # each additional line.  (some sites have very high latency.)
             if i == 0:
@@ -1896,7 +1929,7 @@ class Transport (threading.Thread):
         self.global_response = m
         if self.completion_event is not None:
             self.completion_event.set()
-        
+
     def _parse_request_failure(self, m):
         self._log(DEBUG, 'Global request denied.')
         self.global_response = None
@@ -1985,7 +2018,7 @@ class Transport (threading.Thread):
                 origin_addr = m.get_string()
                 origin_port = m.get_int()
                 reason = self.server_object.check_channel_direct_tcpip_request(
-                                my_chanid, (origin_addr, origin_port), 
+                                my_chanid, (origin_addr, origin_port),
                                            (dest_addr, dest_port))
             else:
                 reason = self.server_object.check_channel_request(kind, my_chanid)
@@ -2001,7 +2034,7 @@ class Transport (threading.Thread):
             msg.add_string('en')
             self._send_message(msg)
             return
-        
+
         chan = Channel(my_chanid)
         self.lock.acquire()
         try:

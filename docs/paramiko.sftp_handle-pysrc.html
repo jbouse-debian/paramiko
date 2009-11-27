@@ -54,24 +54,24 @@
 </table>
 <h1 class="epydoc">Source Code for <a href="paramiko.sftp_handle-module.html" onclick="show_private();">Module paramiko.sftp_handle</a></h1>
 <pre class="py-src">
-<a name="L1"></a><tt class="py-lineno">  1</tt>  <tt class="py-line"><tt class="py-comment"># Copyright (C) 2003-2007  Robey Pointer &lt;robey@lag.net&gt;</tt> </tt>
-<a name="L2"></a><tt class="py-lineno">  2</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment">#</tt> </tt>
-<a name="L3"></a><tt class="py-lineno">  3</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># This file is part of paramiko.</tt> </tt>
-<a name="L4"></a><tt class="py-lineno">  4</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment">#</tt> </tt>
-<a name="L5"></a><tt class="py-lineno">  5</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># Paramiko is free software; you can redistribute it and/or modify it under the</tt> </tt>
-<a name="L6"></a><tt class="py-lineno">  6</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># terms of the GNU Lesser General Public License as published by the Free</tt> </tt>
-<a name="L7"></a><tt class="py-lineno">  7</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># Software Foundation; either version 2.1 of the License, or (at your option)</tt> </tt>
-<a name="L8"></a><tt class="py-lineno">  8</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># any later version.</tt> </tt>
-<a name="L9"></a><tt class="py-lineno">  9</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment">#</tt> </tt>
-<a name="L10"></a><tt class="py-lineno"> 10</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># Paramiko is distrubuted in the hope that it will be useful, but WITHOUT ANY</tt> </tt>
-<a name="L11"></a><tt class="py-lineno"> 11</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR</tt> </tt>
-<a name="L12"></a><tt class="py-lineno"> 12</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more</tt> </tt>
-<a name="L13"></a><tt class="py-lineno"> 13</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># details.</tt> </tt>
-<a name="L14"></a><tt class="py-lineno"> 14</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment">#</tt> </tt>
-<a name="L15"></a><tt class="py-lineno"> 15</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># You should have received a copy of the GNU Lesser General Public License</tt> </tt>
-<a name="L16"></a><tt class="py-lineno"> 16</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># along with Paramiko; if not, write to the Free Software Foundation, Inc.,</tt> </tt>
-<a name="L17"></a><tt class="py-lineno"> 17</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA.</tt> </tt>
-<a name="L18"></a><tt class="py-lineno"> 18</tt>  <tt class="py-line"><tt class="py-comment"></tt> </tt>
+<a name="L1"></a><tt class="py-lineno">  1</tt>  <tt class="py-line"><tt class="py-comment"># Copyright (C) 2003-2007  Robey Pointer &lt;robeypointer@gmail.com&gt;</tt> </tt>
+<a name="L2"></a><tt class="py-lineno">  2</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L3"></a><tt class="py-lineno">  3</tt>  <tt class="py-line"><tt class="py-comment"># This file is part of paramiko.</tt> </tt>
+<a name="L4"></a><tt class="py-lineno">  4</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L5"></a><tt class="py-lineno">  5</tt>  <tt class="py-line"><tt class="py-comment"># Paramiko is free software; you can redistribute it and/or modify it under the</tt> </tt>
+<a name="L6"></a><tt class="py-lineno">  6</tt>  <tt class="py-line"><tt class="py-comment"># terms of the GNU Lesser General Public License as published by the Free</tt> </tt>
+<a name="L7"></a><tt class="py-lineno">  7</tt>  <tt class="py-line"><tt class="py-comment"># Software Foundation; either version 2.1 of the License, or (at your option)</tt> </tt>
+<a name="L8"></a><tt class="py-lineno">  8</tt>  <tt class="py-line"><tt class="py-comment"># any later version.</tt> </tt>
+<a name="L9"></a><tt class="py-lineno">  9</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L10"></a><tt class="py-lineno"> 10</tt>  <tt class="py-line"><tt class="py-comment"># Paramiko is distrubuted in the hope that it will be useful, but WITHOUT ANY</tt> </tt>
+<a name="L11"></a><tt class="py-lineno"> 11</tt>  <tt class="py-line"><tt class="py-comment"># WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR</tt> </tt>
+<a name="L12"></a><tt class="py-lineno"> 12</tt>  <tt class="py-line"><tt class="py-comment"># A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more</tt> </tt>
+<a name="L13"></a><tt class="py-lineno"> 13</tt>  <tt class="py-line"><tt class="py-comment"># details.</tt> </tt>
+<a name="L14"></a><tt class="py-lineno"> 14</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L15"></a><tt class="py-lineno"> 15</tt>  <tt class="py-line"><tt class="py-comment"># You should have received a copy of the GNU Lesser General Public License</tt> </tt>
+<a name="L16"></a><tt class="py-lineno"> 16</tt>  <tt class="py-line"><tt class="py-comment"># along with Paramiko; if not, write to the Free Software Foundation, Inc.,</tt> </tt>
+<a name="L17"></a><tt class="py-lineno"> 17</tt>  <tt class="py-line"><tt class="py-comment"># 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA.</tt> </tt>
+<a name="L18"></a><tt class="py-lineno"> 18</tt>  <tt class="py-line"> </tt>
 <a name="L19"></a><tt class="py-lineno"> 19</tt>  <tt class="py-line"><tt class="py-docstring">"""</tt> </tt>
 <a name="L20"></a><tt class="py-lineno"> 20</tt>  <tt class="py-line"><tt class="py-docstring">Abstraction of an SFTP file handle (for server mode).</tt> </tt>
 <a name="L21"></a><tt class="py-lineno"> 21</tt>  <tt class="py-line"><tt class="py-docstring">"""</tt> </tt>
@@ -103,7 +103,7 @@
 <a name="L47"></a><tt class="py-lineno"> 47</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">__flags</tt> <tt class="py-op">=</tt> <tt class="py-name">flags</tt> </tt>
 <a name="L48"></a><tt class="py-lineno"> 48</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">__name</tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt> </tt>
 <a name="L49"></a><tt class="py-lineno"> 49</tt>  <tt class="py-line">        <tt class="py-comment"># only for handles to folders:</tt> </tt>
-<a name="L50"></a><tt class="py-lineno"> 50</tt>  <tt class="py-line"><tt class="py-comment"></tt>        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">__files</tt> <tt class="py-op">=</tt> <tt class="py-op">{</tt> <tt class="py-op">}</tt> </tt>
+<a name="L50"></a><tt class="py-lineno"> 50</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">__files</tt> <tt class="py-op">=</tt> <tt class="py-op">{</tt> <tt class="py-op">}</tt> </tt>
 <a name="L51"></a><tt class="py-lineno"> 51</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">__tell</tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt> </tt>
 </div><a name="L52"></a><tt class="py-lineno"> 52</tt>  <tt class="py-line"> </tt>
 <a name="SFTPHandle.close"></a><div id="SFTPHandle.close-def"><a name="L53"></a><tt class="py-lineno"> 53</tt> <a class="py-toggle" href="#" id="SFTPHandle.close-toggle" onclick="return toggle('SFTPHandle.close');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="paramiko.sftp_handle.SFTPHandle-class.html#close">close</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
@@ -224,7 +224,7 @@ paramiko.sftp_server.SFTP_OP_UNSUPPORTED
 paramiko.sftp_si.SFTP_OP_UNSUPPORTED" class="py-name" href="#" onclick="return doclink('link-12', 'SFTP_OP_UNSUPPORTED', 'link-6');">SFTP_OP_UNSUPPORTED</a></tt> </tt>
 <a name="L132"></a><tt class="py-lineno">132</tt>  <tt class="py-line">        <tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
 <a name="L133"></a><tt class="py-lineno">133</tt>  <tt class="py-line">            <tt class="py-comment"># in append mode, don't care about seeking</tt> </tt>
-<a name="L134"></a><tt class="py-lineno">134</tt>  <tt class="py-line"><tt class="py-comment"></tt>            <tt class="py-keyword">if</tt> <tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">__flags</tt> <tt class="py-op">&amp;</tt> <tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">O_APPEND</tt><tt class="py-op">)</tt> <tt class="py-op">==</tt> <tt class="py-number">0</tt><tt class="py-op">:</tt> </tt>
+<a name="L134"></a><tt class="py-lineno">134</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">__flags</tt> <tt class="py-op">&amp;</tt> <tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">O_APPEND</tt><tt class="py-op">)</tt> <tt class="py-op">==</tt> <tt class="py-number">0</tt><tt class="py-op">:</tt> </tt>
 <a name="L135"></a><tt class="py-lineno">135</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">__tell</tt> <tt class="py-keyword">is</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
 <a name="L136"></a><tt class="py-lineno">136</tt>  <tt class="py-line">                    <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">__tell</tt> <tt class="py-op">=</tt> <tt class="py-name">writefile</tt><tt class="py-op">.</tt><tt id="link-13" class="py-name"><a title="paramiko.BufferedFile.tell" class="py-name" href="#" onclick="return doclink('link-13', 'tell', 'link-7');">tell</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
 <a name="L137"></a><tt class="py-lineno">137</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-name">offset</tt> <tt class="py-op">!=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">__tell</tt><tt class="py-op">:</tt> </tt>
@@ -286,7 +286,7 @@ paramiko.sftp_si.SFTP_OP_UNSUPPORTED" class="py-name" href="#" onclick="return d
 </div><a name="L173"></a><tt class="py-lineno">173</tt>  <tt class="py-line"> </tt>
 <a name="L174"></a><tt class="py-lineno">174</tt>  <tt class="py-line"> </tt>
 <a name="L175"></a><tt class="py-lineno">175</tt>  <tt class="py-line">    <tt class="py-comment">###  internals...</tt> </tt>
-<a name="L176"></a><tt class="py-lineno">176</tt>  <tt class="py-line"><tt class="py-comment"></tt> </tt>
+<a name="L176"></a><tt class="py-lineno">176</tt>  <tt class="py-line"> </tt>
 <a name="L177"></a><tt class="py-lineno">177</tt>  <tt class="py-line">     </tt>
 <a name="SFTPHandle._set_files"></a><div id="SFTPHandle._set_files-def"><a name="L178"></a><tt class="py-lineno">178</tt> <a class="py-toggle" href="#" id="SFTPHandle._set_files-toggle" onclick="return toggle('SFTPHandle._set_files');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="paramiko.sftp_handle.SFTPHandle-class.html#_set_files">_set_files</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">files</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
 </div><div id="SFTPHandle._set_files-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="SFTPHandle._set_files-expanded"><a name="L179"></a><tt class="py-lineno">179</tt>  <tt class="py-line">        <tt class="py-docstring">"""</tt> </tt>
@@ -347,7 +347,7 @@ expandto(location.href);
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Sun Jul  6 18:30:35 2008
+    Generated by Epydoc 3.0.1 on Sun Nov  1 22:14:18 2009
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

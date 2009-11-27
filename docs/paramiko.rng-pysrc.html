@@ -55,25 +55,25 @@
 <h1 class="epydoc">Source Code for <a href="paramiko.rng-module.html" onclick="show_private();">Module paramiko.rng</a></h1>
 <pre class="py-src">
 <a name="L1"></a><tt class="py-lineno">  1</tt>  <tt class="py-line"><tt class="py-comment">#!/usr/bin/python</tt> </tt>
-<a name="L2"></a><tt class="py-lineno">  2</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># -*- coding: ascii -*-</tt> </tt>
-<a name="L3"></a><tt class="py-lineno">  3</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># Copyright (C) 2008  Dwayne C. Litzenberger &lt;dlitz@dlitz.net&gt;</tt> </tt>
-<a name="L4"></a><tt class="py-lineno">  4</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment">#</tt> </tt>
-<a name="L5"></a><tt class="py-lineno">  5</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># This file is part of paramiko.</tt> </tt>
-<a name="L6"></a><tt class="py-lineno">  6</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment">#</tt> </tt>
-<a name="L7"></a><tt class="py-lineno">  7</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># Paramiko is free software; you can redistribute it and/or modify it under the</tt> </tt>
-<a name="L8"></a><tt class="py-lineno">  8</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># terms of the GNU Lesser General Public License as published by the Free</tt> </tt>
-<a name="L9"></a><tt class="py-lineno">  9</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># Software Foundation; either version 2.1 of the License, or (at your option)</tt> </tt>
-<a name="L10"></a><tt class="py-lineno"> 10</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># any later version.</tt> </tt>
-<a name="L11"></a><tt class="py-lineno"> 11</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment">#</tt> </tt>
-<a name="L12"></a><tt class="py-lineno"> 12</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># Paramiko is distrubuted in the hope that it will be useful, but WITHOUT ANY</tt> </tt>
-<a name="L13"></a><tt class="py-lineno"> 13</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR</tt> </tt>
-<a name="L14"></a><tt class="py-lineno"> 14</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more</tt> </tt>
-<a name="L15"></a><tt class="py-lineno"> 15</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># details.</tt> </tt>
-<a name="L16"></a><tt class="py-lineno"> 16</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment">#</tt> </tt>
-<a name="L17"></a><tt class="py-lineno"> 17</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># You should have received a copy of the GNU Lesser General Public License</tt> </tt>
-<a name="L18"></a><tt class="py-lineno"> 18</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># along with Paramiko; if not, write to the Free Software Foundation, Inc.,</tt> </tt>
-<a name="L19"></a><tt class="py-lineno"> 19</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.</tt> </tt>
-<a name="L20"></a><tt class="py-lineno"> 20</tt>  <tt class="py-line"><tt class="py-comment"></tt> </tt>
+<a name="L2"></a><tt class="py-lineno">  2</tt>  <tt class="py-line"><tt class="py-comment"># -*- coding: ascii -*-</tt> </tt>
+<a name="L3"></a><tt class="py-lineno">  3</tt>  <tt class="py-line"><tt class="py-comment"># Copyright (C) 2008  Dwayne C. Litzenberger &lt;dlitz@dlitz.net&gt;</tt> </tt>
+<a name="L4"></a><tt class="py-lineno">  4</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L5"></a><tt class="py-lineno">  5</tt>  <tt class="py-line"><tt class="py-comment"># This file is part of paramiko.</tt> </tt>
+<a name="L6"></a><tt class="py-lineno">  6</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L7"></a><tt class="py-lineno">  7</tt>  <tt class="py-line"><tt class="py-comment"># Paramiko is free software; you can redistribute it and/or modify it under the</tt> </tt>
+<a name="L8"></a><tt class="py-lineno">  8</tt>  <tt class="py-line"><tt class="py-comment"># terms of the GNU Lesser General Public License as published by the Free</tt> </tt>
+<a name="L9"></a><tt class="py-lineno">  9</tt>  <tt class="py-line"><tt class="py-comment"># Software Foundation; either version 2.1 of the License, or (at your option)</tt> </tt>
+<a name="L10"></a><tt class="py-lineno"> 10</tt>  <tt class="py-line"><tt class="py-comment"># any later version.</tt> </tt>
+<a name="L11"></a><tt class="py-lineno"> 11</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L12"></a><tt class="py-lineno"> 12</tt>  <tt class="py-line"><tt class="py-comment"># Paramiko is distrubuted in the hope that it will be useful, but WITHOUT ANY</tt> </tt>
+<a name="L13"></a><tt class="py-lineno"> 13</tt>  <tt class="py-line"><tt class="py-comment"># WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR</tt> </tt>
+<a name="L14"></a><tt class="py-lineno"> 14</tt>  <tt class="py-line"><tt class="py-comment"># A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more</tt> </tt>
+<a name="L15"></a><tt class="py-lineno"> 15</tt>  <tt class="py-line"><tt class="py-comment"># details.</tt> </tt>
+<a name="L16"></a><tt class="py-lineno"> 16</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L17"></a><tt class="py-lineno"> 17</tt>  <tt class="py-line"><tt class="py-comment"># You should have received a copy of the GNU Lesser General Public License</tt> </tt>
+<a name="L18"></a><tt class="py-lineno"> 18</tt>  <tt class="py-line"><tt class="py-comment"># along with Paramiko; if not, write to the Free Software Foundation, Inc.,</tt> </tt>
+<a name="L19"></a><tt class="py-lineno"> 19</tt>  <tt class="py-line"><tt class="py-comment"># 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.</tt> </tt>
+<a name="L20"></a><tt class="py-lineno"> 20</tt>  <tt class="py-line"> </tt>
 <a name="L21"></a><tt class="py-lineno"> 21</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">sys</tt> </tt>
 <a name="L22"></a><tt class="py-lineno"> 22</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">threading</tt> </tt>
 <a name="L23"></a><tt class="py-lineno"> 23</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">Crypto</tt><tt class="py-op">.</tt><tt class="py-name">Util</tt><tt class="py-op">.</tt><tt id="link-0" class="py-name" targets="Variable paramiko.auth_handler.randpool=paramiko.auth_handler-module.html#randpool,Variable paramiko.channel.randpool=paramiko.channel-module.html#randpool,Variable paramiko.client.randpool=paramiko.client-module.html#randpool,Variable paramiko.common.randpool=paramiko.common-module.html#randpool,Variable paramiko.dsskey.randpool=paramiko.dsskey-module.html#randpool,Variable paramiko.hostkeys.randpool=paramiko.hostkeys-module.html#randpool,Variable paramiko.kex_gex.randpool=paramiko.kex_gex-module.html#randpool,Variable paramiko.kex_group1.randpool=paramiko.kex_group1-module.html#randpool,Variable paramiko.packet.randpool=paramiko.packet-module.html#randpool,Variable paramiko.pkey.randpool=paramiko.pkey-module.html#randpool,Variable paramiko.rsakey.randpool=paramiko.rsakey-module.html#randpool,Variable paramiko.server.randpool=paramiko.server-module.html#randpool,Variable paramiko.sftp.randpool=paramiko.sftp-module.html#randpool,Variable paramiko.sftp_attr.randpool=paramiko.sftp_attr-module.html#randpool,Variable paramiko.sftp_client.randpool=paramiko.sftp_client-module.html#randpool,Variable paramiko.sftp_file.randpool=paramiko.sftp_file-module.html#randpool,Variable paramiko.sftp_handle.randpool=paramiko.sftp_handle-module.html#randpool,Variable paramiko.sftp_server.randpool=paramiko.sftp_server-module.html#randpool,Variable paramiko.sftp_si.randpool=paramiko.sftp_si-module.html#randpool,Variable paramiko.transport.randpool=paramiko.transport-module.html#randpool,Variable paramiko.util.randpool=paramiko.util-module.html#randpool"><a title="paramiko.auth_handler.randpool
@@ -108,24 +108,24 @@ paramiko.util.randpool" class="py-name" href="#" onclick="return doclink('link-0
 <a name="L32"></a><tt class="py-lineno"> 32</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-string">""</tt><tt class="py-op">.</tt><tt class="py-name">join</tt><tt class="py-op">(</tt><tt class="py-name">map</tt><tt class="py-op">(</tt><tt class="py-keyword">lambda</tt> <tt class="py-name">x</tt><tt class="py-op">,</tt> <tt class="py-name">y</tt><tt class="py-op">:</tt> <tt class="py-name">chr</tt><tt class="py-op">(</tt><tt class="py-name">ord</tt><tt class="py-op">(</tt><tt class="py-name">x</tt><tt class="py-op">)</tt> <tt class="py-op">^</tt> <tt class="py-name">ord</tt><tt class="py-op">(</tt><tt class="py-name">y</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-name">a</tt><tt class="py-op">,</tt> <tt class="py-name">b</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
 </div><a name="L33"></a><tt class="py-lineno"> 33</tt>  <tt class="py-line"> </tt>
 <a name="L34"></a><tt class="py-lineno"> 34</tt>  <tt class="py-line"><tt class="py-comment">##</tt> </tt>
-<a name="L35"></a><tt class="py-lineno"> 35</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment">## Find a strong random entropy source, depending on the detected platform.</tt> </tt>
-<a name="L36"></a><tt class="py-lineno"> 36</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment">## WARNING TO DEVELOPERS: This will fail on some systems, but do NOT use</tt> </tt>
-<a name="L37"></a><tt class="py-lineno"> 37</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment">## Crypto.Util.randpool.RandomPool as a fall-back.  RandomPool will happily run</tt> </tt>
-<a name="L38"></a><tt class="py-lineno"> 38</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment">## with very little entropy, thus _silently_ defeating any security that</tt> </tt>
-<a name="L39"></a><tt class="py-lineno"> 39</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment">## Paramiko attempts to provide.  (This is current as of PyCrypto 2.0.1).</tt> </tt>
-<a name="L40"></a><tt class="py-lineno"> 40</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment">## See http://www.lag.net/pipermail/paramiko/2008-January/000599.html</tt> </tt>
-<a name="L41"></a><tt class="py-lineno"> 41</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment">## and http://www.lag.net/pipermail/paramiko/2008-April/000678.html</tt> </tt>
-<a name="L42"></a><tt class="py-lineno"> 42</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment">##</tt> </tt>
-<a name="L43"></a><tt class="py-lineno"> 43</tt>  <tt class="py-line"><tt class="py-comment"></tt> </tt>
+<a name="L35"></a><tt class="py-lineno"> 35</tt>  <tt class="py-line"><tt class="py-comment">## Find a strong random entropy source, depending on the detected platform.</tt> </tt>
+<a name="L36"></a><tt class="py-lineno"> 36</tt>  <tt class="py-line"><tt class="py-comment">## WARNING TO DEVELOPERS: This will fail on some systems, but do NOT use</tt> </tt>
+<a name="L37"></a><tt class="py-lineno"> 37</tt>  <tt class="py-line"><tt class="py-comment">## Crypto.Util.randpool.RandomPool as a fall-back.  RandomPool will happily run</tt> </tt>
+<a name="L38"></a><tt class="py-lineno"> 38</tt>  <tt class="py-line"><tt class="py-comment">## with very little entropy, thus _silently_ defeating any security that</tt> </tt>
+<a name="L39"></a><tt class="py-lineno"> 39</tt>  <tt class="py-line"><tt class="py-comment">## Paramiko attempts to provide.  (This is current as of PyCrypto 2.0.1).</tt> </tt>
+<a name="L40"></a><tt class="py-lineno"> 40</tt>  <tt class="py-line"><tt class="py-comment">## See http://www.lag.net/pipermail/paramiko/2008-January/000599.html</tt> </tt>
+<a name="L41"></a><tt class="py-lineno"> 41</tt>  <tt class="py-line"><tt class="py-comment">## and http://www.lag.net/pipermail/paramiko/2008-April/000678.html</tt> </tt>
+<a name="L42"></a><tt class="py-lineno"> 42</tt>  <tt class="py-line"><tt class="py-comment">##</tt> </tt>
+<a name="L43"></a><tt class="py-lineno"> 43</tt>  <tt class="py-line"> </tt>
 <a name="L44"></a><tt class="py-lineno"> 44</tt>  <tt class="py-line"><tt class="py-keyword">if</tt> <tt class="py-op">(</tt><tt class="py-op">(</tt><tt class="py-name">platform</tt> <tt class="py-keyword">is</tt> <tt class="py-keyword">not</tt> <tt class="py-name">None</tt> <tt class="py-keyword">and</tt> <tt class="py-name">platform</tt><tt class="py-op">.</tt><tt class="py-name">system</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt class="py-name">lower</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-op">==</tt> <tt class="py-string">'windows'</tt><tt class="py-op">)</tt> <tt class="py-keyword">or</tt> </tt>
 <a name="L45"></a><tt class="py-lineno"> 45</tt>  <tt class="py-line">        <tt class="py-name">sys</tt><tt class="py-op">.</tt><tt class="py-name">platform</tt> <tt class="py-op">==</tt> <tt class="py-string">'win32'</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
 <a name="L46"></a><tt class="py-lineno"> 46</tt>  <tt class="py-line">    <tt class="py-comment"># MS Windows</tt> </tt>
-<a name="L47"></a><tt class="py-lineno"> 47</tt>  <tt class="py-line"><tt class="py-comment"></tt>    <tt class="py-keyword">from</tt> <tt id="link-1" class="py-name" targets="Package paramiko=paramiko-module.html"><a title="paramiko" class="py-name" href="#" onclick="return doclink('link-1', 'paramiko', 'link-1');">paramiko</a></tt> <tt class="py-keyword">import</tt> <tt id="link-2" class="py-name" targets="Module paramiko.rng_win32=paramiko.rng_win32-module.html"><a title="paramiko.rng_win32" class="py-name" href="#" onclick="return doclink('link-2', 'rng_win32', 'link-2');">rng_win32</a></tt> </tt>
+<a name="L47"></a><tt class="py-lineno"> 47</tt>  <tt class="py-line">    <tt class="py-keyword">from</tt> <tt id="link-1" class="py-name" targets="Package paramiko=paramiko-module.html"><a title="paramiko" class="py-name" href="#" onclick="return doclink('link-1', 'paramiko', 'link-1');">paramiko</a></tt> <tt class="py-keyword">import</tt> <tt id="link-2" class="py-name" targets="Module paramiko.rng_win32=paramiko.rng_win32-module.html"><a title="paramiko.rng_win32" class="py-name" href="#" onclick="return doclink('link-2', 'rng_win32', 'link-2');">rng_win32</a></tt> </tt>
 <a name="L48"></a><tt class="py-lineno"> 48</tt>  <tt class="py-line">    <tt id="link-3" class="py-name" targets="Variable paramiko.rng.rng_device=paramiko.rng-module.html#rng_device"><a title="paramiko.rng.rng_device" class="py-name" href="#" onclick="return doclink('link-3', 'rng_device', 'link-3');">rng_device</a></tt> <tt class="py-op">=</tt> <tt id="link-4" class="py-name"><a title="paramiko.rng_win32" class="py-name" href="#" onclick="return doclink('link-4', 'rng_win32', 'link-2');">rng_win32</a></tt><tt class="py-op">.</tt><tt id="link-5" class="py-name" targets="Function paramiko.rng_posix.open_rng_device()=paramiko.rng_posix-module.html#open_rng_device,Function paramiko.rng_win32.open_rng_device()=paramiko.rng_win32-module.html#open_rng_device"><a title="paramiko.rng_posix.open_rng_device
 paramiko.rng_win32.open_rng_device" class="py-name" href="#" onclick="return doclink('link-5', 'open_rng_device', 'link-5');">open_rng_device</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
 <a name="L49"></a><tt class="py-lineno"> 49</tt>  <tt class="py-line"><tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
 <a name="L50"></a><tt class="py-lineno"> 50</tt>  <tt class="py-line">    <tt class="py-comment"># Assume POSIX (any system where /dev/urandom exists)</tt> </tt>
-<a name="L51"></a><tt class="py-lineno"> 51</tt>  <tt class="py-line"><tt class="py-comment"></tt>    <tt class="py-keyword">from</tt> <tt id="link-6" class="py-name"><a title="paramiko" class="py-name" href="#" onclick="return doclink('link-6', 'paramiko', 'link-1');">paramiko</a></tt> <tt class="py-keyword">import</tt> <tt id="link-7" class="py-name" targets="Module paramiko.rng_posix=paramiko.rng_posix-module.html"><a title="paramiko.rng_posix" class="py-name" href="#" onclick="return doclink('link-7', 'rng_posix', 'link-7');">rng_posix</a></tt> </tt>
+<a name="L51"></a><tt class="py-lineno"> 51</tt>  <tt class="py-line">    <tt class="py-keyword">from</tt> <tt id="link-6" class="py-name"><a title="paramiko" class="py-name" href="#" onclick="return doclink('link-6', 'paramiko', 'link-1');">paramiko</a></tt> <tt class="py-keyword">import</tt> <tt id="link-7" class="py-name" targets="Module paramiko.rng_posix=paramiko.rng_posix-module.html"><a title="paramiko.rng_posix" class="py-name" href="#" onclick="return doclink('link-7', 'rng_posix', 'link-7');">rng_posix</a></tt> </tt>
 <a name="L52"></a><tt class="py-lineno"> 52</tt>  <tt class="py-line">    <tt id="link-8" class="py-name"><a title="paramiko.rng.rng_device" class="py-name" href="#" onclick="return doclink('link-8', 'rng_device', 'link-3');">rng_device</a></tt> <tt class="py-op">=</tt> <tt id="link-9" class="py-name"><a title="paramiko.rng_posix" class="py-name" href="#" onclick="return doclink('link-9', 'rng_posix', 'link-7');">rng_posix</a></tt><tt class="py-op">.</tt><tt id="link-10" class="py-name"><a title="paramiko.rng_posix.open_rng_device
 paramiko.rng_win32.open_rng_device" class="py-name" href="#" onclick="return doclink('link-10', 'open_rng_device', 'link-5');">open_rng_device</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
 <a name="L53"></a><tt class="py-lineno"> 53</tt>  <tt class="py-line"> </tt>
@@ -170,7 +170,7 @@ paramiko.util.randpool" class="py-name" href="#" onclick="return doclink('link-1
 <a name="L72"></a><tt class="py-lineno"> 72</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">entropy</tt> <tt class="py-op">=</tt> <tt id="link-12" class="py-name"><a title="paramiko.rng.rng_device" class="py-name" href="#" onclick="return doclink('link-12', 'rng_device', 'link-3');">rng_device</a></tt> </tt>
 <a name="L73"></a><tt class="py-lineno"> 73</tt>  <tt class="py-line"> </tt>
 <a name="L74"></a><tt class="py-lineno"> 74</tt>  <tt class="py-line">        <tt class="py-comment"># Stir 256 bits of entropy from the RNG device into the RandomPool.</tt> </tt>
-<a name="L75"></a><tt class="py-lineno"> 75</tt>  <tt class="py-line"><tt class="py-comment"></tt>        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-13" class="py-name"><a title="paramiko.auth_handler.randpool
+<a name="L75"></a><tt class="py-lineno"> 75</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-13" class="py-name"><a title="paramiko.auth_handler.randpool
 paramiko.channel.randpool
 paramiko.client.randpool
 paramiko.common.randpool
@@ -313,7 +313,7 @@ paramiko.buffered_pipe.BufferedPipe.read" class="py-name" href="#" onclick="retu
 <a name="L110"></a><tt class="py-lineno">110</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">result</tt> </tt>
 </div></div><a name="L111"></a><tt class="py-lineno">111</tt>  <tt class="py-line"> </tt>
 <a name="L112"></a><tt class="py-lineno">112</tt>  <tt class="py-line"><tt class="py-comment"># vim:set ts=4 sw=4 sts=4 expandtab:</tt> </tt>
-<a name="L113"></a><tt class="py-lineno">113</tt>  <tt class="py-line"><tt class="py-comment"></tt> </tt><script type="text/javascript">
+<a name="L113"></a><tt class="py-lineno">113</tt>  <tt class="py-line"> </tt><script type="text/javascript">
 <!--
 expandto(location.href);
 // -->
@@ -346,7 +346,7 @@ expandto(location.href);
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Sun Jul  6 18:30:35 2008
+    Generated by Epydoc 3.0.1 on Sun Nov  1 22:14:17 2009
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"
