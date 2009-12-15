@@ -1,3 +1,16 @@
+paramiko (1.7.6-1) unstable; urgency=low
+
+  * Imported Upstream version 1.7.6 (Closes: #543784)
+  * Fix formatting error for __all__ in paramiko/__init__.py (Closes:
+    #494836)
+  * Update debian/watch syntax
+  * Package build clean-up
+  * Include docs/ contents with build (LP: #364998)
+  * Update Build-Depends
+  * debian/control: Update Vcs-* entries
+
+ -- Jeremy T. Bouse <jbouse@debian.org>  Tue, 15 Dec 2009 09:46:29 -0500
+
 paramiko (1.7.4-0.1) unstable; urgency=medium
 
   * NMU.
