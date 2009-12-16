@@ -1,3 +1,9 @@
+paramiko (1.7.6-2) unstable; urgency=low
+
+  * debian/control: Fix last remaining lintian warning
+
+ -- Jeremy T. Bouse <jbouse@debian.org>  Wed, 16 Dec 2009 08:15:36 -0500
+
 paramiko (1.7.6-1) unstable; urgency=low
 
   * Imported Upstream version 1.7.6 (Closes: #543784)
