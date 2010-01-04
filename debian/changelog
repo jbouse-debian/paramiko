@@ -1,3 +1,10 @@
+paramiko (1.7.6-3) unstable; urgency=medium
+
+  * Add conflict against fabric 0.9.0-1 (Closes: #563490) - thanks to
+    Chris Lamb <lamby@debian.org> for being a packaging tool
+
+ -- Jeremy T. Bouse <jbouse@debian.org>  Mon, 04 Jan 2010 10:12:32 -0500
+
 paramiko (1.7.6-2) unstable; urgency=low
 
   * debian/control: Fix last remaining lintian warning
