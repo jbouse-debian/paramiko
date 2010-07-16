@@ -1,3 +1,12 @@
+paramiko (1.7.6-4) unstable; urgency=low
+
+  * Update Standards-Version to 3.9.0
+  * debian/control: Add versioned dependency on python-crypto (Closes:
+    #479596)
+  * debian/control: Build-Depends python-all-dev to python-all
+
+ -- Jeremy T. Bouse <jbouse@debian.org>  Fri, 16 Jul 2010 10:54:06 -0400
+
 paramiko (1.7.6-3) unstable; urgency=medium
 
   * Add conflict against fabric 0.9.0-1 (Closes: #563490) - thanks to
