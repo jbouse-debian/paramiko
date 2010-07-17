@@ -1,8 +1,9 @@
 paramiko (1.7.6-5) unstable; urgency=low
 
   * debian/control: Fix python-crypto version dependency
+  * debian/rules: Remove simple-patchsys.mk
 
- -- Jeremy T. Bouse <jbouse@debian.org>  Fri, 16 Jul 2010 23:29:32 -0400
+ -- Jeremy T. Bouse <jbouse@debian.org>  Sat, 17 Jul 2010 00:00:40 -0400
 
 paramiko (1.7.6-4) unstable; urgency=low
 
