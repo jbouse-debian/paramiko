@@ -1,3 +1,9 @@
+paramiko (1.7.6-5) unstable; urgency=low
+
+  * debian/control: Fix python-crypto version dependency
+
+ -- Jeremy T. Bouse <jbouse@debian.org>  Fri, 16 Jul 2010 23:29:32 -0400
+
 paramiko (1.7.6-4) unstable; urgency=low
 
   * Update Standards-Version to 3.9.0
