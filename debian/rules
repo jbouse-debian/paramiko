@@ -1,11 +1,8 @@
 #!/usr/bin/make -f
 
-DEB_PYTHON_SYSTEM=pysupport
+%:
+	dh --with python-support,quilt $@
 
-include /usr/share/cdbs/1/rules/buildcore.mk
-include /usr/share/cdbs/1/rules/debhelper.mk
-include /usr/share/cdbs/1/class/python-distutils.mk
-# include /usr/share/cdbs/1/rules/simple-patchsys.mk
-
-clean::
+override_dh_clean:
 	rm -rf build
+	dh_clean

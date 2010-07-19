@@ -3,7 +3,7 @@ Section: python
 Priority: optional
 Maintainer: Jeremy T. Bouse <jbouse@debian.org>
 Uploaders: Guido Guenther <agx@debian.org>
-Build-Depends: cdbs (>= 0.4.49), debhelper (>= 7), python-all (>= 2.3.5-11), python-support (>= 0.5.3)
+Build-Depends: quilt (>= 0.46-7~), debhelper (>> 7.0.50), python-all (>= 2.3.5-11), python-support (>= 0.5.3)
 Standards-Version: 3.9.0
 Homepage: http://www.lag.net/paramiko/
 Vcs-Git: git://git.debian.org/collab-maint/paramiko.git
