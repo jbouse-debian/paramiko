@@ -1,3 +1,14 @@
+paramiko (1.7.6-5.1) unstable; urgency=low
+
+  * Non-maintainer upload.
+  * Avoid deprecated RandomPool. Patch by Gary van der Merwe. Closes:
+    #576697
+  * Try connecting to each available address family until one succeeds.
+    Patch by Andrew Bennetts.  Closes: #602251
+  * Bump standards version to 3.9.1 (no changes).
+
+ -- Jelmer Vernooij <jelmer@debian.org>  Fri, 28 Jan 2011 12:35:12 +0100
+
 paramiko (1.7.6-5) unstable; urgency=low
 
   * debian/control: Fix python-crypto version dependency

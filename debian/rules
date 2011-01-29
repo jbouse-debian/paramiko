@@ -1,11 +1,14 @@
 #!/usr/bin/make -f
 
 %:
-	dh --with python-support,quilt $@
+	dh --with python-support $@
 
 override_dh_clean:
 	rm -rf build
 	dh_clean
+
+override_dh_auto_test:
+	./test.py
 
 # Commands not to run
 override_dh_installcatalogs override_dh_installcron:
