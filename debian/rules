@@ -1,10 +1,10 @@
 #!/usr/bin/make -f
 
 %:
-	dh --with python-support $@
+	dh --with python-support,quilt $@
 
 override_dh_clean:
-	rm -rf build
+	rm -rf build test.log
 	dh_clean
 
 override_dh_auto_test:
