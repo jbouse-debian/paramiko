@@ -1,3 +1,10 @@
+paramiko (1.7.6-6) unstable; urgency=low
+
+  * Add back quilt support NMU removed & update clean target
+  * Accept NMU upload. Thanks Jelmer Vernooij <jelmer@debian.org>
+
+ -- Jeremy T. Bouse <jbouse@debian.org>  Sat, 29 Jan 2011 12:02:16 -0500
+
 paramiko (1.7.6-5.1) unstable; urgency=low
 
   * Non-maintainer upload.
