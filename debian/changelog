@@ -1,3 +1,11 @@
+paramiko (1.7.7.1-1) unstable; urgency=low
+
+  * Imported Upstream version 1.7.7.1 (Closes: #627754)
+  * debian/patches: Patches included in upstream
+  * debian/control: Updated standards version (no change)
+
+ -- Jeremy T. Bouse <jbouse@debian.org>  Tue, 31 May 2011 21:23:55 -0400
+
 paramiko (1.7.6-6) unstable; urgency=low
 
   * Add back quilt support NMU removed & update clean target
