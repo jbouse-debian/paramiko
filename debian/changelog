@@ -1,3 +1,10 @@
+paramiko (1.7.7.1-2.1) unstable; urgency=low
+
+  * Non-maintainer upload.
+  * Fix broken host key handling when port != 22 (Closes: 668239)
+
+ -- Luk Claes <luk@debian.org>  Thu, 05 Jul 2012 00:38:56 +0000
+
 paramiko (1.7.7.1-2) unstable; urgency=low
 
   * debian/*: Update build to use dh_python2 (Closes: #637379)
