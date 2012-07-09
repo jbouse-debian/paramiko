@@ -1,3 +1,19 @@
+paramiko (1.7.7.1-2.2) unstable; urgency=low
+
+  * Non-maintainer upload.
+  * Add Fix-SSHException-when-re-keying-over-a-fast-connection.patch patch.
+    Fix bug "Transfers fail after 1GB; rekeying window too small".
+    (Closes: #659007)
+
+ -- Salvatore Bonaccorso <carnil@debian.org>  Sat, 07 Jul 2012 17:09:08 +0200
+
+paramiko (1.7.7.1-2.1) unstable; urgency=low
+
+  * Non-maintainer upload.
+  * Fix broken host key handling when port != 22 (Closes: 668239)
+
+ -- Luk Claes <luk@debian.org>  Thu, 05 Jul 2012 00:38:56 +0000
+
 paramiko (1.7.7.1-2) unstable; urgency=low
 
   * debian/*: Update build to use dh_python2 (Closes: #637379)
