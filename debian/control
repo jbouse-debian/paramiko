@@ -3,7 +3,7 @@ Section: python
 Priority: optional
 Maintainer: Jeremy T. Bouse <jbouse@debian.org>
 Uploaders: Guido Guenther <agx@debian.org>
-Build-Depends: debhelper (>> 8.0.0),
+Build-Depends: debhelper (>> 8),
 	python-all (>= 2.6.6-3~),
 	python-crypto (>= 2.1.0-2)
 Standards-Version: 3.9.3
