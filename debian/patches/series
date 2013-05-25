@@ -1,2 +1,1 @@
 hostkey.patch
-Fix-SSHException-when-re-keying-over-a-fast-connection.patch
