@@ -122,7 +122,8 @@ class Channel (object):
         out += '>'
         return out
 
-    def get_pty(self, term='vt100', width=80, height=24):
+    def get_pty(self, term='vt100', width=80, height=24, width_pixels=0,
+                height_pixels=0):
         """
         Request a pseudo-terminal from the server.  This is usually used right
         after creating a client channel, to ask the server to provide some
@@ -136,6 +137,10 @@ class Channel (object):
         @type width: int
         @param height: height (in characters) of the terminal screen
         @type height: int
+        @param width_pixels: width (in pixels) of the terminal screen
+        @type width_pixels: int
+        @param height_pixels: height (in pixels) of the terminal screen
+        @type height_pixels: int
         
         @raise SSHException: if the request was rejected or the channel was
             closed
@@ -150,8 +155,8 @@ class Channel (object):
         m.add_string(term)
         m.add_int(width)
         m.add_int(height)
-        # pixel height, width (usually useless)
-        m.add_int(0).add_int(0)
+        m.add_int(width_pixels)
+        m.add_int(height_pixels)
         m.add_string('')
         self._event_pending()
         self.transport._send_user_message(m)
@@ -239,7 +244,7 @@ class Channel (object):
         self.transport._send_user_message(m)
         self._wait_for_event()
 
-    def resize_pty(self, width=80, height=24):
+    def resize_pty(self, width=80, height=24, width_pixels=0, height_pixels=0):
         """
         Resize the pseudo-terminal.  This can be used to change the width and
         height of the terminal emulation created in a previous L{get_pty} call.
@@ -248,6 +253,10 @@ class Channel (object):
         @type width: int
         @param height: new height (in characters) of the terminal screen
         @type height: int
+        @param width_pixels: new width (in pixels) of the terminal screen
+        @type width_pixels: int
+        @param height_pixels: new height (in pixels) of the terminal screen
+        @type height_pixels: int
 
         @raise SSHException: if the request was rejected or the channel was
             closed
@@ -258,13 +267,12 @@ class Channel (object):
         m.add_byte(chr(MSG_CHANNEL_REQUEST))
         m.add_int(self.remote_chanid)
         m.add_string('window-change')
-        m.add_boolean(True)
+        m.add_boolean(False)
         m.add_int(width)
         m.add_int(height)
-        m.add_int(0).add_int(0)
-        self._event_pending()
+        m.add_int(width_pixels)
+        m.add_int(height_pixels)
         self.transport._send_user_message(m)
-        self._wait_for_event()
 
     def exit_status_ready(self):
         """
@@ -380,6 +388,31 @@ class Channel (object):
         self._wait_for_event()
         self.transport._set_x11_handler(handler)
         return auth_cookie
+
+    def request_forward_agent(self, handler):
+        """
+        Request for a forward SSH Agent on this channel.
+        This is only valid for an ssh-agent from openssh !!!
+
+        @param handler: a required handler to use for incoming SSH Agent connections
+        @type handler: function
+
+        @return: if we are ok or not (at that time we always return ok)
+        @rtype: boolean
+
+        @raise: SSHException in case of channel problem.
+        """
+        if self.closed or self.eof_received or self.eof_sent or not self.active:
+            raise SSHException('Channel is not open')
+
+        m = Message()
+        m.add_byte(chr(MSG_CHANNEL_REQUEST))
+        m.add_int(self.remote_chanid)
+        m.add_string('auth-agent-req@openssh.com')
+        m.add_boolean(False)
+        self.transport._send_user_message(m)
+        self.transport._set_forward_agent_handler(handler)
+        return True
 
     def get_transport(self):
         """
@@ -1026,6 +1059,11 @@ class Channel (object):
             else:
                 ok = server.check_channel_x11_request(self, single_connection,
                                                       auth_proto, auth_cookie, screen_number)
+        elif key == 'auth-agent-req@openssh.com':
+            if server is None:
+                ok = False
+            else:
+                ok = server.check_channel_forward_agent_request(self)
         else:
             self._log(DEBUG, 'Unhandled channel request "%s"' % key)
             ok = False
