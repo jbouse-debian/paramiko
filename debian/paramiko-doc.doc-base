@@ -5,5 +5,5 @@ Abstract: A Python interface to the paramiko SSH2 protocol library
 Section: Programming/Python
 
 Format: html
-Index: /usr/share/doc/python-paramiko/docs/index.html
-Files: /usr/share/doc/python-paramiko/docs/*.html
+Index: /usr/share/doc/paramiko-doc/docs/index.html
+Files: /usr/share/doc/paramiko-doc/docs/*.html

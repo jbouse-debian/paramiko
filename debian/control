@@ -13,6 +13,18 @@ Homepage: https://github.com/paramiko/paramiko/
 Vcs-Git: git://git.debian.org/collab-maint/paramiko.git
 Vcs-Browser: http://git.debian.org/?p=collab-maint/paramiko.git
 
+Package: paramiko-doc
+Section: doc
+Architecture: all
+Depends: ${misc:Depends}
+Description: Make ssh v2 connections with Python (Documentation)
+ This is a library for making SSH2 connections (client or server).
+ Emphasis is on using SSH2 as an alternative to SSL for making secure
+ connections between Python scripts.  All major ciphers and hash methods
+ are supported.  SFTP client and server mode are both supported too.
+ .
+ This is the documentation for the package.
+
 Package: python-paramiko
 Architecture: all
 Depends: ${misc:Depends},
