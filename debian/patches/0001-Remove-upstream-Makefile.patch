@@ -1,0 +1,35 @@
+From: Jeremy T. Bouse <jbouse@debian.org>
+Date: Sat, 25 May 2013 01:05:44 -0400
+Subject: [PATCH] Remove upstream Makefile
+
+The upstream Makefile is non-functional for package building. It is
+meant for upstream release management rather than package management.
+Removing it to get it out of the way and allow debhelper to build using
+python setuptools.
+---
+ Makefile |   15 ---------------
+ 1 files changed, 0 insertions(+), 15 deletions(-)
+ delete mode 100644 Makefile
+
+diff --git a/Makefile b/Makefile
+deleted file mode 100644
+index 572f867..0000000
+--- a/Makefile
++++ /dev/null
+@@ -1,15 +0,0 @@
+-release: docs
+-	python setup.py sdist register upload
+-
+-docs: paramiko/*
+-	epydoc --no-private -o docs/ paramiko
+-
+-clean:
+-	rm -rf build dist docs
+-	rm -f MANIFEST *.log demos/*.log
+-	rm -f paramiko/*.pyc
+-	rm -f test.log
+-	rm -rf paramiko.egg-info
+-
+-test:
+-	python ./test.py
+-- 
