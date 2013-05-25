@@ -6,7 +6,8 @@ Uploaders: Guido Guenther <agx@debian.org>
 Build-Depends: debhelper (>> 8),
 	python-all (>= 2.6.6-3~),
 	python-crypto (>= 2.1.0-2),
-	python-setuptools
+	python-setuptools,
+	python-epydoc
 Standards-Version: 3.9.4
 Homepage: https://github.com/paramiko/paramiko/
 Vcs-Git: git://git.debian.org/collab-maint/paramiko.git
