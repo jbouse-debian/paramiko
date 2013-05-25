@@ -1,3 +1,22 @@
+paramiko (1.10.1-1) unstable; urgency=low
+
+  * Imported Upstream version 1.10.1
+  * debian/control: Revise debhelper Build-Depends entry
+  * debian/{control,watch}: Update for new maintainer and source address
+    (Closes: #690080) - thanks to Mike Gabriel <mike.gabriel@das-
+    netzwerkteam.de>
+  * debian/gbp.conf: Add standard git-buildpackage settings
+  * debian/patches/*: Removed patch included in upstream
+  * debian/patches/*: Removed hostkey patch that caused problems -
+    thanks to Lars Noschinski <lars@public.noschinski.de>
+  * debian/*: clean up build files for new version
+  * debian/control: Add Build-Depend on python-epydoc
+  * debian/patches/*: Add patch to remove upstream Makefile
+  * debian/*: Build out separate paramiko-doc package (Closes: #682255)
+    - thanks to Touko Korpela <touko.korpela@iki.fi>
+
+ -- Jeremy T. Bouse <jbouse@debian.org>  Thu, 27 Jun 2013 22:59:08 -0400
+
 paramiko (1.7.7.1-3) unstable; urgency=low
 
   * Accept NMU uploads (Closes: #659007, #668239)
