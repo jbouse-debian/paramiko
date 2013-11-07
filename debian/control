@@ -12,6 +12,7 @@ Standards-Version: 3.9.4
 Homepage: https://github.com/paramiko/paramiko/
 Vcs-Git: git://git.debian.org/collab-maint/paramiko.git
 Vcs-Browser: http://git.debian.org/?p=collab-maint/paramiko.git
+XS-Testsuite: autopkgtest
 
 Package: paramiko-doc
 Section: doc
