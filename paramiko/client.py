@@ -7,7 +7,7 @@
 # Software Foundation; either version 2.1 of the License, or (at your option)
 # any later version.
 #
-# Paramiko is distrubuted in the hope that it will be useful, but WITHOUT ANY
+# Paramiko is distributed in the hope that it will be useful, but WITHOUT ANY
 # WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
 # A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more
 # details.
@@ -186,8 +186,13 @@ class SSHClient (object):
 
         @raise IOError: if the file could not be written
         """
+
+        # update local host keys from file (in case other SSH clients
+        # have written to the known_hosts file meanwhile.
+        if self._host_keys_filename is not None:
+            self.load_host_keys(self._host_keys_filename)
+
         f = open(filename, 'w')
-        f.write('# SSH host keys collected by paramiko\n')
         for hostname, keys in self._host_keys.iteritems():
             for keytype, key in keys.iteritems():
                 f.write('%s %s %s\n' % (hostname, keytype, key.get_base64()))

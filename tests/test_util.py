@@ -7,7 +7,7 @@
 # Software Foundation; either version 2.1 of the License, or (at your option)
 # any later version.
 #
-# Paramiko is distrubuted in the hope that it will be useful, but WITHOUT ANY
+# Paramiko is distributed in the hope that it will be useful, but WITHOUT ANY
 # WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
 # A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more
 # details.
@@ -329,3 +329,14 @@ IdentityFile id_dsa22
                 paramiko.util.lookup_ssh_host_config(host, config),
                 values
             )
+
+    def test_12_config_addressfamily_and_lazy_fqdn(self):
+        """
+        Ensure the code path honoring non-'all' AddressFamily doesn't asplode
+        """
+        test_config = """
+AddressFamily inet
+IdentityFile something_%l_using_fqdn
+"""
+        config = paramiko.util.parse_ssh_config(cStringIO.StringIO(test_config))
+        assert config.lookup('meh') # will die during lookup() if bug regresses
