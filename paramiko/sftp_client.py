@@ -7,7 +7,7 @@
 # Software Foundation; either version 2.1 of the License, or (at your option)
 # any later version.
 #
-# Paramiko is distrubuted in the hope that it will be useful, but WITHOUT ANY
+# Paramiko is distributed in the hope that it will be useful, but WITHOUT ANY
 # WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
 # A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more
 # details.
@@ -736,7 +736,7 @@ class SFTPClient (BaseSFTP):
                     self._convert_status(msg)
                 return t, msg
             if fileobj is not type(None):
-                fileobj._async_response(t, msg)
+                fileobj._async_response(t, msg, num)
             if waitfor is None:
                 # just doing a single check
                 break

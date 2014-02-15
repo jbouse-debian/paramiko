@@ -7,7 +7,7 @@
 # Software Foundation; either version 2.1 of the License, or (at your option)
 # any later version.
 #
-# Paramiko is distrubuted in the hope that it will be useful, but WITHOUT ANY
+# Paramiko is distributed in the hope that it will be useful, but WITHOUT ANY
 # WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
 # A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more
 # details.
@@ -46,6 +46,8 @@ Paramiko is written entirely in python (no C or platform-dependent code) and is
 released under the GNU Lesser General Public License (LGPL).
 
 Website: U{https://github.com/paramiko/paramiko/}
+
+Mailing list: U{paramiko@librelist.com<mailto:paramiko@librelist.com>}
 """
 
 import sys
@@ -55,7 +57,8 @@ if sys.version_info < (2, 5):
 
 
 __author__ = "Jeff Forcier <jeff@bitprophet.org>"
-__version__ = "1.10.1"
+__version__ = "1.12.2"
+__version_info__ = tuple([ int(d) for d in __version__.split(".") ])
 __license__ = "GNU Lesser General Public License (LGPL)"
 
 
@@ -69,6 +72,7 @@ from ssh_exception import SSHException, PasswordRequiredException, \
 from server import ServerInterface, SubsystemHandler, InteractiveQuery
 from rsakey import RSAKey
 from dsskey import DSSKey
+from ecdsakey import ECDSAKey
 from sftp import SFTPError, BaseSFTP
 from sftp_client import SFTP, SFTPClient
 from sftp_server import SFTPServer

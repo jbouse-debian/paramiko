@@ -7,7 +7,7 @@
 # Software Foundation; either version 2.1 of the License, or (at your option)
 # any later version.
 #
-# Paramiko is distrubuted in the hope that it will be useful, but WITHOUT ANY
+# Paramiko is distributed in the hope that it will be useful, but WITHOUT ANY
 # WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
 # A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more
 # details.
@@ -255,11 +255,11 @@ class AgentServerProxy(AgentSSH):
         self.close()
 
     def connect(self):
-         conn_sock = self.__t.open_forward_agent_channel()
-         if conn_sock is None:
-             raise SSHException('lost ssh-agent')
-         conn_sock.set_name('auth-agent')
-         self._connect(conn_sock)
+        conn_sock = self.__t.open_forward_agent_channel()
+        if conn_sock is None:
+            raise SSHException('lost ssh-agent')
+        conn_sock.set_name('auth-agent')
+        self._connect(conn_sock)
 
     def close(self):
         """

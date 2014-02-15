@@ -7,7 +7,7 @@
 # Software Foundation; either version 2.1 of the License, or (at your option)
 # any later version.
 #
-# Paramiko is distrubuted in the hope that it will be useful, but WITHOUT ANY
+# Paramiko is distributed in the hope that it will be useful, but WITHOUT ANY
 # WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
 # A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more
 # details.
@@ -33,17 +33,13 @@ from paramiko.ssh_exception import SSHException, ProxyCommandFailure
 from paramiko.message import Message
 
 
-got_r_hmac = False
 try:
-    import r_hmac
-    got_r_hmac = True
+    from r_hmac import HMAC
 except ImportError:
-    pass
+    from Crypto.Hash.HMAC import HMAC
+
 def compute_hmac(key, message, digest_class):
-    if got_r_hmac:
-        return r_hmac.HMAC(key, message, digest_class).digest()
-    from Crypto.Hash import HMAC
-    return HMAC.HMAC(key, message, digest_class).digest()
+    return HMAC(key, message, digest_class).digest()
 
 
 class NeedRekeyException (Exception):
@@ -156,7 +152,6 @@ class Packetizer (object):
 
     def close(self):
         self.__closed = True
-        self.__socket.close()
 
     def set_hexdump(self, hexdump):
         self.__dump_packets = hexdump
