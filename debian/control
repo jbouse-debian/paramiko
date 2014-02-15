@@ -8,13 +8,14 @@ Build-Depends: debhelper (>> 8),
 	python-crypto (>= 2.1.0-2),
 	python-setuptools,
 	python-epydoc
-Standards-Version: 3.9.4
+Standards-Version: 3.9.5
 Homepage: https://github.com/paramiko/paramiko/
 Vcs-Git:  git@github.com:gbp-debian/paramiko.git
 Vcs-Browser: https://github.com/gbp-debian/paramiko
 XS-Testsuite: autopkgtest
 
-Package: paramiko-doc
+Packag: paramiko-doc
+Package-Type: deb
 Section: doc
 Architecture: all
 Depends: ${misc:Depends}
@@ -27,6 +28,7 @@ Description: Make ssh v2 connections with Python (Documentation)
  This is the documentation for the package.
 
 Package: python-paramiko
+Package-Type: deb
 Architecture: all
 Depends: ${misc:Depends},
 	${python:Depends},
