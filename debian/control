@@ -10,8 +10,8 @@ Build-Depends: debhelper (>> 8),
 	python-epydoc
 Standards-Version: 3.9.4
 Homepage: https://github.com/paramiko/paramiko/
-Vcs-Git: git://git.debian.org/collab-maint/paramiko.git
-Vcs-Browser: http://git.debian.org/?p=collab-maint/paramiko.git
+Vcs-Git:  git@github.com:gbp-debian/paramiko.git
+Vcs-Browser: https://github.com/gbp-debian/paramiko
 XS-Testsuite: autopkgtest
 
 Package: paramiko-doc
