@@ -1,7 +1,7 @@
 Welcome to Paramiko!
 ====================
 
-Paramiko is a Python (2.5+) implementation of the SSHv2 protocol [#]_,
+Paramiko is a Python (2.6+, 3.3+) implementation of the SSHv2 protocol [#]_,
 providing both client and server functionality. While it leverages a Python C
 extension for low level cryptography (`PyCrypto <http://pycrypto.org>`_),
 Paramiko itself is a pure Python interface around SSH networking concepts.
@@ -11,18 +11,16 @@ contribution guidelines, development roadmap, news/blog, and so forth. Detailed
 usage and API documentation can be found at our code documentation site,
 `docs.paramiko.org <http://docs.paramiko.org>`_.
 
-.. toctree::
-    changelog
-    installing
-    contributing
-    contact
-
-.. Hide blog in hidden toctree for now (to avoid warnings.)
+Please see the sidebar to the left to begin.
 
 .. toctree::
     :hidden:
 
-    blog
+    changelog
+    FAQs <faq>
+    installing
+    contributing
+    contact
 
 
 .. rubric:: Footnotes
