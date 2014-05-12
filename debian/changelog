@@ -1,10 +1,15 @@
-paramiko (1.10.1-2) UNRELEASED; urgency=low
+paramiko (1.14.0-1) unstable; urgency=low
 
-  [ Jean-Baptiste Lallement ]
-  * Add autopkgtest that runs the upstream test suite against the installed
-    package. (LP: #1248706)
+  * Imported Upstream version 1.14.0 (Closes: #742005)
+  * Update Standards-Version to 3.9.5
+  * Fix paramiko-doc overwriting /usr/share/doc-base/python-paramiko.
+    Thanks to Felix Geyer <fgeyer@debian.org> (Closes: #718004)
+  * debian/patches/*: Removed patch applied upstream
+  * debian/control: Move VCS location
+  * debian/control: Fix type in paramiko-doc block
+  * debian/control: Removed unknown XS-Testsuite
 
- -- Jeremy T. Bouse <jbouse@debian.org>  Wed, 06 Nov 2013 21:48:53 +0100
+ -- Jeremy T. Bouse <jbouse@debian.org>  Sun, 11 May 2014 23:01:05 -0400
 
 paramiko (1.10.1-1) unstable; urgency=low
 
