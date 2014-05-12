@@ -10,7 +10,7 @@ Build-Depends: debhelper (>> 8),
 	python-epydoc
 Standards-Version: 3.9.5
 Homepage: https://github.com/paramiko/paramiko/
-Vcs-Git:  git@github.com:jbouse-debian/paramiko.git
+Vcs-Git: https://github.com/jbouse-debian/paramiko.git
 Vcs-Browser: https://github.com/jbouse-debian/paramiko
 
 Package: paramiko-doc
