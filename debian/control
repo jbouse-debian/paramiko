@@ -12,7 +12,6 @@ Standards-Version: 3.9.5
 Homepage: https://github.com/paramiko/paramiko/
 Vcs-Git:  git@github.com:jbouse-debian/paramiko.git
 Vcs-Browser: https://github.com/jbouse-debian/paramiko
-XS-Testsuite: autopkgtest
 
 Package: paramiko-doc
 Package-Type: deb
