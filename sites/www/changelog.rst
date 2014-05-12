@@ -2,9 +2,70 @@
 Changelog
 =========
 
+* :release:`1.14.0 <2014-05-07>`
+* :release:`1.13.1 <2014-05-07>`
+* :release:`1.12.4 <2014-05-07>`
+* :release:`1.11.6 <2014-05-07>`
+* :bug:`-` `paramiko.file.BufferedFile.read` incorrectly returned text strings
+  after the Python 3 migration, despite bytes being more appropriate for file
+  contents (which may be binary or of an unknown encoding.) This has been
+  addressed.
+
+  .. note::
+      `paramiko.file.BufferedFile.readline` continues to return strings, not
+      bytes, as "lines" only make sense for textual data. It assumes UTF-8 by
+      default.
+
+  This should fix `this issue raised on the Obnam mailing list
+  <http://comments.gmane.org/gmane.comp.sysutils.backup.obnam/252>`_.  Thanks
+  to Antoine Brenner for the patch.
+* :bug:`-` Added self.args for exception classes. Used for unpickling. Related
+  to (`Fabric #986 <https://github.com/fabric/fabric/issues/986>`_, `Fabric
+  #714 <https://github.com/fabric/fabric/issues/714>`_). Thanks to Alex
+  Plugaru.
+* :bug:`-` Fix logging error in sftp_client for filenames containing the '%'
+  character. Thanks to Antoine Brenner.
+* :bug:`308` Fix regression in dsskey.py that caused sporadic signature 
+  verification failures. Thanks to Chris Rose.
+* :support:`299` Use deterministic signatures for ECDSA keys for improved
+  security. Thanks to Alex Gaynor.
+* :support:`297` Replace PyCrypto's ``Random`` with `os.urandom` for improved
+  speed and security. Thanks again to Alex.
+* :support:`295` Swap out a bunch of PyCrypto hash functions with use of
+  `hashlib`. Thanks to Alex Gaynor.
+* :support:`290` (also :issue:`292`) Add support for building universal
+  (Python 2+3 compatible) wheel files during the release process. Courtesy of
+  Alex Gaynor.
+* :support:`284` Add Python language trove identifiers to ``setup.py``. Thanks
+  to Alex Gaynor for catch & patch.
+* :bug:`235` Improve string type testing in a handful of spots (e.g. ``s/if
+  type(x) is str/if isinstance(x, basestring)/g``.) Thanks to ``@ksamuel`` for
+  the report.
+* :release:`1.13.0 <2014-03-13>`
+* :release:`1.12.3 <2014-03-13>`
+* :release:`1.11.5 <2014-03-13>`
+* :release:`1.10.7 <2014-03-13>`
+* :feature:`16` **Python 3 support!** Our test suite passes under Python 3, and
+  it (& Fabric's test suite) continues to pass under Python 2. **Python 2.5 is
+  no longer supported with this change!**
+  
+  The merged code was built on many contributors' efforts, both code &
+  feedback. In no particular order, we thank Daniel Goertzen, Ivan Kolodyazhny,
+  Tomi Pieviläinen, Jason R. Coombs, Jan N. Schulze, ``@Lazik``, Dorian Pula,
+  Scott Maxwell, Tshepang Lekhonkhobe, Aaron Meurer, and Dave Halter.
+* :support:`256 backported` Convert API documentation to Sphinx, yielding a new
+  API docs website to replace the old Epydoc one. Thanks to Olle Lundberg for
+  the initial conversion work.
+* :bug:`-` Use constant-time hash comparison operations where possible, to
+  protect against `timing-based attacks
+  <http://codahale.com/a-lesson-in-timing-attacks/>`_. Thanks to Alex Gaynor
+  for the patch.
 * :release:`1.12.2 <2014-02-14>`
 * :release:`1.11.4 <2014-02-14>`
 * :release:`1.10.6 <2014-02-14>`
+* :feature:`58` Allow client code to access the stored SSH server banner via
+  `Transport.get_banner <paramiko.transport.Transport.get_banner>`. Thanks to
+  ``@Jhoanor`` for the patch.
 * :bug:`252` (`Fabric #1020 <https://github.com/fabric/fabric/issues/1020>`_)
   Enhanced the implementation of ``ProxyCommand`` to avoid a deadlock/hang
   condition that frequently occurs at ``Transport`` shutdown time. Thanks to
@@ -29,10 +90,10 @@ Changelog
 * :release:`1.12.0 <2013-09-27>`
 * :release:`1.11.2 <2013-09-27>`
 * :release:`1.10.4 <2013-09-27>`
-* :feature:`152` Add tentative support for ECDSA keys. *This adds the ecdsa
-  module as a new dependency of Paramiko.* The module is available at
-  [warner/python-ecdsa on Github](https://github.com/warner/python-ecdsa) and
-  [ecdsa on PyPI](https://pypi.python.org/pypi/ecdsa).
+* :feature:`152` Add tentative support for ECDSA keys. **This adds the ecdsa
+  module as a new dependency of Paramiko.** The module is available at
+  `warner/python-ecdsa on Github <https://github.com/warner/python-ecdsa>`_ and
+  `ecdsa on PyPI <https://pypi.python.org/pypi/ecdsa>`_.
 
     * Note that you might still run into problems with key negotiation --
       Paramiko picks the first key that the server offers, which might not be
