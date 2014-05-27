@@ -6,6 +6,7 @@ Uploaders: Guido Guenther <agx@debian.org>
 Build-Depends: debhelper (>> 8),
 	python-all (>= 2.6.6-3~),
 	python-crypto (>= 2.1.0-2),
+	python-ecdsa,
 	python-setuptools,
 	python-epydoc
 Standards-Version: 3.9.5
