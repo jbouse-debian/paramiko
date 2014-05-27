@@ -30,14 +30,14 @@ override_dh_install:
 
 override_dh_installdocs:
 ifeq (,$(findstring nodocs, $(DEB_BUILD_OPTIONS)))
-	epydoc --no-private -o docs/ paramiko
+	epydoc --no-private -o html/ paramiko
 endif
 	dh_installdocs
 
 override_dh_clean:
 	dh_clean
 	rm -rf build
-	rm -rf docs/a*.* docs/b* docs/c* docs/e* docs/f* docs/h* docs/id* docs/l* docs/m* docs/pa* docs/r* docs/st* docs/t* docs/u*
+	rm -rf html
 
 # Commands not to run
 override_dh_installcatalogs override_dh_installcron:
