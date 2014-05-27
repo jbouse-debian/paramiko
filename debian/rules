@@ -1,32 +1,43 @@
 #!/usr/bin/make -f
 
-PYTHON2=$(shell pyversions -vr)
+PY3VERS=$(shell py3versions -vr)
 
 %:
-	dh $@ --with python2
-
-ifeq (,$(filter nocheck,$(DEB_BUILD_OPTIONS)))
-test-python%:
-	python$* setup.py test -vv
-
-override_dh_auto_test: $(PYTHON2:%=test-python%)
-endif
+	dh $@ --with python2,python3
 
 build-python%:
 	python$* setup.py build
 
-override_dh_auto_build: $(PYTHON2:%=build-python%)
-	dh_auto_build
+test-python%:
+	python$* setup.py test -vv
 
 install-python%:
 	python$* setup.py install --root=$(CURDIR)/debian/tmp --install-layout=deb
 
-override_dh_auto_install: $(PYTHON2:%=install-python%)
+override_dh_auto_build: $(PY3VERS:%=build-python%)
+	dh_auto_build
+
+override_dh_auto_test: $(PY3VERS:%=test-python%)
+	dh_auto_test
+
+override_dh_auto_install: $(PY3VERS:%=install-python%)
 	dh_auto_install
 
-override_dh_installdocs: 
+override_dh_install:
+	dh_install "debian/tmp/usr/lib/python2*" -p python-paramiko
+	dh_install "debian/tmp/usr/lib/python3*" -p python3-paramiko
+	dh_install
+
+override_dh_installdocs:
+ifeq (,$(findstring nodocs, $(DEB_BUILD_OPTIONS)))
 	epydoc --no-private -o docs/ paramiko
+endif
 	dh_installdocs
+
+override_dh_clean:
+	dh_clean
+	rm -rf build
+	rm -rf docs/a*.* docs/b* docs/c* docs/e* docs/f* docs/h* docs/id* docs/l* docs/m* docs/pa* docs/r* docs/st* docs/t* docs/u*
 
 # Commands not to run
 override_dh_installcatalogs override_dh_installcron:
