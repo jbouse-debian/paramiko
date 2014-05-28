@@ -1,3 +1,14 @@
+paramiko (1.14.0-2) unstable; urgency=low
+
+  * Add extend-diff-ignore to debian/source/options.
+    Thanks to Thomas Goirand <zigo>
+  * Add python-ecdsa to Build-Depends (Closes: #702571)
+  * Add Python 3 support to build.
+    Thanks to Thomas Goirand <zigo> (Closes: #697600, #749512)
+  * Clean up build environment
+
+ -- Jeremy T. Bouse <jbouse@debian.org>  Tue, 27 May 2014 21:30:02 -0400
+
 paramiko (1.14.0-1) unstable; urgency=low
 
   * Imported Upstream version 1.14.0 (Closes: #742005)
