@@ -534,9 +534,7 @@ class SFTPClient(BaseSFTP):
             an `.SFTPAttributes` object containing attributes about the given
             file.
 
-        .. versionadded:: 1.4
-        .. versionchanged:: 1.7.4
-            Began returning rich attribute objects.
+        .. versionadded:: 1.10
         """
         with self.file(remotepath, 'wb') as fr:
             fr.set_pipelined(True)
@@ -566,7 +564,9 @@ class SFTPClient(BaseSFTP):
         The SFTP operations use pipelining for speed.
 
         :param str localpath: the local file to copy
-        :param str remotepath: the destination path on the SFTP server
+        :param str remotepath: the destination path on the SFTP server. Note
+            that the filename should be included. Only specifying a directory
+            may result in an error.
         :param callable callback:
             optional callback function (form: ``func(int, int)``) that accepts
             the bytes transferred so far and the total bytes to be transferred
@@ -584,7 +584,7 @@ class SFTPClient(BaseSFTP):
         """
         file_size = os.stat(localpath).st_size
         with open(localpath, 'rb') as fl:
-            return self.putfo(fl, remotepath, os.stat(localpath).st_size, callback, confirm)
+            return self.putfo(fl, remotepath, file_size, callback, confirm)
 
     def getfo(self, remotepath, fl, callback=None):
         """
@@ -601,9 +601,7 @@ class SFTPClient(BaseSFTP):
             the bytes transferred so far and the total bytes to be transferred
         :return: the `number <int>` of bytes written to the opened file object
 
-        .. versionadded:: 1.4
-        .. versionchanged:: 1.7.4
-            Added the ``callable`` param.
+        .. versionadded:: 1.10
         """
         with self.open(remotepath, 'rb') as fr:
             file_size = self.stat(remotepath).st_size
