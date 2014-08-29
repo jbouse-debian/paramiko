@@ -2,6 +2,33 @@
 Changelog
 =========
 
+* :release:`1.14.1 <2014-08-25>`
+* :release:`1.13.2 <2014-08-25>`
+* :bug:`376` Be less aggressive about expanding variables in ``ssh_config``
+  files, which results in a speedup of SSH config parsing. Credit to Olle
+  Lundberg.
+* :support:`324 backported` A bevvy of documentation typo fixes, courtesy of Roy
+  Wellington.
+* :bug:`312` `paramiko.transport.Transport` had a bug in its ``__repr__`` which
+  surfaces during errors encountered within its ``__init__``, causing
+  problematic tracebacks in such situations. Thanks to Simon Percivall for
+  catch & patch.
+* :bug:`272` Fix a bug where ``known_hosts`` parsing hashed the input hostname
+  as well as the hostnames from the ``known_hosts`` file, on every comparison.
+  Thanks to ``@sigmunau`` for final patch and ``@ostacey`` for the original
+  report.
+* :bug:`239` Add Windows-style CRLF support to SSH config file parsing. Props
+  to Christopher Swenson.
+* :support:`229` Fix a couple of incorrectly-copied docstrings' ``..
+  versionadded::`` RST directives. Thanks to Aarni Koskela for the catch.
+* :support:`169 backported` Minor refactor of
+  `paramiko.sftp_client.SFTPClient.put` thanks to Abhinav Upadhyay.
+* :bug:`285` (also :issue:`352`) Update our Python 3 ``b()`` compatibility shim
+  to handle ``buffer`` objects correctly; this fixes a frequently reported
+  issue affecting many users, including users of the ``bzr`` software suite.
+  Thanks to ``@basictheprogram`` for the initial report, Jelmer Vernooij for
+  the fix and Andrew Starr-Bochicchio & Jeremy T. Bouse (among others) for
+  discussion & feedback.
 * :release:`1.14.0 <2014-05-07>`
 * :release:`1.13.1 <2014-05-07>`
 * :release:`1.12.4 <2014-05-07>`
