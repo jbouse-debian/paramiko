@@ -1,3 +1,18 @@
+paramiko (1.14.1-1) unstable; urgency=medium
+
+  [ Thomas Kluyver ]
+  * Add autopkgtest information
+
+  [ Jeremy T. Bouse ]
+  * Include upstream GitHub Pull Request #352 to fix RC bug.
+    Thanks to Jelmer Vernooij <jelmer> (Closes: #750517, #755910)
+  * Imported Upstream version 1.14.1
+  * Revert "Include upstream GitHub Pull Request #352 to fix RC bug"
+    as it was included in upstream bug fix release 1.14.1 to remove
+    the regression introduced into 1.14.0.
+
+ -- Jeremy T. Bouse <jbouse@debian.org>  Thu, 28 Aug 2014 22:23:51 -0700
+
 paramiko (1.14.0-2) unstable; urgency=low
 
   * Add extend-diff-ignore to debian/source/options.
