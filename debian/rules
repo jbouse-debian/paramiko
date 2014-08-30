@@ -1,32 +1,9 @@
 #!/usr/bin/make -f
 
-PY3VERS=$(shell py3versions -vr)
+export PYBUILD_NAME=paramiko
 
 %:
-	dh $@ --with python2,python3
-
-build-python%:
-	python$* setup.py build
-
-test-python%:
-	python$* setup.py test -vv
-
-install-python%:
-	python$* setup.py install --root=$(CURDIR)/debian/tmp --install-layout=deb
-
-override_dh_auto_build: $(PY3VERS:%=build-python%)
-	dh_auto_build
-
-override_dh_auto_test: $(PY3VERS:%=test-python%)
-	dh_auto_test
-
-override_dh_auto_install: $(PY3VERS:%=install-python%)
-	dh_auto_install
-
-override_dh_install:
-	dh_install "debian/tmp/usr/lib/python2*" -p python-paramiko
-	dh_install "debian/tmp/usr/lib/python3*" -p python3-paramiko
-	dh_install
+	dh $@ --with python2,python3 --buildsystem=pybuild
 
 override_dh_installdocs:
 ifeq (,$(findstring nodocs, $(DEB_BUILD_OPTIONS)))
@@ -34,15 +11,3 @@ ifeq (,$(findstring nodocs, $(DEB_BUILD_OPTIONS)))
 endif
 	dh_installdocs
 
-override_dh_clean:
-	dh_clean
-	rm -rf build
-	rm -rf html
-
-# Commands not to run
-override_dh_installcatalogs override_dh_installcron:
-override_dh_installdebconf override_dh_installemacsen override_dh_installifupdown:
-override_dh_installinfo override_dh_installinit override_dh_installmenu override_dh_installmime:
-override_dh_installmodules override_dh_installlogcheck override_dh_installlogrotate:
-override_dh_installpam override_dh_installppp override_dh_installudev override_dh_installwm:
-override_dh_installxfonts override_dh_gconf override_dh_icons override_dh_perl override_dh_usrlocal:

@@ -6,6 +6,7 @@ Uploaders: Guido Guenther <agx@debian.org>
 X-Python-Version: >= 2.6
 X-Python3-Version: >= 3.2
 Build-Depends: debhelper (>> 9),
+	dh-python,
 	python-all (>= 2.6.6-3~),
 	python-crypto (>= 2.1.0-2),
 	python-ecdsa,
