@@ -7,7 +7,7 @@ export PYBUILD_NAME=paramiko
 
 override_dh_installdocs:
 ifeq (,$(findstring nodocs, $(DEB_BUILD_OPTIONS)))
-	epydoc --no-private -o html/ paramiko
+	sphinx-build sites/docs html
 endif
 	dh_installdocs
 
