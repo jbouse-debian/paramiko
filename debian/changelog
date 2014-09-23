@@ -1,3 +1,12 @@
+paramiko (1.15.0-1) unstable; urgency=medium
+
+  * Implement pybuild buildsystem
+  * debian/gbp.conf: Update postbuild for git-buildpackage
+  * Imported Upstream version 1.15.0
+  * Specify minimum required version of ecdsa
+
+ -- Jeremy T. Bouse <jbouse@debian.org>  Mon, 22 Sep 2014 20:05:40 -0400
+
 paramiko (1.14.1-1) unstable; urgency=medium
 
   [ Thomas Kluyver ]
