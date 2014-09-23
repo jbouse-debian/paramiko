@@ -1,0 +1,28 @@
+From: "Jeremy T. Bouse" <jbouse@debian.org>
+Date: Tue, 23 Sep 2014 12:54:17 -0400
+Subject: Localize generated documentation
+
+Remove external resource references from the Sphinx layout to
+generate local documentation to package under /usr/share/doc for
+the paramiko-doc.
+---
+ sites/shared_conf.py | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
+
+diff --git a/sites/shared_conf.py b/sites/shared_conf.py
+index 4a6a5c4..343b579 100644
+--- a/sites/shared_conf.py
++++ b/sites/shared_conf.py
+@@ -10,11 +10,7 @@ extensions = ['alabaster', 'sphinx.ext.intersphinx']
+ html_theme = 'alabaster'
+ html_theme_options = {
+     'description': "A Python implementation of SSHv2.",
+-    'github_user': 'paramiko',
+-    'github_repo': 'paramiko',
+-    'gratipay_user': 'bitprophet',
+-    'analytics_id': 'UA-18486793-2',
+-    'travis_button': True,
++    'github_button': False,
+ }
+ html_sidebars = {
+     '**': [
