@@ -17,7 +17,7 @@ Build-Depends: debhelper (>> 9),
 	python3-crypto,
 	python3-ecdsa (>= 0.11),
 	python3-setuptools
-Standards-Version: 3.9.5
+Standards-Version: 3.9.6
 Homepage: https://github.com/paramiko/paramiko/
 Vcs-Git: https://github.com/jbouse-debian/paramiko.git
 Vcs-Browser: https://github.com/jbouse-debian/paramiko
