@@ -10,10 +10,7 @@ extensions = ['alabaster', 'sphinx.ext.intersphinx']
 html_theme = 'alabaster'
 html_theme_options = {
     'description': "A Python implementation of SSHv2.",
-    'github_user': 'paramiko',
-    'github_repo': 'paramiko',
-    'analytics_id': 'UA-18486793-2',
-    'travis_button': True,
+    'github_button': False,
 }
 html_sidebars = {
     '**': [
