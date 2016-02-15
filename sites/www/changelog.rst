@@ -2,6 +2,56 @@
 Changelog
 =========
 
+* :release:`1.16.0 <2015-11-04>`
+* :bug:`194 major` (also :issue:`562`, :issue:`530`, :issue:`576`) Streamline
+  use of ``stat`` when downloading SFTP files via `SFTPClient.get
+  <paramiko.sftp_client.SFTPClient.get>`; this avoids triggering bugs in some
+  off-spec SFTP servers such as IBM Sterling. Thanks to ``@muraleee`` for the
+  initial report and to Torkil Gustavsen for the patch.
+* :feature:`467` (also :issue:`139`, :issue:`412`) Fully enable two-factor
+  authentication (e.g. when a server requires ``AuthenticationMethods
+  pubkey,keyboard-interactive``). Thanks to ``@perryjrandall`` for the patch
+  and to ``@nevins-b`` and Matt Robenolt for additional support.
+* :bug:`502 major` Fix 'exec' requests in server mode to use ``get_string``
+  instead of ``get_text`` to avoid ``UnicodeDecodeError`` on non-UTF-8 input.
+  Thanks to Anselm Kruis for the patch & discussion.
+* :bug:`401` Fix line number reporting in log output regarding invalid
+  ``known_hosts`` line entries. Thanks to Dylan Thacker-Smith for catch &
+  patch.
+* :support:`525 backported` Update the vendored Windows API addon to a more
+  recent edition. Also fixes :issue:`193`, :issue:`488`, :issue:`498`. Thanks
+  to Jason Coombs.
+* :release:`1.15.4 <2015-11-02>`
+* :release:`1.14.3 <2015-11-02>`
+* :release:`1.13.4 <2015-11-02>`
+* :bug:`366` Fix `~paramiko.sftp_attributes.SFTPAttributes` so its string
+  representation doesn't raise exceptions on empty/initialized instances. Patch
+  by Ulrich Petri.
+* :bug:`359` Use correct attribute name when trying to use Python 3's
+  ``int.bit_length`` method; prior to fix, the Python 2 custom fallback
+  implementation was always used, even on Python 3. Thanks to Alex Gaynor.
+* :support:`594 backported` Correct some post-Python3-port docstrings to
+  specify ``bytes`` type instead of ``str``. Credit to ``@redixin``.
+* :bug:`565` Don't explode with ``IndexError`` when reading private key files
+  lacking an ``-----END <type> PRIVATE KEY-----`` footer. Patch courtesy of
+  Prasanna Santhanam.
+* :feature:`604` Add support for the ``aes192-ctr`` and ``aes192-cbc`` ciphers.
+  Thanks to Michiel Tiller for noticing it was as easy as tweaking some key
+  sizes :D
+* :feature:`356` (also :issue:`596`, :issue:`365`, :issue:`341`, :issue:`164`,
+  :issue:`581`, and a bunch of other duplicates besides) Add support for SHA-2
+  based key exchange (kex) algorithm ``diffie-hellman-group-exchange-sha256``
+  and (H)MAC algorithms ``hmac-sha2-256`` and ``hmac-sha2-512``.
+  
+  This change includes tweaks to debug-level logging regarding
+  algorithm-selection handshakes; the old all-in-one log line is now multiple
+  easier-to-read, printed-at-handshake-time log lines.
+
+  Thanks to the many people who submitted patches for this functionality and/or
+  assisted in testing those patches. That list includes but is not limited to,
+  and in no particular order: Matthias Witte, Dag Wieers, Ash Berlin, Etienne
+  Perot, Gert van Dijk, ``@GuyShaanan``, Aaron Bieber, ``@cyphase``, and Eric
+  Brown.
 * :release:`1.15.3 <2015-10-02>`
 * :support:`554 backported` Fix inaccuracies in the docstring for the ECDSA key
   class. Thanks to Jared Hance for the patch.
@@ -29,6 +79,13 @@ Changelog
   which caused ``OverFlowError`` (and other symptoms) in SFTP functionality.
   Thanks to ``@dboreham`` for leading the troubleshooting charge, and to
   Scott Maxwell for the final patch.
+* :support:`582` Fix some old ``setup.py`` related helper code which was
+  breaking ``bdist_dumb`` on Mac OS X. Thanks to Peter Odding for the patch.
+* :bug:`22 major` Try harder to connect to multiple network families (e.g. IPv4
+  vs IPv6) in case of connection issues; this helps with problems such as hosts
+  which resolve both IPv4 and IPv6 addresses but are only listening on IPv4.
+  Thanks to Dries Desmet for original report and Torsten Landschoff for the
+  foundational patchset.
 * :bug:`402` Check to see if an SSH agent is actually present before trying to
   forward it to the remote end. This replaces what was usually a useless
   ``TypeError`` with a human-readable
@@ -57,7 +114,7 @@ Changelog
   use of the ``shlex`` module. Thanks to Yan Kalchevskiy.
 * :support:`422 backported` Clean up some unused imports. Courtesy of Olle
   Lundberg.
-* :support:`421 backported` Modernize threading calls to user newer API. Thanks
+* :support:`421 backported` Modernize threading calls to use newer API. Thanks
   to Olle Lundberg.
 * :support:`419 backported` Modernize a bunch of the codebase internals to
   leverage decorators. Props to ``@beckjake`` for realizing we're no longer on
