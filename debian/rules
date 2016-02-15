@@ -11,3 +11,9 @@ ifeq (,$(findstring nodocs, $(DEB_BUILD_OPTIONS)))
 endif
 	dh_installdocs
 
+override_dh_auto_test:
+ifeq (,$(findstring nocheck, $(DEB_BUILD_OPTIONS)))
+	set -e ; for python in $$(pyversions -s) $$(pyversions -s); do \
+		$$python test.py --verbose ; \
+	done
+endif
