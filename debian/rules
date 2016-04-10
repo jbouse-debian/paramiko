@@ -1,6 +1,8 @@
 #!/usr/bin/make -f
 
 export PYBUILD_NAME=paramiko
+export PYBUILD_TEST_ARGS={interpreter} $(CURDIR)/test.py
+export LC_ALL=C.UTF-8
 
 %:
 	dh $@ --with python2,python3 --buildsystem=pybuild
@@ -12,8 +14,4 @@ endif
 	dh_installdocs
 
 override_dh_auto_test:
-ifeq (,$(findstring nocheck, $(DEB_BUILD_OPTIONS)))
-	set -e ; for python in $$(pyversions -s) $$(pyversions -s); do \
-		$$python test.py --verbose ; \
-	done
-endif
+	PYBUILD_SYSTEM=custom dh_auto_test
