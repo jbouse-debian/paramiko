@@ -1,3 +1,16 @@
+paramiko (1.16.0-1) unstable; urgency=medium
+
+  * Imported Upstream version 1.16.0 (Closes: #816618)
+  * Update debian/patches
+  * Add Python pyasn1 and gssapi build depends (Closes: #804582)
+  * Use upstream test script
+  * Update debian/watch to use pypi.debian.net
+  * Fix dh_auto_test override
+  * Update Standards-Version to 3.9.7, no changes needed
+  * Remove unneeded option
+
+ -- Jeremy T. Bouse <jbouse@debian.org>  Mon, 11 Apr 2016 15:47:02 -0400
+
 paramiko (1.15.3-1) unstable; urgency=medium
 
   * Imported Upstream version 1.15.3
