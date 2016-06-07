@@ -57,13 +57,6 @@ Paramiko primarily supports POSIX platforms with standard OpenSSH
 implementations, and is most frequently tested on Linux and OS X.  Windows is
 supported as well, though it may not be as straightforward.
 
-Some Windows users whose Python is 64-bit have found that the PyCrypto
-dependency ``winrandom`` may not install properly, leading to an
-``ImportError``.  In this scenario, you may need to compile ``winrandom``
-yourself.  See `Fabric #194 <https://github.com/fabric/fabric/issues/194>`_
-for info.
-
-
 Bugs & Support
 --------------
 
