@@ -2,9 +2,14 @@
 Changelog
 =========
 
+* :release:`2.0.0 <2016-04-28>`
 * :release:`1.17.0 <2016-04-28>`
 * :release:`1.16.1 <2016-04-28>`
 * :release:`1.15.5 <2016-04-28>`
+* :feature:`731` (working off the earlier :issue:`611`) Add support for 384-
+  and 512-bit elliptic curve groups in ECDSA key types (aka
+  ``ecdsa-sha2-nistp384`` / ``ecdsa-sha2-nistp521``). Thanks to Michiel Tiller
+  and ``@CrazyCasta`` for the patches.
 * :bug:`670` Due to an earlier bugfix, less-specific ``Host`` blocks'
   ``ProxyCommand`` values were overriding ``ProxyCommand none`` in
   more-specific ``Host`` blocks. This has been fixed in a backwards compatible
@@ -16,6 +21,28 @@ Changelog
   erroneously non-optional ``file_size`` parameter. Should only affect users
   who manually call ``prefetch``. Thanks to ``@stevevanhooser`` for catch &
   patch.
+* :feature:`394` Replace PyCrypto with the Python Cryptographic Authority
+  (PyCA) 'Cryptography' library suite. This improves security, installability,
+  and performance; adds PyPy support; and much more.
+
+  There aren't enough ways to thank Alex Gaynor for all of his work on this,
+  and then his patience while the maintainer let his PR grow moss for a year
+  and change. Paul Kehrer came in with an assist, and I think I saw Olle
+  Lundberg, ``@techtonik`` and ``@johnthagen`` supplying backup as well. Thanks
+  to all!
+
+  .. warning::
+    **This is a backwards incompatible change.**
+
+    However, **it should only affect installation** requirements; **no API
+    changes are intended or expected**. Please report any such breakages as
+    bugs.
+
+    See our updated :doc:`installation docs <installing>` for details on what
+    is now required to install Paramiko; many/most users should be able to
+    simply ``pip install -U paramiko`` (especially if you **upgrade to pip
+    8**).
+
 * :bug:`577` (via :issue:`578`; should also fix :issue:`718`, :issue:`560`) Fix
   stalled/hung SFTP downloads by cleaning up some threading lock issues. Thanks
   to Stephen C. Pope for the patch.
