@@ -8,7 +8,7 @@ X-Python3-Version: >= 3.2
 Build-Depends: debhelper (>> 9),
 	dh-python,
 	python-all (>= 2.6.6-3~),
-	python-crypto (>= 2.1.0-2),
+	python-cryptography,
 	python-ecdsa (>= 0.11),
 	python-pyasn1,
 	python-gssapi,
@@ -16,7 +16,7 @@ Build-Depends: debhelper (>> 9),
 	python-sphinx,
 	python-alabaster,
 	python3-all,
-	python3-crypto,
+	python3-cryptography,
 	python3-ecdsa (>= 0.11),
 	python3-pyasn1,
 	python3-gssapi,
@@ -44,9 +44,7 @@ Description: Make ssh v2 connections with Python (Documentation)
 Package: python-paramiko
 Package-Type: deb
 Architecture: all
-Depends: python-crypto (>= 2.1.0-2),
-	${misc:Depends},
-	${python:Depends}
+Depends: ${misc:Depends}, ${python:Depends}
 Provides: ${python:Provides}
 Description: Make ssh v2 connections with Python (Python 2)
  This is a library for making SSH2 connections (client or server).
@@ -59,9 +57,7 @@ Description: Make ssh v2 connections with Python (Python 2)
 Package: python3-paramiko
 Package-Type: deb
 Architecture: all
-Depends: python3-crypto (>= 2.1.0-2),
-	${misc:Depends},
-	${python3:Depends}
+Depends: ${misc:Depends}, ${python3:Depends}
 Provides: ${python3:Provides}
 Description: Make ssh v2 connections with Python (Python 3)
  This is a library for making SSH2 connections (client or server).
