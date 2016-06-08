@@ -9,7 +9,7 @@ export LC_ALL=C.UTF-8
 
 override_dh_installdocs:
 ifeq (,$(findstring nodocs, $(DEB_BUILD_OPTIONS)))
-	sphinx-build sites/docs html
+	http_proxy=127.0.0.1:9 https_proxy=127.0.0.1:9 sphinx-build sites/docs html
 endif
 	dh_installdocs
 
