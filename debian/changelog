@@ -1,3 +1,15 @@
+paramiko (2.0.0-1) unstable; urgency=medium
+
+  * Imported Upstream version 2.0.0 (Closes: #826737)
+  * Correct email address for patch
+  * Update Standards-Version to 3.9.8, no changes needed
+  * Update doc file names to match upstream changes
+  * Update crypto dependencies
+  * Clean up debian/control, debian/rules and lintian issues
+  * Upstream bug tracking check (Closes: #783313, #754851)
+
+ -- Jeremy T. Bouse <jbouse@debian.org>  Wed, 08 Jun 2016 23:56:41 -0400
+
 paramiko (1.16.0-1) unstable; urgency=medium
 
   * Imported Upstream version 1.16.0 (Closes: #816618)
