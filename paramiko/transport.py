@@ -58,7 +58,7 @@ from paramiko.kex_gss import KexGSSGex, KexGSSGroup1, KexGSSGroup14, NullHostKey
 from paramiko.message import Message
 from paramiko.packet import Packetizer, NeedRekeyException
 from paramiko.primes import ModulusPack
-from paramiko.py3compat import string_types, long, byte_ord, b, input
+from paramiko.py3compat import string_types, long, byte_ord, b, input, PY2
 from paramiko.rsakey import RSAKey
 from paramiko.ecdsakey import ECDSAKey
 from paramiko.server import ServerInterface
@@ -694,6 +694,8 @@ class Transport (threading.Thread, ClosingContextManager):
         :raises SSHException: if the request is rejected or the session ends
             prematurely
 
+        .. versionchanged:: 1.13.4/1.14.3/1.15.3
+            Added the ``timeout`` argument.
         .. versionchanged:: 1.15
             Added the ``window_size`` and ``max_packet_size`` arguments.
         """
@@ -1533,8 +1535,23 @@ class Transport (threading.Thread, ClosingContextManager):
     def stop_thread(self):
         self.active = False
         self.packetizer.close()
-        while self.is_alive() and (self is not threading.current_thread()):
-            self.join(10)
+        if PY2:
+            # Original join logic; #520 doesn't appear commonly present under
+            # Python 2.
+            while self.is_alive() and self is not threading.current_thread():
+                self.join(10)
+        else:
+            # Keep trying to join() our main thread, quickly, until:
+            # * We join()ed successfully (self.is_alive() == False)
+            # * Or it looks like we've hit issue #520 (socket.recv hitting some
+            # race condition preventing it from timing out correctly), wherein
+            # our socket and packetizer are both closed (but where we'd
+            # otherwise be sitting forever on that recv()).
+            while (
+                self.is_alive() and self is not threading.current_thread()
+                and not self.sock._closed and not self.packetizer.closed
+            ):
+                self.join(0.1)
 
     ###  internals...
 
