@@ -1,17 +1,8 @@
 #!/usr/bin/make -f
 
 export PYBUILD_NAME=paramiko
-export PYBUILD_TEST_ARGS={interpreter} $(CURDIR)/test.py
+export PYBUILD_DISABLE=test
 export LC_ALL=C.UTF-8
 
 %:
 	dh $@ --with python2,python3 --buildsystem=pybuild
-
-override_dh_installdocs:
-ifeq (,$(findstring nodocs, $(DEB_BUILD_OPTIONS)))
-	http_proxy=127.0.0.1:9 https_proxy=127.0.0.1:9 sphinx-build sites/docs html
-endif
-	dh_installdocs
-
-override_dh_auto_test:
-	PYBUILD_SYSTEM=custom dh_auto_test

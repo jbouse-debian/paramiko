@@ -1,9 +1,0 @@
-Document: python-paramiko
-Title: Paramiko
-Author: Jeff Forcier <jeff@bitprophet.org>
-Abstract: A Python interface to the paramiko SSH2 protocol library
-Section: Programming/Python
-
-Format: html
-Index: /usr/share/doc/paramiko-doc/html/index.html
-Files: /usr/share/doc/paramiko-doc/html/*.html
