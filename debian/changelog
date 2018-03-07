@@ -1,3 +1,10 @@
+paramiko (2.4.0-1) unstable; urgency=medium
+
+  * Imported Upstream version 2.4.0
+  * Update build for 2.4.0 (Closes: #871249, #882322, #698075)
+
+ -- Jeremy T. Bouse <jbouse@debian.org>  Wed, 07 Mar 2018 14:59:55 -0500
+
 paramiko (2.0.0-1) unstable; urgency=medium
 
   * Imported Upstream version 2.0.0 (Closes: #826737)
