@@ -58,17 +58,17 @@ class SSHConfig (object):
         host = {"host": ['*'], "config": {}}
         for line in file_obj:
             # Strip any leading or trailing whitespace from the line.
-            # See https://github.com/paramiko/paramiko/issues/499 for more info.
+            # Refer to https://github.com/paramiko/paramiko/issues/499
             line = line.strip()
             if not line or line.startswith('#'):
                 continue
 
             match = re.match(self.SETTINGS_REGEX, line)
             if not match:
-                raise Exception("Unparsable line %s" % line)
+                raise Exception("Unparsable line {}".format(line))
             key = match.group(1).lower()
             value = match.group(2)
-            
+
             if key == 'host':
                 self._config.append(host)
                 host = {
@@ -209,6 +209,7 @@ class SSHConfig (object):
                         ],
                         'proxycommand':
                         [
+                            ('~', homedir),
                             ('%h', config['hostname']),
                             ('%p', port),
                             ('%r', remoteuser)
@@ -223,8 +224,9 @@ class SSHConfig (object):
                     if isinstance(config[k], list):
                         for item in range(len(config[k])):
                             if find in config[k][item]:
-                                config[k][item] = config[k][item].\
-                                    replace(find, str(replace))
+                                config[k][item] = config[k][item].replace(
+                                    find, str(replace)
+                                )
                     else:
                         if find in config[k]:
                             config[k] = config[k].replace(find, str(replace))
@@ -237,7 +239,7 @@ class SSHConfig (object):
         try:
             return shlex.split(host)
         except ValueError:
-            raise Exception("Unparsable host %s" % host)
+            raise Exception("Unparsable host {}".format(host))
 
 
 class LazyFqdn(object):
@@ -266,8 +268,9 @@ class LazyFqdn(object):
             address_family = self.config.get('addressfamily', 'any').lower()
             if address_family != 'any':
                 try:
-                    family = socket.AF_INET if address_family == 'inet' \
-                        else socket.AF_INET6
+                    family = socket.AF_INET6
+                    if address_family == 'inet':
+                        socket.AF_INET
                     results = socket.getaddrinfo(
                         self.host,
                         None,

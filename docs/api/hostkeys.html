@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Host keys / known_hosts files &mdash; Paramiko  documentation</title>
+    <title>Host keys / known_hosts files &#8212; Paramiko  documentation</title>
     
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -23,6 +23,8 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
     <link rel="top" title="Paramiko  documentation" href="../index.html" />
     <link rel="next" title="Key handling" href="keys.html" />
     <link rel="prev" title="SSH agents" href="agent.html" />
@@ -63,7 +65,7 @@ style host-key file.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; filename to load host keys from, or <code class="docutils literal"><span class="pre">None</span></code></td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; filename to load host keys from, or <code class="docutils literal"><span class="pre">None</span></code></td>
 </tr>
 </tbody>
 </table>
@@ -79,8 +81,8 @@ style host-key file.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>hostname</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; the hostname (or IP) to add</li>
-<li><strong>keytype</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; key type (<code class="docutils literal"><span class="pre">&quot;ssh-rsa&quot;</span></code> or <code class="docutils literal"><span class="pre">&quot;ssh-dss&quot;</span></code>)</li>
+<li><strong>hostname</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; the hostname (or IP) to add</li>
+<li><strong>keytype</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; key type (<code class="docutils literal"><span class="pre">&quot;ssh-rsa&quot;</span></code> or <code class="docutils literal"><span class="pre">&quot;ssh-dss&quot;</span></code>)</li>
 <li><strong>key</strong> (<a class="reference internal" href="keys.html#paramiko.pkey.PKey" title="paramiko.pkey.PKey"><em>PKey</em></a>) &#8211; the key to add</li>
 </ul>
 </td>
@@ -103,9 +105,9 @@ replacing any existing entries and adding new ones.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; name of the file to read host keys from</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; name of the file to read host keys from</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>IOError</strong> &#8211; if there was an error reading the file</td>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><code class="docutils literal"><span class="pre">IOError</span></code> &#8211; if there was an error reading the file</td>
 </tr>
 </tbody>
 </table>
@@ -114,17 +116,17 @@ replacing any existing entries and adding new ones.</p>
 <dl class="method">
 <dt id="paramiko.hostkeys.HostKeys.save">
 <code class="descname">save</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="headerlink" href="#paramiko.hostkeys.HostKeys.save" title="Permalink to this definition">¶</a></dt>
-<dd><p>Save host keys into a file, in the format used by OpenSSH.  The order of
-keys in the file will be preserved when possible (if these keys were
+<dd><p>Save host keys into a file, in the format used by OpenSSH.  The order
+of keys in the file will be preserved when possible (if these keys were
 loaded from a file originally).  The single exception is that combined
 lines will be split into individual key lines, which is arguably a bug.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; name of the file to write</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; name of the file to write</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>IOError</strong> &#8211; if there was an error writing the file</td>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><code class="docutils literal"><span class="pre">IOError</span></code> &#8211; if there was an error writing the file</td>
 </tr>
 </tbody>
 </table>
@@ -143,9 +145,10 @@ returned.  The keytype will be either <code class="docutils literal"><span class
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>hostname</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; the hostname (or IP) to lookup</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>hostname</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; the hostname (or IP) to lookup</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">dict of <a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><code class="xref py py-obj docutils literal"><span class="pre">str</span></code></a> -&gt; <a class="reference internal" href="keys.html#paramiko.pkey.PKey" title="paramiko.pkey.PKey"><code class="xref py py-obj docutils literal"><span class="pre">PKey</span></code></a> keys associated with this host (or <code class="docutils literal"><span class="pre">None</span></code>)</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">dict of <a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-obj docutils literal"><span class="pre">str</span></code></a> -&gt; <a class="reference internal" href="keys.html#paramiko.pkey.PKey" title="paramiko.pkey.PKey"><code class="xref py py-obj docutils literal"><span class="pre">PKey</span></code></a> keys associated with this host
+(or <code class="docutils literal"><span class="pre">None</span></code>)</td>
 </tr>
 </tbody>
 </table>
@@ -161,7 +164,7 @@ in this dictionary.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>hostname</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; hostname (or IP) of the SSH server</li>
+<li><strong>hostname</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; hostname (or IP) of the SSH server</li>
 <li><strong>key</strong> (<a class="reference internal" href="keys.html#paramiko.pkey.PKey" title="paramiko.pkey.PKey"><em>PKey</em></a>) &#8211; the key to check</li>
 </ul>
 </td>
@@ -189,12 +192,13 @@ hashed hostnames in the known_hosts file.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>hostname</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; the hostname to hash</li>
-<li><strong>salt</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; optional salt to use when hashing (must be 20 bytes long)</li>
+<li><strong>hostname</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; the hostname to hash</li>
+<li><strong>salt</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; optional salt to use when hashing
+(must be 20 bytes long)</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the hashed hostname as a <a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><code class="xref py py-obj docutils literal"><span class="pre">str</span></code></a></p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the hashed hostname as a <a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-obj docutils literal"><span class="pre">str</span></code></a></p>
 </td>
 </tr>
 </tbody>
@@ -220,7 +224,7 @@ that should be taken care of before sending the line to us.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>line</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; a line from an OpenSSH known_hosts file</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>line</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; a line from an OpenSSH known_hosts file</td>
 </tr>
 </tbody>
 </table>
@@ -325,11 +329,11 @@ included.</p>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2016 Jeff Forcier.
+      &copy;2017 Jeff Forcier.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.4</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.9</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |
       <a href="../_sources/api/hostkeys.txt"

@@ -23,14 +23,18 @@ Some unit tests for authenticating over a Transport.
 import sys
 import threading
 import unittest
+from time import sleep
 
-from paramiko import Transport, ServerInterface, RSAKey, DSSKey, \
-    BadAuthenticationType, InteractiveQuery, \
-    AuthenticationException
+from paramiko import (
+    Transport, ServerInterface, RSAKey, DSSKey, BadAuthenticationType,
+    InteractiveQuery, AuthenticationException,
+)
 from paramiko import AUTH_FAILED, AUTH_PARTIALLY_SUCCESSFUL, AUTH_SUCCESSFUL
 from paramiko.py3compat import u
-from tests.loop import LoopSocket
-from tests.util import test_path
+
+from .loop import LoopSocket
+from .util import _support, slow
+
 
 _pwd = u('\u2022')
 
@@ -38,7 +42,7 @@ _pwd = u('\u2022')
 class NullServer (ServerInterface):
     paranoid_did_password = False
     paranoid_did_public_key = False
-    paranoid_key = DSSKey.from_private_key_file(test_path('test_dss.key'))
+    paranoid_key = DSSKey.from_private_key_file(_support('test_dss.key'))
 
     def get_allowed_auths(self, username):
         if username == 'slowdive':
@@ -73,6 +77,9 @@ class NullServer (ServerInterface):
             return AUTH_SUCCESSFUL
         if username == 'bad-server':
             raise Exception("Ack!")
+        if username == 'unresponsive-server':
+            sleep(5)
+            return AUTH_SUCCESSFUL
         return AUTH_FAILED
 
     def check_auth_publickey(self, username, key):
@@ -113,7 +120,7 @@ class AuthTest (unittest.TestCase):
         self.sockc.close()
 
     def start_server(self):
-        host_key = RSAKey.from_private_key_file(test_path('test_rsa.key'))
+        host_key = RSAKey.from_private_key_file(_support('test_rsa.key'))
         self.public_host_key = RSAKey(data=host_key.asbytes())
         self.ts.add_server_key(host_key)
         self.event = threading.Event()
@@ -165,7 +172,7 @@ class AuthTest (unittest.TestCase):
         self.tc.connect(hostkey=self.public_host_key)
         remain = self.tc.auth_password(username='paranoid', password='paranoid')
         self.assertEqual(['publickey'], remain)
-        key = DSSKey.from_private_key_file(test_path('test_dss.key'))
+        key = DSSKey.from_private_key_file(_support('test_dss.key'))
         remain = self.tc.auth_publickey(username='paranoid', key=key)
         self.assertEqual([], remain)
         self.verify_finished()
@@ -232,3 +239,19 @@ class AuthTest (unittest.TestCase):
         except:
             etype, evalue, etb = sys.exc_info()
             self.assertTrue(issubclass(etype, AuthenticationException))
+
+    @slow
+    def test_9_auth_non_responsive(self):
+        """
+        verify that authentication times out if server takes to long to
+        respond (or never responds).
+        """
+        self.tc.auth_timeout = 1  # 1 second, to speed up test
+        self.start_server()
+        self.tc.connect()
+        try:
+            remain = self.tc.auth_password('unresponsive-server', 'hello')
+        except:
+            etype, evalue, etb = sys.exc_info()
+            self.assertTrue(issubclass(etype, AuthenticationException))
+            self.assertTrue('Authentication timeout' in str(evalue))

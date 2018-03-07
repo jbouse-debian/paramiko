@@ -20,20 +20,21 @@
 Some unit tests for the ssh2 protocol in Transport.
 """
 
+import sys
 import unittest
 from hashlib import sha1
 
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.ciphers import algorithms, Cipher, modes
 
-from tests.loop import LoopSocket
-
 from paramiko import Message, Packetizer, util
 from paramiko.common import byte_chr, zero_byte
 
+from .loop import LoopSocket
+
+
 x55 = byte_chr(0x55)
 x1f = byte_chr(0x1f)
-
 
 class PacketizerTest (unittest.TestCase):
 
@@ -85,6 +86,8 @@ class PacketizerTest (unittest.TestCase):
         self.assertEqual(900, m.get_int())
 
     def test_3_closed(self):
+        if sys.platform.startswith("win"): # no SIGALRM on windows
+            return
         rsock = LoopSocket()
         wsock = LoopSocket()
         rsock.link(wsock)
@@ -112,9 +115,13 @@ class PacketizerTest (unittest.TestCase):
         import signal
 
         class TimeoutError(Exception):
-            pass
+            def __init__(self, error_message):
+                if hasattr(errno, 'ETIME'):
+                    self.message = os.sterror(errno.ETIME)
+                else:
+                    self.messaage = error_message
 
-        def timeout(seconds=1, error_message=os.strerror(errno.ETIME)):
+        def timeout(seconds=1, error_message='Timer expired'):
             def decorator(func):
                 def _handle_timeout(signum, frame):
                     raise TimeoutError(error_message)

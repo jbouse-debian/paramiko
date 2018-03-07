@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>SSH agents &mdash; Paramiko  documentation</title>
+    <title>SSH agents &#8212; Paramiko  documentation</title>
     
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -23,6 +23,8 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
     <link rel="top" title="Paramiko  documentation" href="../index.html" />
     <link rel="next" title="Host keys / known_hosts files" href="hostkeys.html" />
     <link rel="prev" title="Transport" href="transport.html" />
@@ -49,7 +51,7 @@
 <em class="property">class </em><code class="descclassname">paramiko.agent.</code><code class="descname">Agent</code><a class="headerlink" href="#paramiko.agent.Agent" title="Permalink to this definition">¶</a></dt>
 <dd><p>Client interface for using private keys from an SSH agent running on the
 local machine.  If an SSH agent is running, this class can be used to
-connect to it and retreive <a class="reference internal" href="keys.html#paramiko.pkey.PKey" title="paramiko.pkey.PKey"><code class="xref py py-obj docutils literal"><span class="pre">PKey</span></code></a> objects which can be used when
+connect to it and retrieve <a class="reference internal" href="keys.html#paramiko.pkey.PKey" title="paramiko.pkey.PKey"><code class="xref py py-obj docutils literal"><span class="pre">PKey</span></code></a> objects which can be used when
 attempting to authenticate to remote SSH servers.</p>
 <p>Upon initialization, a session with the local machine&#8217;s SSH agent is
 opened, if one is running. If no agent is running, initialization will
@@ -58,7 +60,8 @@ succeed, but <a class="reference internal" href="#paramiko.agent.Agent.get_keys"
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><strong>SSHException</strong> &#8211; if an SSH agent is found, but speaks an incompatible protocol</td>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><a class="reference internal" href="ssh_exception.html#paramiko.ssh_exception.SSHException" title="paramiko.ssh_exception.SSHException"><code class="xref py py-obj docutils literal"><span class="pre">SSHException</span></code></a> &#8211;
+if an SSH agent is found, but speaks an incompatible protocol</td>
 </tr>
 </tbody>
 </table>
@@ -141,18 +144,21 @@ object.  If the private key is encrypted and <code class="docutils literal"><spa
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>file_obj</strong> &#8211; the file-like object to read from</li>
-<li><strong>password</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; an optional password to use to decrypt the key, if it&#8217;s encrypted</li>
+<li><strong>password</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; an optional password to use to decrypt the key, if it&#8217;s encrypted</li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">a new <a class="reference internal" href="keys.html#paramiko.pkey.PKey" title="paramiko.pkey.PKey"><code class="xref py py-obj docutils literal"><span class="pre">PKey</span></code></a> based on the given private key</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><strong>IOError</strong> &#8211; if there was an error reading the key</li>
-<li><strong>PasswordRequiredException</strong> &#8211; if the private key file is encrypted, and <code class="docutils literal"><span class="pre">password</span></code> is <code class="docutils literal"><span class="pre">None</span></code></li>
-<li><strong>SSHException</strong> &#8211; if the key file is invalid</li>
-</ul>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><code class="docutils literal"><span class="pre">IOError</span></code> &#8211; if there was an error reading the key</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><a class="reference internal" href="ssh_exception.html#paramiko.ssh_exception.PasswordRequiredException" title="paramiko.ssh_exception.PasswordRequiredException"><code class="xref py py-obj docutils literal"><span class="pre">PasswordRequiredException</span></code></a> &#8211;
+if the private key file is encrypted, and <code class="docutils literal"><span class="pre">password</span></code> is <code class="docutils literal"><span class="pre">None</span></code></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference internal" href="ssh_exception.html#paramiko.ssh_exception.SSHException" title="paramiko.ssh_exception.SSHException"><code class="xref py py-obj docutils literal"><span class="pre">SSHException</span></code></a> &#8211; if the key file is invalid</p>
 </td>
 </tr>
 </tbody>
@@ -173,8 +179,8 @@ is useless on the abstract PKey class.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; name of the file to read</li>
-<li><strong>password</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; an optional password to use to decrypt the key file, if it&#8217;s
+<li><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; name of the file to read</li>
+<li><strong>password</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; an optional password to use to decrypt the key file, if it&#8217;s
 encrypted</li>
 </ul>
 </td>
@@ -182,12 +188,14 @@ encrypted</li>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">a new <a class="reference internal" href="keys.html#paramiko.pkey.PKey" title="paramiko.pkey.PKey"><code class="xref py py-obj docutils literal"><span class="pre">PKey</span></code></a> based on the given private key</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><strong>IOError</strong> &#8211; if there was an error reading the file</li>
-<li><strong>PasswordRequiredException</strong> &#8211; if the private key file is
-encrypted, and <code class="docutils literal"><span class="pre">password</span></code> is <code class="docutils literal"><span class="pre">None</span></code></li>
-<li><strong>SSHException</strong> &#8211; if the key file is invalid</li>
-</ul>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><code class="docutils literal"><span class="pre">IOError</span></code> &#8211; if there was an error reading the file</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><a class="reference internal" href="ssh_exception.html#paramiko.ssh_exception.PasswordRequiredException" title="paramiko.ssh_exception.PasswordRequiredException"><code class="xref py py-obj docutils literal"><span class="pre">PasswordRequiredException</span></code></a> &#8211; if the private key file is
+encrypted, and <code class="docutils literal"><span class="pre">password</span></code> is <code class="docutils literal"><span class="pre">None</span></code></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference internal" href="ssh_exception.html#paramiko.ssh_exception.SSHException" title="paramiko.ssh_exception.SSHException"><code class="xref py py-obj docutils literal"><span class="pre">SSHException</span></code></a> &#8211; if the key file is invalid</p>
 </td>
 </tr>
 </tbody>
@@ -204,7 +212,7 @@ public key files or recognized host keys.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a base64 <a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><code class="xref py py-obj docutils literal"><span class="pre">string</span></code></a> containing the public part of the key.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a base64 <a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-obj docutils literal"><span class="pre">string</span></code></a> containing the public part of the key.</td>
 </tr>
 </tbody>
 </table>
@@ -219,7 +227,7 @@ for judging the relative security of a key.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">bits in the key (as an <a class="reference external" href="https://docs.python.org/2.6/library/functions.html#int" title="(in Python v2.6)"><code class="xref py py-obj docutils literal"><span class="pre">int</span></code></a>)</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">bits in the key (as an <a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-obj docutils literal"><span class="pre">int</span></code></a>)</td>
 </tr>
 </tbody>
 </table>
@@ -234,11 +242,29 @@ secret is revealed.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a 16-byte <a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><code class="xref py py-obj docutils literal"><span class="pre">string</span></code></a> (binary) of the MD5 fingerprint, in SSH
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a 16-byte <a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-obj docutils literal"><span class="pre">string</span></code></a> (binary) of the MD5 fingerprint, in SSH
 format.</td>
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
+<dl class="method">
+<dt id="paramiko.agent.AgentKey.load_certificate">
+<code class="descname">load_certificate</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#paramiko.agent.AgentKey.load_certificate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Supplement the private key contents with data loaded from an OpenSSH
+public key (<code class="docutils literal"><span class="pre">.pub</span></code>) or certificate (<code class="docutils literal"><span class="pre">-cert.pub</span></code>) file, a string
+containing such a file, or a <a class="reference internal" href="message.html#paramiko.message.Message" title="paramiko.message.Message"><code class="xref py py-obj docutils literal"><span class="pre">Message</span></code></a> object.</p>
+<p>The .pub contents adds no real value, since the private key
+file includes sufficient information to derive the public
+key info. For certificates, however, this can be used on
+the client side to offer authentication requests to the server
+based on certificate instead of raw public key.</p>
+<p>See:
+<a class="reference external" href="https://github.com/openssh/openssh-portable/blob/master/PROTOCOL.certkeys">https://github.com/openssh/openssh-portable/blob/master/PROTOCOL.certkeys</a></p>
+<p>Note: very little effort is made to validate the certificate contents,
+that is for the server to decide if it is good enough to authenticate
+successfully.</p>
 </dd></dl>
 
 <dl class="method">
@@ -251,7 +277,7 @@ that data, verify that it was signed with this key.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>data</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; the data that was signed.</li>
+<li><strong>data</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; the data that was signed.</li>
 <li><strong>msg</strong> (<a class="reference internal" href="message.html#paramiko.message.Message" title="paramiko.message.Message"><em>Message</em></a>) &#8211; an SSH signature message</li>
 </ul>
 </td>
@@ -274,14 +300,14 @@ password is not <code class="docutils literal"><span class="pre">None</span></co
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>file_obj</strong> &#8211; the file-like object to write into</li>
-<li><strong>password</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; an optional password to use to encrypt the key</li>
+<li><strong>password</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; an optional password to use to encrypt the key</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><strong>IOError</strong> &#8211; if there was an error writing to the file</li>
-<li><strong>SSHException</strong> &#8211; if the key is invalid</li>
-</ul>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><code class="docutils literal"><span class="pre">IOError</span></code> &#8211; if there was an error writing to the file</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference internal" href="ssh_exception.html#paramiko.ssh_exception.SSHException" title="paramiko.ssh_exception.SSHException"><code class="xref py py-obj docutils literal"><span class="pre">SSHException</span></code></a> &#8211; if the key is invalid</p>
 </td>
 </tr>
 </tbody>
@@ -298,15 +324,15 @@ password is not <code class="docutils literal"><span class="pre">None</span></co
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; name of the file to write</li>
-<li><strong>password</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; an optional password to use to encrypt the key file</li>
+<li><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; name of the file to write</li>
+<li><strong>password</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; an optional password to use to encrypt the key file</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><strong>IOError</strong> &#8211; if there was an error writing the file</li>
-<li><strong>SSHException</strong> &#8211; if the key is invalid</li>
-</ul>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><code class="docutils literal"><span class="pre">IOError</span></code> &#8211; if there was an error writing the file</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference internal" href="ssh_exception.html#paramiko.ssh_exception.SSHException" title="paramiko.ssh_exception.SSHException"><code class="xref py py-obj docutils literal"><span class="pre">SSHException</span></code></a> &#8211; if the key is invalid</p>
 </td>
 </tr>
 </tbody>
@@ -606,7 +632,7 @@ finds.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>t</strong> (<a class="reference internal" href="transport.html#paramiko.transport.Transport" title="paramiko.transport.Transport"><em>Transport</em></a>) &#8211; Transport used for SSH Agent communication forwarding</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>SSHException</strong> &#8211; mostly if we lost the agent</td>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><a class="reference internal" href="ssh_exception.html#paramiko.ssh_exception.SSHException" title="paramiko.ssh_exception.SSHException"><code class="xref py py-obj docutils literal"><span class="pre">SSHException</span></code></a> &#8211; mostly if we lost the agent</td>
 </tr>
 </tbody>
 </table>
@@ -739,11 +765,11 @@ SSH agent</td>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2016 Jeff Forcier.
+      &copy;2017 Jeff Forcier.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.4</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.9</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |
       <a href="../_sources/api/agent.txt"

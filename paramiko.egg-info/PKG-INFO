@@ -1,6 +1,6 @@
 Metadata-Version: 1.1
 Name: paramiko
-Version: 2.0.2
+Version: 2.4.0
 Summary: SSH2 protocol library
 Home-page: https://github.com/paramiko/paramiko/
 Author: Jeff Forcier
@@ -15,9 +15,8 @@ Description:
         Required packages:
             Cryptography
         
-        To install the `in-development version
-        <https://github.com/paramiko/paramiko/tarball/master#egg=paramiko-dev>`_, use
-        `pip install paramiko==dev`.
+        To install the development version, ``pip install -e
+        git+https://github.com/paramiko/paramiko/#egg=paramiko``.
         
 Platform: Posix; MacOS X; Windows
 Classifier: Development Status :: 5 - Production/Stable
@@ -28,10 +27,8 @@ Classifier: Topic :: Internet
 Classifier: Topic :: Security :: Cryptography
 Classifier: Programming Language :: Python
 Classifier: Programming Language :: Python :: 2
-Classifier: Programming Language :: Python :: 2.6
 Classifier: Programming Language :: Python :: 2.7
 Classifier: Programming Language :: Python :: 3
-Classifier: Programming Language :: Python :: 3.2
-Classifier: Programming Language :: Python :: 3.3
 Classifier: Programming Language :: Python :: 3.4
 Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6

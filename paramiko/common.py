@@ -20,10 +20,10 @@
 Common constants and global variables.
 """
 import logging
-from paramiko.py3compat import byte_chr, PY2, bytes_types, string_types, b, long
+from paramiko.py3compat import byte_chr, PY2, bytes_types, text_type, long
 
-MSG_DISCONNECT, MSG_IGNORE, MSG_UNIMPLEMENTED, MSG_DEBUG, MSG_SERVICE_REQUEST, \
-    MSG_SERVICE_ACCEPT = range(1, 7)
+MSG_DISCONNECT, MSG_IGNORE, MSG_UNIMPLEMENTED, MSG_DEBUG, \
+    MSG_SERVICE_REQUEST, MSG_SERVICE_ACCEPT = range(1, 7)
 MSG_KEXINIT, MSG_NEWKEYS = range(20, 22)
 MSG_USERAUTH_REQUEST, MSG_USERAUTH_FAILURE, MSG_USERAUTH_SUCCESS, \
     MSG_USERAUTH_BANNER = range(50, 54)
@@ -31,7 +31,7 @@ MSG_USERAUTH_PK_OK = 60
 MSG_USERAUTH_INFO_REQUEST, MSG_USERAUTH_INFO_RESPONSE = range(60, 62)
 MSG_USERAUTH_GSSAPI_RESPONSE, MSG_USERAUTH_GSSAPI_TOKEN = range(60, 62)
 MSG_USERAUTH_GSSAPI_EXCHANGE_COMPLETE, MSG_USERAUTH_GSSAPI_ERROR,\
-MSG_USERAUTH_GSSAPI_ERRTOK, MSG_USERAUTH_GSSAPI_MIC = range(63, 67)
+    MSG_USERAUTH_GSSAPI_ERRTOK, MSG_USERAUTH_GSSAPI_MIC = range(63, 67)
 MSG_GLOBAL_REQUEST, MSG_REQUEST_SUCCESS, MSG_REQUEST_FAILURE = range(80, 83)
 MSG_CHANNEL_OPEN, MSG_CHANNEL_OPEN_SUCCESS, MSG_CHANNEL_OPEN_FAILURE, \
     MSG_CHANNEL_WINDOW_ADJUST, MSG_CHANNEL_DATA, MSG_CHANNEL_EXTENDED_DATA, \
@@ -55,7 +55,8 @@ cMSG_USERAUTH_INFO_REQUEST = byte_chr(MSG_USERAUTH_INFO_REQUEST)
 cMSG_USERAUTH_INFO_RESPONSE = byte_chr(MSG_USERAUTH_INFO_RESPONSE)
 cMSG_USERAUTH_GSSAPI_RESPONSE = byte_chr(MSG_USERAUTH_GSSAPI_RESPONSE)
 cMSG_USERAUTH_GSSAPI_TOKEN = byte_chr(MSG_USERAUTH_GSSAPI_TOKEN)
-cMSG_USERAUTH_GSSAPI_EXCHANGE_COMPLETE = byte_chr(MSG_USERAUTH_GSSAPI_EXCHANGE_COMPLETE)
+cMSG_USERAUTH_GSSAPI_EXCHANGE_COMPLETE = \
+    byte_chr(MSG_USERAUTH_GSSAPI_EXCHANGE_COMPLETE)
 cMSG_USERAUTH_GSSAPI_ERROR = byte_chr(MSG_USERAUTH_GSSAPI_ERROR)
 cMSG_USERAUTH_GSSAPI_ERRTOK = byte_chr(MSG_USERAUTH_GSSAPI_ERRTOK)
 cMSG_USERAUTH_GSSAPI_MIC = byte_chr(MSG_USERAUTH_GSSAPI_MIC)
@@ -160,15 +161,18 @@ else:
 
 
 def asbytes(s):
-    if not isinstance(s, bytes_types):
-        if isinstance(s, string_types):
-            s = b(s)
-        else:
-            try:
-                s = s.asbytes()
-            except Exception:
-                raise Exception('Unknown type')
+    """Coerce to bytes if possible or return unchanged."""
+    if isinstance(s, bytes_types):
+        return s
+    if isinstance(s, text_type):
+        # Accept text and encode as utf-8 for compatibility only.
+        return s.encode("utf-8")
+    asbytes = getattr(s, "asbytes", None)
+    if asbytes is not None:
+        return asbytes()
+    # May be an object that implements the buffer api, let callers handle.
     return s
+
 
 xffffffff = long(0xffffffff)
 x80000000 = long(0x80000000)
@@ -202,4 +206,4 @@ MIN_WINDOW_SIZE = 2 ** 15
 MIN_PACKET_SIZE = 2 ** 12
 
 # Max windows size according to http://www.ietf.org/rfc/rfc4254.txt
-MAX_WINDOW_SIZE = 2**32 -1
+MAX_WINDOW_SIZE = 2 ** 32 - 1

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Channel &mdash; Paramiko  documentation</title>
+    <title>Channel &#8212; Paramiko  documentation</title>
     
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -23,6 +23,8 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
     <link rel="top" title="Paramiko  documentation" href="../index.html" />
     <link rel="next" title="Client" href="client.html" />
     <link rel="prev" title="Welcome to Paramiko’s documentation!" href="../index.html" />
@@ -69,7 +71,7 @@ subclass of <a class="reference internal" href="#paramiko.channel.Channel" title
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>chanid</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#int" title="(in Python v2.6)"><em>int</em></a>) &#8211; the ID of this channel, as passed by an existing <a class="reference internal" href="transport.html#paramiko.transport.Transport" title="paramiko.transport.Transport"><code class="xref py py-obj docutils literal"><span class="pre">Transport</span></code></a>.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>chanid</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; the ID of this channel, as passed by an existing <a class="reference internal" href="transport.html#paramiko.transport.Transport" title="paramiko.transport.Transport"><code class="xref py py-obj docutils literal"><span class="pre">Transport</span></code></a>.</td>
 </tr>
 </tbody>
 </table>
@@ -121,9 +123,9 @@ another command.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>command</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; a shell command to execute.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>command</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; a shell command to execute.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>SSHException</strong> &#8211; if the request was rejected or the channel was
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><a class="reference internal" href="ssh_exception.html#paramiko.ssh_exception.SSHException" title="paramiko.ssh_exception.SSHException"><code class="xref py py-obj docutils literal"><span class="pre">SSHException</span></code></a> &#8211; if the request was rejected or the channel was
 closed</td>
 </tr>
 </tbody>
@@ -166,7 +168,7 @@ open at the same time.)</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">an OS-level file descriptor (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#int" title="(in Python v2.6)"><code class="xref py py-obj docutils literal"><span class="pre">int</span></code></a>)</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">an OS-level file descriptor (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-obj docutils literal"><span class="pre">int</span></code></a>)</td>
 </tr>
 </tbody>
 </table>
@@ -179,7 +181,7 @@ open at the same time.)</p>
 <dl class="method">
 <dt id="paramiko.channel.Channel.get_id">
 <code class="descname">get_id</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paramiko.channel.Channel.get_id" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the <a class="reference external" href="https://docs.python.org/2.6/library/functions.html#int" title="(in Python v2.6)"><code class="xref py py-obj docutils literal"><span class="pre">int</span></code></a> ID # for this channel.</p>
+<dd><p>Return the <a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-obj docutils literal"><span class="pre">int</span></code></a> ID # for this channel.</p>
 <p>The channel ID is unique across a <a class="reference internal" href="transport.html#paramiko.transport.Transport" title="paramiko.transport.Transport"><code class="xref py py-obj docutils literal"><span class="pre">Transport</span></code></a> and usually a small
 number.  It&#8217;s also the number passed to
 <a class="reference internal" href="server.html#paramiko.server.ServerInterface.check_channel_request" title="paramiko.server.ServerInterface.check_channel_request"><code class="xref py py-obj docutils literal"><span class="pre">ServerInterface.check_channel_request</span></code></a> when determining whether to
@@ -199,21 +201,23 @@ accept a channel request in server mode.</p>
 after creating a client channel, to ask the server to provide some
 basic terminal semantics for a shell invoked with <a class="reference internal" href="#paramiko.channel.Channel.invoke_shell" title="paramiko.channel.Channel.invoke_shell"><code class="xref py py-obj docutils literal"><span class="pre">invoke_shell</span></code></a>.
 It isn&#8217;t necessary (or desirable) to call this method if you&#8217;re going
-to exectue a single command with <a class="reference internal" href="#paramiko.channel.Channel.exec_command" title="paramiko.channel.Channel.exec_command"><code class="xref py py-obj docutils literal"><span class="pre">exec_command</span></code></a>.</p>
+to execute a single command with <a class="reference internal" href="#paramiko.channel.Channel.exec_command" title="paramiko.channel.Channel.exec_command"><code class="xref py py-obj docutils literal"><span class="pre">exec_command</span></code></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>term</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; the terminal type to emulate (for example, <code class="docutils literal"><span class="pre">'vt100'</span></code>)</li>
-<li><strong>width</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#int" title="(in Python v2.6)"><em>int</em></a>) &#8211; width (in characters) of the terminal screen</li>
-<li><strong>height</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#int" title="(in Python v2.6)"><em>int</em></a>) &#8211; height (in characters) of the terminal screen</li>
-<li><strong>width_pixels</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#int" title="(in Python v2.6)"><em>int</em></a>) &#8211; width (in pixels) of the terminal screen</li>
-<li><strong>height_pixels</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#int" title="(in Python v2.6)"><em>int</em></a>) &#8211; height (in pixels) of the terminal screen</li>
+<li><strong>term</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; the terminal type to emulate
+(for example, <code class="docutils literal"><span class="pre">'vt100'</span></code>)</li>
+<li><strong>width</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; width (in characters) of the terminal screen</li>
+<li><strong>height</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; height (in characters) of the terminal screen</li>
+<li><strong>width_pixels</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; width (in pixels) of the terminal screen</li>
+<li><strong>height_pixels</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; height (in pixels) of the terminal screen</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><strong>SSHException</strong> &#8211; if the request was rejected or the channel was closed</p>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference internal" href="ssh_exception.html#paramiko.ssh_exception.SSHException" title="paramiko.ssh_exception.SSHException"><code class="xref py py-obj docutils literal"><span class="pre">SSHException</span></code></a> &#8211; if the request was rejected or the channel was
+closed</p>
 </td>
 </tr>
 </tbody>
@@ -258,7 +262,7 @@ You must open a new channel if you wish to open another shell.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><strong>SSHException</strong> &#8211; if the request was rejected or the channel was
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><a class="reference internal" href="ssh_exception.html#paramiko.ssh_exception.SSHException" title="paramiko.ssh_exception.SSHException"><code class="xref py py-obj docutils literal"><span class="pre">SSHException</span></code></a> &#8211; if the request was rejected or the channel was
 closed</td>
 </tr>
 </tbody>
@@ -277,9 +281,10 @@ reused.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>subsystem</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; name of the subsystem being requested.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>subsystem</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; name of the subsystem being requested.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>SSHException</strong> &#8211; if the request was rejected or the channel was closed</td>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><a class="reference internal" href="ssh_exception.html#paramiko.ssh_exception.SSHException" title="paramiko.ssh_exception.SSHException"><code class="xref py py-obj docutils literal"><span class="pre">SSHException</span></code></a> &#8211; if the request was rejected or the channel was
+closed</td>
 </tr>
 </tbody>
 </table>
@@ -329,17 +334,17 @@ server, it only makes sense to open this file for writing.</p>
 <code class="descname">recv</code><span class="sig-paren">(</span><em>nbytes</em><span class="sig-paren">)</span><a class="headerlink" href="#paramiko.channel.Channel.recv" title="Permalink to this definition">¶</a></dt>
 <dd><p>Receive data from the channel.  The return value is a string
 representing the data received.  The maximum amount of data to be
-received at once is specified by <code class="docutils literal"><span class="pre">nbytes</span></code>.  If a string of length zero
-is returned, the channel stream has closed.</p>
+received at once is specified by <code class="docutils literal"><span class="pre">nbytes</span></code>.  If a string of
+length zero is returned, the channel stream has closed.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>nbytes</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#int" title="(in Python v2.6)"><em>int</em></a>) &#8211; maximum number of bytes to read.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>nbytes</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; maximum number of bytes to read.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">received data, as a <code class="xref py py-obj docutils literal"><span class="pre">bytes</span></code></td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">received data, as a <code class="docutils literal"><span class="pre">str</span></code>/<code class="docutils literal"><span class="pre">bytes</span></code>.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2.6/library/socket.html#socket.timeout" title="(in Python v2.6)"><strong>socket.timeout</strong></a> &#8211; if no data is ready before the timeout set by <a class="reference internal" href="#paramiko.channel.Channel.settimeout" title="paramiko.channel.Channel.settimeout"><code class="xref py py-obj docutils literal"><span class="pre">settimeout</span></code></a>.</td>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2.7/library/socket.html#socket.timeout" title="(in Python v2.7)"><strong>socket.timeout</strong></a> &#8211; if no data is ready before the timeout set by <a class="reference internal" href="#paramiko.channel.Channel.settimeout" title="paramiko.channel.Channel.settimeout"><code class="xref py py-obj docutils literal"><span class="pre">settimeout</span></code></a>.</td>
 </tr>
 </tbody>
 </table>
@@ -359,16 +364,16 @@ provided by the server, -1 is returned.</p>
 <a class="reference internal" href="transport.html#paramiko.transport.Transport" title="paramiko.transport.Transport"><code class="xref py py-obj docutils literal"><span class="pre">Transport</span></code></a> or session&#8217;s <code class="docutils literal"><span class="pre">window_size</span></code> (e.g. that set by the
 <code class="docutils literal"><span class="pre">default_window_size</span></code> kwarg for <a class="reference internal" href="transport.html#paramiko.transport.Transport.__init__" title="paramiko.transport.Transport.__init__"><code class="xref py py-obj docutils literal"><span class="pre">Transport.__init__</span></code></a>) will cause
 <a class="reference internal" href="#paramiko.channel.Channel.recv_exit_status" title="paramiko.channel.Channel.recv_exit_status"><code class="xref py py-obj docutils literal"><span class="pre">recv_exit_status</span></code></a> to hang indefinitely if it is called prior to a
-sufficiently large <code class="xref py py-obj docutils literal"><span class="pre">read</span></code> (or if there are no threads
-calling <code class="xref py py-obj docutils literal"><span class="pre">read</span></code> in the background).</p>
+sufficiently large <a class="reference internal" href="#paramiko.channel.Channel.recv" title="paramiko.channel.Channel.recv"><code class="xref py py-obj docutils literal"><span class="pre">Channel.recv</span></code></a> (or if there are no threads
+calling <a class="reference internal" href="#paramiko.channel.Channel.recv" title="paramiko.channel.Channel.recv"><code class="xref py py-obj docutils literal"><span class="pre">Channel.recv</span></code></a> in the background).</p>
 <p class="last">In these cases, ensuring that <a class="reference internal" href="#paramiko.channel.Channel.recv_exit_status" title="paramiko.channel.Channel.recv_exit_status"><code class="xref py py-obj docutils literal"><span class="pre">recv_exit_status</span></code></a> is called <em>after</em>
-<code class="xref py py-obj docutils literal"><span class="pre">read</span></code> (or, again, using threads) can avoid the hang.</p>
+<a class="reference internal" href="#paramiko.channel.Channel.recv" title="paramiko.channel.Channel.recv"><code class="xref py py-obj docutils literal"><span class="pre">Channel.recv</span></code></a> (or, again, using threads) can avoid the hang.</p>
 </div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the exit code (as an <a class="reference external" href="https://docs.python.org/2.6/library/functions.html#int" title="(in Python v2.6)"><code class="xref py py-obj docutils literal"><span class="pre">int</span></code></a>) of the process on the server.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the exit code (as an <a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-obj docutils literal"><span class="pre">int</span></code></a>) of the process on the server.</td>
 </tr>
 </tbody>
 </table>
@@ -407,11 +412,11 @@ channel stream has closed.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>nbytes</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#int" title="(in Python v2.6)"><em>int</em></a>) &#8211; maximum number of bytes to read.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>nbytes</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; maximum number of bytes to read.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">received data as a <a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><code class="xref py py-obj docutils literal"><span class="pre">str</span></code></a></td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">received data as a <a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-obj docutils literal"><span class="pre">str</span></code></a></td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2.6/library/socket.html#socket.timeout" title="(in Python v2.6)"><strong>socket.timeout</strong></a> &#8211; if no data is ready before the timeout set by
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2.7/library/socket.html#socket.timeout" title="(in Python v2.7)"><strong>socket.timeout</strong></a> &#8211; if no data is ready before the timeout set by
 <a class="reference internal" href="#paramiko.channel.Channel.settimeout" title="paramiko.channel.Channel.settimeout"><code class="xref py py-obj docutils literal"><span class="pre">settimeout</span></code></a>.</td>
 </tr>
 </tbody>
@@ -457,9 +462,11 @@ This is only valid for an ssh-agent from OpenSSH !!!</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>handler</strong> (<em>function</em>) &#8211; a required handler to use for incoming SSH Agent connections</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>handler</strong> &#8211; a required callable handler to use for incoming SSH Agent
+connections</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if we are ok, else False (at that time we always return ok)</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if we are ok, else False
+(at that time we always return ok)</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body">SSHException in case of channel problem.</td>
 </tr>
@@ -495,15 +502,15 @@ incoming x11 connections, which may be retrieved using
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>screen_number</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#int" title="(in Python v2.6)"><em>int</em></a>) &#8211; the x11 screen number (0, 10, etc.)</li>
-<li><strong>auth_protocol</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; the name of the X11 authentication method used; if none is given,
+<li><strong>screen_number</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; the x11 screen number (0, 10, etc.)</li>
+<li><strong>auth_protocol</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; the name of the X11 authentication method used; if none is given,
 <code class="docutils literal"><span class="pre">&quot;MIT-MAGIC-COOKIE-1&quot;</span></code> is used</li>
-<li><strong>auth_cookie</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; hexadecimal string containing the x11 auth cookie; if none is
+<li><strong>auth_cookie</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; hexadecimal string containing the x11 auth cookie; if none is
 given, a secure random 128-bit value is generated</li>
-<li><strong>single_connection</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#bool" title="(in Python v2.6)"><em>bool</em></a>) &#8211; if True, only a single x11 connection will be forwarded (by
+<li><strong>single_connection</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; if True, only a single x11 connection will be forwarded (by
 default, any number of x11 connections can arrive over this
 session)</li>
-<li><strong>handler</strong> (<em>function</em>) &#8211; an optional handler to use for incoming X11 connections</li>
+<li><strong>handler</strong> &#8211; an optional callable handler to use for incoming X11 connections</li>
 </ul>
 </td>
 </tr>
@@ -524,14 +531,15 @@ height of the terminal emulation created in a previous <a class="reference inter
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>width</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#int" title="(in Python v2.6)"><em>int</em></a>) &#8211; new width (in characters) of the terminal screen</li>
-<li><strong>height</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#int" title="(in Python v2.6)"><em>int</em></a>) &#8211; new height (in characters) of the terminal screen</li>
-<li><strong>width_pixels</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#int" title="(in Python v2.6)"><em>int</em></a>) &#8211; new width (in pixels) of the terminal screen</li>
-<li><strong>height_pixels</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#int" title="(in Python v2.6)"><em>int</em></a>) &#8211; new height (in pixels) of the terminal screen</li>
+<li><strong>width</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; new width (in characters) of the terminal screen</li>
+<li><strong>height</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; new height (in characters) of the terminal screen</li>
+<li><strong>width_pixels</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; new width (in pixels) of the terminal screen</li>
+<li><strong>height_pixels</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; new height (in pixels) of the terminal screen</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><strong>SSHException</strong> &#8211; if the request was rejected or the channel was closed</p>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference internal" href="ssh_exception.html#paramiko.ssh_exception.SSHException" title="paramiko.ssh_exception.SSHException"><code class="xref py py-obj docutils literal"><span class="pre">SSHException</span></code></a> &#8211; if the request was rejected or the channel was
+closed</p>
 </td>
 </tr>
 </tbody>
@@ -550,11 +558,11 @@ data.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>s</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; data to send</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>s</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; data to send</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">number of bytes actually sent, as an <a class="reference external" href="https://docs.python.org/2.6/library/functions.html#int" title="(in Python v2.6)"><code class="xref py py-obj docutils literal"><span class="pre">int</span></code></a></td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">number of bytes actually sent, as an <a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-obj docutils literal"><span class="pre">int</span></code></a></td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2.6/library/socket.html#socket.timeout" title="(in Python v2.6)"><strong>socket.timeout</strong></a> &#8211; if no data could be sent before the timeout set
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2.7/library/socket.html#socket.timeout" title="(in Python v2.7)"><strong>socket.timeout</strong></a> &#8211; if no data could be sent before the timeout set
 by <a class="reference internal" href="#paramiko.channel.Channel.settimeout" title="paramiko.channel.Channel.settimeout"><code class="xref py py-obj docutils literal"><span class="pre">settimeout</span></code></a>.</td>
 </tr>
 </tbody>
@@ -572,7 +580,7 @@ it completes.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>status</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#int" title="(in Python v2.6)"><em>int</em></a>) &#8211; the exit code of the process</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>status</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; the exit code of the process</td>
 </tr>
 </tbody>
 </table>
@@ -614,11 +622,11 @@ application needs to attempt delivery of the remaining data.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>s</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; data to send.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>s</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; data to send.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">number of bytes actually sent, as an <a class="reference external" href="https://docs.python.org/2.6/library/functions.html#int" title="(in Python v2.6)"><code class="xref py py-obj docutils literal"><span class="pre">int</span></code></a>.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">number of bytes actually sent, as an <a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-obj docutils literal"><span class="pre">int</span></code></a>.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2.6/library/socket.html#socket.timeout" title="(in Python v2.6)"><strong>socket.timeout</strong></a> &#8211; if no data could be sent before the timeout set by <a class="reference internal" href="#paramiko.channel.Channel.settimeout" title="paramiko.channel.Channel.settimeout"><code class="xref py py-obj docutils literal"><span class="pre">settimeout</span></code></a>.</td>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2.7/library/socket.html#socket.timeout" title="(in Python v2.7)"><strong>socket.timeout</strong></a> &#8211; if no data could be sent before the timeout set by <a class="reference internal" href="#paramiko.channel.Channel.settimeout" title="paramiko.channel.Channel.settimeout"><code class="xref py py-obj docutils literal"><span class="pre">settimeout</span></code></a>.</td>
 </tr>
 </tbody>
 </table>
@@ -637,12 +645,12 @@ either all data has been sent or an error occurs.  Nothing is returned.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>s</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; data to send.</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>s</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; data to send.</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><a class="reference external" href="https://docs.python.org/2.6/library/socket.html#socket.timeout" title="(in Python v2.6)"><strong>socket.timeout</strong></a> &#8211; if sending stalled for longer than the timeout set by <a class="reference internal" href="#paramiko.channel.Channel.settimeout" title="paramiko.channel.Channel.settimeout"><code class="xref py py-obj docutils literal"><span class="pre">settimeout</span></code></a>.</li>
-<li><a class="reference external" href="https://docs.python.org/2.6/library/socket.html#socket.error" title="(in Python v2.6)"><strong>socket.error</strong></a> &#8211; if an error occurred before the entire string was sent.</li>
+<li><a class="reference external" href="https://docs.python.org/2.7/library/socket.html#socket.timeout" title="(in Python v2.7)"><strong>socket.timeout</strong></a> &#8211; if sending stalled for longer than the timeout set by <a class="reference internal" href="#paramiko.channel.Channel.settimeout" title="paramiko.channel.Channel.settimeout"><code class="xref py py-obj docutils literal"><span class="pre">settimeout</span></code></a>.</li>
+<li><a class="reference external" href="https://docs.python.org/2.7/library/socket.html#socket.error" title="(in Python v2.7)"><strong>socket.error</strong></a> &#8211; if an error occurred before the entire string was sent.</li>
 </ul>
 </td>
 </tr>
@@ -667,12 +675,12 @@ Nothing is returned.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>s</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; data to send to the client as &#8220;stderr&#8221; output.</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>s</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; data to send to the client as &#8220;stderr&#8221; output.</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><a class="reference external" href="https://docs.python.org/2.6/library/socket.html#socket.timeout" title="(in Python v2.6)"><strong>socket.timeout</strong></a> &#8211; if sending stalled for longer than the timeout set by <a class="reference internal" href="#paramiko.channel.Channel.settimeout" title="paramiko.channel.Channel.settimeout"><code class="xref py py-obj docutils literal"><span class="pre">settimeout</span></code></a>.</li>
-<li><a class="reference external" href="https://docs.python.org/2.6/library/socket.html#socket.error" title="(in Python v2.6)"><strong>socket.error</strong></a> &#8211; if an error occurred before the entire string was sent.</li>
+<li><a class="reference external" href="https://docs.python.org/2.7/library/socket.html#socket.timeout" title="(in Python v2.7)"><strong>socket.timeout</strong></a> &#8211; if sending stalled for longer than the timeout set by <a class="reference internal" href="#paramiko.channel.Channel.settimeout" title="paramiko.channel.Channel.settimeout"><code class="xref py py-obj docutils literal"><span class="pre">settimeout</span></code></a>.</li>
+<li><a class="reference external" href="https://docs.python.org/2.7/library/socket.html#socket.error" title="(in Python v2.7)"><strong>socket.error</strong></a> &#8211; if an error occurred before the entire string was sent.</li>
 </ul>
 </td>
 </tr>
@@ -699,16 +707,45 @@ and <a class="reference internal" href="#paramiko.channel.Channel.recv_ready" ti
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>combine</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#bool" title="(in Python v2.6)"><em>bool</em></a>) &#8211; <code class="docutils literal"><span class="pre">True</span></code> if stderr output should be combined into stdout on this
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>combine</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; <code class="docutils literal"><span class="pre">True</span></code> if stderr output should be combined into stdout on this
 channel.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the previous setting (a <a class="reference external" href="https://docs.python.org/2.6/library/functions.html#bool" title="(in Python v2.6)"><code class="xref py py-obj docutils literal"><span class="pre">bool</span></code></a>).</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the previous setting (a <a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><code class="xref py py-obj docutils literal"><span class="pre">bool</span></code></a>).</td>
 </tr>
 </tbody>
 </table>
 <div class="versionadded">
 <p><span class="versionmodified">New in version 1.1.</span></p>
 </div>
+</dd></dl>
+
+<dl class="method">
+<dt id="paramiko.channel.Channel.set_environment_variable">
+<code class="descname">set_environment_variable</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwds</em><span class="sig-paren">)</span><a class="headerlink" href="#paramiko.channel.Channel.set_environment_variable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the value of an environment variable.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">The server may reject this request depending on its <code class="docutils literal"><span class="pre">AcceptEnv</span></code>
+setting; such rejections will fail silently (which is common client
+practice for this particular request type). Make sure you
+understand your server&#8217;s configuration before using!</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; name of the environment variable</li>
+<li><strong>value</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; value of the environment variable</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference internal" href="ssh_exception.html#paramiko.ssh_exception.SSHException" title="paramiko.ssh_exception.SSHException"><code class="xref py py-obj docutils literal"><span class="pre">SSHException</span></code></a> &#8211; if the request was rejected or the channel was
+closed</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -721,7 +758,7 @@ of the channel in logfile entries.  The name can be fetched with the
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; new channel name</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; new channel name</td>
 </tr>
 </tbody>
 </table>
@@ -744,7 +781,7 @@ channel is closed in the read direction, it will never block.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>blocking</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#int" title="(in Python v2.6)"><em>int</em></a>) &#8211; 0 to set non-blocking mode; non-0 to set blocking mode.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>blocking</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; 0 to set non-blocking mode; non-0 to set blocking mode.</td>
 </tr>
 </tbody>
 </table>
@@ -754,18 +791,18 @@ channel is closed in the read direction, it will never block.</p>
 <dt id="paramiko.channel.Channel.settimeout">
 <code class="descname">settimeout</code><span class="sig-paren">(</span><em>timeout</em><span class="sig-paren">)</span><a class="headerlink" href="#paramiko.channel.Channel.settimeout" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set a timeout on blocking read/write operations.  The <code class="docutils literal"><span class="pre">timeout</span></code>
-argument can be a nonnegative float expressing seconds, or <code class="docutils literal"><span class="pre">None</span></code>.  If
-a float is given, subsequent channel read/write operations will raise
-a timeout exception if the timeout period value has elapsed before the
-operation has completed.  Setting a timeout of <code class="docutils literal"><span class="pre">None</span></code> disables
-timeouts on socket operations.</p>
+argument can be a nonnegative float expressing seconds, or <code class="docutils literal"><span class="pre">None</span></code>.
+If a float is given, subsequent channel read/write operations will
+raise a timeout exception if the timeout period value has elapsed
+before the operation has completed.  Setting a timeout of <code class="docutils literal"><span class="pre">None</span></code>
+disables timeouts on socket operations.</p>
 <p><code class="docutils literal"><span class="pre">chan.settimeout(0.0)</span></code> is equivalent to <code class="docutils literal"><span class="pre">chan.setblocking(0)</span></code>;
 <code class="docutils literal"><span class="pre">chan.settimeout(None)</span></code> is equivalent to <code class="docutils literal"><span class="pre">chan.setblocking(1)</span></code>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>timeout</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#float" title="(in Python v2.6)"><em>float</em></a>) &#8211; seconds to wait for a pending read/write operation before raising
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>timeout</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; seconds to wait for a pending read/write operation before raising
 <code class="docutils literal"><span class="pre">socket.timeout</span></code>, or <code class="docutils literal"><span class="pre">None</span></code> for no timeout.</td>
 </tr>
 </tbody>
@@ -783,7 +820,7 @@ disallowed.  This closes the stream in one or both directions.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>how</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#int" title="(in Python v2.6)"><em>int</em></a>) &#8211; <dl class="docutils">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>how</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; <dl class="docutils">
 <dt>0 (stop receiving), 1 (stop sending), or 2 (stop receiving and</dt>
 <dd>sending).</dd>
 </dl>
@@ -825,6 +862,33 @@ memorize unix constants from the 1970s.</p>
 <dd><p><a class="reference internal" href="transport.html#paramiko.transport.Transport" title="paramiko.transport.Transport"><code class="xref py py-obj docutils literal"><span class="pre">Transport</span></code></a> managing this channel</p>
 </dd></dl>
 
+<dl class="method">
+<dt id="paramiko.channel.Channel.update_environment">
+<code class="descname">update_environment</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwds</em><span class="sig-paren">)</span><a class="headerlink" href="#paramiko.channel.Channel.update_environment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates this channel&#8217;s remote shell environment.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This operation is additive - i.e. the current environment is not
+reset before the given environment variables are set.</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Servers may silently reject some environment variables; see the
+warning in <a class="reference internal" href="#paramiko.channel.Channel.set_environment_variable" title="paramiko.channel.Channel.set_environment_variable"><code class="xref py py-obj docutils literal"><span class="pre">set_environment_variable</span></code></a> for details.</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>environment</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; a dictionary containing the name and respective values to set</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><a class="reference internal" href="ssh_exception.html#paramiko.ssh_exception.SSHException" title="paramiko.ssh_exception.SSHException"><code class="xref py py-obj docutils literal"><span class="pre">SSHException</span></code></a> &#8211; if any of the environment variables was rejected
+by the server or the channel was closed</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="class">
@@ -834,7 +898,7 @@ memorize unix constants from the 1970s.</p>
 <a class="reference internal" href="#paramiko.channel.Channel.makefile" title="paramiko.channel.Channel.makefile"><code class="xref py py-obj docutils literal"><span class="pre">Channel.makefile</span></code></a>.</p>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
-<p class="last">To correctly emulate the file object created from a socket&#8217;s <a class="reference external" href="https://docs.python.org/2.6/library/socket.html#socket.socket.makefile" title="(in Python v2.6)"><code class="xref py py-obj docutils literal"><span class="pre">makefile</span></code></a> method, a <a class="reference internal" href="#paramiko.channel.Channel" title="paramiko.channel.Channel"><code class="xref py py-obj docutils literal"><span class="pre">Channel</span></code></a> and its
+<p class="last">To correctly emulate the file object created from a socket&#8217;s <a class="reference external" href="https://docs.python.org/2.7/library/socket.html#socket.socket.makefile" title="(in Python v2.7)"><code class="xref py py-obj docutils literal"><span class="pre">makefile</span></code></a> method, a <a class="reference internal" href="#paramiko.channel.Channel" title="paramiko.channel.Channel"><code class="xref py py-obj docutils literal"><span class="pre">Channel</span></code></a> and its
 <a class="reference internal" href="#paramiko.channel.ChannelFile" title="paramiko.channel.ChannelFile"><code class="xref py py-obj docutils literal"><span class="pre">ChannelFile</span></code></a> should be able to be closed or garbage-collected
 independently. Currently, closing the <a class="reference internal" href="#paramiko.channel.ChannelFile" title="paramiko.channel.ChannelFile"><code class="xref py py-obj docutils literal"><span class="pre">ChannelFile</span></code></a> does nothing but
 flush the buffer.</p>
@@ -855,7 +919,8 @@ flush the buffer.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><strong>SSHException</strong> &#8211; If the wrapped method is called on an unopened <a class="reference internal" href="#paramiko.channel.Channel" title="paramiko.channel.Channel"><code class="xref py py-obj docutils literal"><span class="pre">Channel</span></code></a>.</td>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><a class="reference internal" href="ssh_exception.html#paramiko.ssh_exception.SSHException" title="paramiko.ssh_exception.SSHException"><code class="xref py py-obj docutils literal"><span class="pre">SSHException</span></code></a> &#8211; If the wrapped method is called on an unopened
+<a class="reference internal" href="#paramiko.channel.Channel" title="paramiko.channel.Channel"><code class="xref py py-obj docutils literal"><span class="pre">Channel</span></code></a>.</td>
 </tr>
 </tbody>
 </table>
@@ -950,11 +1015,11 @@ flush the buffer.</p>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2016 Jeff Forcier.
+      &copy;2017 Jeff Forcier.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.4</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.9</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |
       <a href="../_sources/api/channel.txt"

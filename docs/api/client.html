@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Client &mdash; Paramiko  documentation</title>
+    <title>Client &#8212; Paramiko  documentation</title>
     
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -23,6 +23,8 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
     <link rel="top" title="Paramiko  documentation" href="../index.html" />
     <link rel="next" title="Message" href="message.html" />
     <link rel="prev" title="Channel" href="channel.html" />
@@ -85,9 +87,10 @@ probably only useful on posix.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; the filename to read, or <code class="docutils literal"><span class="pre">None</span></code></td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; the filename to read, or <code class="docutils literal"><span class="pre">None</span></code></td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>IOError</strong> &#8211; if a filename was provided and the file could not be read</td>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><code class="docutils literal"><span class="pre">IOError</span></code> &#8211;
+if a filename was provided and the file could not be read</td>
 </tr>
 </tbody>
 </table>
@@ -108,9 +111,9 @@ conflicts).  When automatically saving, the last hostname is used.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; the filename to read</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; the filename to read</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>IOError</strong> &#8211; if the filename could not be read</td>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><code class="docutils literal"><span class="pre">IOError</span></code> &#8211; if the filename could not be read</td>
 </tr>
 </tbody>
 </table>
@@ -126,9 +129,9 @@ host keys loaded with <a class="reference internal" href="#paramiko.client.SSHCl
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; the filename to save to</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; the filename to save to</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>IOError</strong> &#8211; if the file could not be written</td>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><code class="docutils literal"><span class="pre">IOError</span></code> &#8211; if the file could not be written</td>
 </tr>
 </tbody>
 </table>
@@ -158,7 +161,7 @@ but it can be set to anything you want.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; new channel name for logging</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; new channel name for logging</td>
 </tr>
 </tbody>
 </table>
@@ -169,22 +172,14 @@ but it can be set to anything you want.</p>
 <code class="descname">set_missing_host_key_policy</code><span class="sig-paren">(</span><em>policy</em><span class="sig-paren">)</span><a class="headerlink" href="#paramiko.client.SSHClient.set_missing_host_key_policy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set policy to use when connecting to servers without a known host key.</p>
 <p>Specifically:</p>
-<ul>
-<li><p class="first">A <strong>policy</strong> is an instance of a &#8220;policy class&#8221;, namely some subclass
-of <a class="reference internal" href="#paramiko.client.MissingHostKeyPolicy" title="paramiko.client.MissingHostKeyPolicy"><code class="xref py py-obj docutils literal"><span class="pre">MissingHostKeyPolicy</span></code></a> such as <a class="reference internal" href="#paramiko.client.RejectPolicy" title="paramiko.client.RejectPolicy"><code class="xref py py-obj docutils literal"><span class="pre">RejectPolicy</span></code></a> (the default),
-<a class="reference internal" href="#paramiko.client.AutoAddPolicy" title="paramiko.client.AutoAddPolicy"><code class="xref py py-obj docutils literal"><span class="pre">AutoAddPolicy</span></code></a>, <a class="reference internal" href="#paramiko.client.WarningPolicy" title="paramiko.client.WarningPolicy"><code class="xref py py-obj docutils literal"><span class="pre">WarningPolicy</span></code></a>, or a user-created subclass.</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">This method takes class <strong>instances</strong>, not <strong>classes</strong> themselves.
-Thus it must be called as e.g.
-<code class="docutils literal"><span class="pre">.set_missing_host_key_policy(WarningPolicy())</span></code> and <em>not</em>
-<code class="docutils literal"><span class="pre">.set_missing_host_key_policy(WarningPolicy)</span></code>.</p>
-</div>
-</li>
-<li><p class="first">A host key is <strong>known</strong> when it appears in the client object&#8217;s cached
+<ul class="simple">
+<li>A <strong>policy</strong> is a &#8220;policy class&#8221; (or instance thereof), namely some
+subclass of <a class="reference internal" href="#paramiko.client.MissingHostKeyPolicy" title="paramiko.client.MissingHostKeyPolicy"><code class="xref py py-obj docutils literal"><span class="pre">MissingHostKeyPolicy</span></code></a> such as <a class="reference internal" href="#paramiko.client.RejectPolicy" title="paramiko.client.RejectPolicy"><code class="xref py py-obj docutils literal"><span class="pre">RejectPolicy</span></code></a> (the
+default), <a class="reference internal" href="#paramiko.client.AutoAddPolicy" title="paramiko.client.AutoAddPolicy"><code class="xref py py-obj docutils literal"><span class="pre">AutoAddPolicy</span></code></a>, <a class="reference internal" href="#paramiko.client.WarningPolicy" title="paramiko.client.WarningPolicy"><code class="xref py py-obj docutils literal"><span class="pre">WarningPolicy</span></code></a>, or a user-created
+subclass.</li>
+<li>A host key is <strong>known</strong> when it appears in the client object&#8217;s cached
 host keys structures (those manipulated by <a class="reference internal" href="#paramiko.client.SSHClient.load_system_host_keys" title="paramiko.client.SSHClient.load_system_host_keys"><code class="xref py py-obj docutils literal"><span class="pre">load_system_host_keys</span></code></a>
-and/or <a class="reference internal" href="#paramiko.client.SSHClient.load_host_keys" title="paramiko.client.SSHClient.load_host_keys"><code class="xref py py-obj docutils literal"><span class="pre">load_host_keys</span></code></a>).</p>
-</li>
+and/or <a class="reference internal" href="#paramiko.client.SSHClient.load_host_keys" title="paramiko.client.SSHClient.load_host_keys"><code class="xref py py-obj docutils literal"><span class="pre">load_host_keys</span></code></a>).</li>
 </ul>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -199,7 +194,7 @@ previously-unknown server</td>
 
 <dl class="method">
 <dt id="paramiko.client.SSHClient.connect">
-<code class="descname">connect</code><span class="sig-paren">(</span><em>hostname</em>, <em>port=22</em>, <em>username=None</em>, <em>password=None</em>, <em>pkey=None</em>, <em>key_filename=None</em>, <em>timeout=None</em>, <em>allow_agent=True</em>, <em>look_for_keys=True</em>, <em>compress=False</em>, <em>sock=None</em>, <em>gss_auth=False</em>, <em>gss_kex=False</em>, <em>gss_deleg_creds=True</em>, <em>gss_host=None</em>, <em>banner_timeout=None</em><span class="sig-paren">)</span><a class="headerlink" href="#paramiko.client.SSHClient.connect" title="Permalink to this definition">¶</a></dt>
+<code class="descname">connect</code><span class="sig-paren">(</span><em>hostname</em>, <em>port=22</em>, <em>username=None</em>, <em>password=None</em>, <em>pkey=None</em>, <em>key_filename=None</em>, <em>timeout=None</em>, <em>allow_agent=True</em>, <em>look_for_keys=True</em>, <em>compress=False</em>, <em>sock=None</em>, <em>gss_auth=False</em>, <em>gss_kex=False</em>, <em>gss_deleg_creds=True</em>, <em>gss_host=None</em>, <em>banner_timeout=None</em>, <em>auth_timeout=None</em>, <em>gss_trust_dns=True</em>, <em>passphrase=None</em><span class="sig-paren">)</span><a class="headerlink" href="#paramiko.client.SSHClient.connect" title="Permalink to this definition">¶</a></dt>
 <dd><p>Connect to an SSH server and authenticate to it.  The server&#8217;s host key
 is checked against the system host keys (see <a class="reference internal" href="#paramiko.client.SSHClient.load_system_host_keys" title="paramiko.client.SSHClient.load_system_host_keys"><code class="xref py py-obj docutils literal"><span class="pre">load_system_host_keys</span></code></a>)
 and any local host keys (<a class="reference internal" href="#paramiko.client.SSHClient.load_host_keys" title="paramiko.client.SSHClient.load_host_keys"><code class="xref py py-obj docutils literal"><span class="pre">load_host_keys</span></code></a>).  If the server&#8217;s hostname
@@ -209,10 +204,24 @@ to reject the key and raise an <a class="reference internal" href="ssh_exception
 <p>Authentication is attempted in the following order of priority:</p>
 <blockquote>
 <div><ul class="simple">
-<li>The <code class="docutils literal"><span class="pre">pkey</span></code> or <code class="docutils literal"><span class="pre">key_filename</span></code> passed in (if any)</li>
+<li>The <code class="docutils literal"><span class="pre">pkey</span></code> or <code class="docutils literal"><span class="pre">key_filename</span></code> passed in (if any)<ul>
+<li><code class="docutils literal"><span class="pre">key_filename</span></code> may contain OpenSSH public certificate paths
+as well as regular private-key paths; when files ending in
+<code class="docutils literal"><span class="pre">-cert.pub</span></code> are found, they are assumed to match a private
+key, and both components will be loaded. (The private key
+itself does <em>not</em> need to be listed in <code class="docutils literal"><span class="pre">key_filename</span></code> for
+this to occur - <em>just</em> the certificate.)</li>
+</ul>
+</li>
 <li>Any key we can find through an SSH agent</li>
 <li>Any &#8220;id_rsa&#8221;, &#8220;id_dsa&#8221; or &#8220;id_ecdsa&#8221; key discoverable in
-<code class="docutils literal"><span class="pre">~/.ssh/</span></code></li>
+<code class="docutils literal"><span class="pre">~/.ssh/</span></code><ul>
+<li>When OpenSSH-style public certificates exist that match an
+existing such private key (so e.g. one has <code class="docutils literal"><span class="pre">id_rsa</span></code> and
+<code class="docutils literal"><span class="pre">id_rsa-cert.pub</span></code>) the certificate will be loaded alongside
+the private key and used for authentication.</li>
+</ul>
+</li>
 <li>Plain username/password auth, if a password was given</li>
 </ul>
 </div></blockquote>
@@ -223,38 +232,49 @@ passed in, that password will be used to attempt to unlock the key.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>hostname</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; the server to connect to</li>
-<li><strong>port</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#int" title="(in Python v2.6)"><em>int</em></a>) &#8211; the server port to connect to</li>
-<li><strong>username</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; the username to authenticate as (defaults to the current local
+<li><strong>hostname</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; the server to connect to</li>
+<li><strong>port</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; the server port to connect to</li>
+<li><strong>username</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; the username to authenticate as (defaults to the current local
 username)</li>
-<li><strong>password</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; a password to use for authentication or for unlocking a private key</li>
+<li><strong>password</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; Used for password authentication; is also used for private key
+decryption if <code class="docutils literal"><span class="pre">passphrase</span></code> is not given.</li>
+<li><strong>passphrase</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; Used for decrypting private keys.</li>
 <li><strong>pkey</strong> (<a class="reference internal" href="keys.html#paramiko.pkey.PKey" title="paramiko.pkey.PKey"><em>PKey</em></a>) &#8211; an optional private key to use for authentication</li>
-<li><strong>key_filename</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; the filename, or list of filenames, of optional private key(s) to
-try for authentication</li>
-<li><strong>timeout</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#float" title="(in Python v2.6)"><em>float</em></a>) &#8211; an optional timeout (in seconds) for the TCP connect</li>
-<li><strong>allow_agent</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#bool" title="(in Python v2.6)"><em>bool</em></a>) &#8211; set to False to disable connecting to the SSH agent</li>
-<li><strong>look_for_keys</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#bool" title="(in Python v2.6)"><em>bool</em></a>) &#8211; set to False to disable searching for discoverable private key
+<li><strong>key_filename</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; the filename, or list of filenames, of optional private key(s)
+and/or certs to try for authentication</li>
+<li><strong>timeout</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; an optional timeout (in seconds) for the TCP connect</li>
+<li><strong>allow_agent</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; set to False to disable connecting to the SSH agent</li>
+<li><strong>look_for_keys</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; set to False to disable searching for discoverable private key
 files in <code class="docutils literal"><span class="pre">~/.ssh/</span></code></li>
-<li><strong>compress</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#bool" title="(in Python v2.6)"><em>bool</em></a>) &#8211; set to True to turn on compression</li>
-<li><strong>sock</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/socket.html#module-socket" title="(in Python v2.6)"><em>socket</em></a>) &#8211; an open socket or socket-like object (such as a <a class="reference internal" href="channel.html#paramiko.channel.Channel" title="paramiko.channel.Channel"><code class="xref py py-obj docutils literal"><span class="pre">Channel</span></code></a>) to use
+<li><strong>compress</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; set to True to turn on compression</li>
+<li><strong>sock</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/socket.html#module-socket" title="(in Python v2.7)"><em>socket</em></a>) &#8211; an open socket or socket-like object (such as a <a class="reference internal" href="channel.html#paramiko.channel.Channel" title="paramiko.channel.Channel"><code class="xref py py-obj docutils literal"><span class="pre">Channel</span></code></a>) to use
 for communication to the target host</li>
-<li><strong>gss_auth</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#bool" title="(in Python v2.6)"><em>bool</em></a>) &#8211; <code class="docutils literal"><span class="pre">True</span></code> if you want to use GSS-API authentication</li>
-<li><strong>gss_kex</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#bool" title="(in Python v2.6)"><em>bool</em></a>) &#8211; Perform GSS-API Key Exchange and user authentication</li>
-<li><strong>gss_deleg_creds</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#bool" title="(in Python v2.6)"><em>bool</em></a>) &#8211; Delegate GSS-API client credentials or not</li>
-<li><strong>gss_host</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; The targets name in the kerberos database. default: hostname</li>
-<li><strong>banner_timeout</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#float" title="(in Python v2.6)"><em>float</em></a>) &#8211; an optional timeout (in seconds) to wait
+<li><strong>gss_auth</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; <code class="docutils literal"><span class="pre">True</span></code> if you want to use GSS-API authentication</li>
+<li><strong>gss_kex</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; Perform GSS-API Key Exchange and user authentication</li>
+<li><strong>gss_deleg_creds</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; Delegate GSS-API client credentials or not</li>
+<li><strong>gss_host</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The targets name in the kerberos database. default: hostname</li>
+<li><strong>gss_trust_dns</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; Indicates whether or not the DNS is trusted to securely
+canonicalize the name of the host being connected to (default
+<code class="docutils literal"><span class="pre">True</span></code>).</li>
+<li><strong>banner_timeout</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; an optional timeout (in seconds) to wait
 for the SSH banner to be presented.</li>
+<li><strong>auth_timeout</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; an optional timeout (in seconds) to wait for
+an authentication response.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><strong>BadHostKeyException</strong> &#8211; if the server&#8217;s host key could not be
-verified</li>
-<li><strong>AuthenticationException</strong> &#8211; if authentication failed</li>
-<li><strong>SSHException</strong> &#8211; if there was any other error connecting or
-establishing an SSH session</li>
-<li><a class="reference external" href="https://docs.python.org/2.6/library/socket.html#socket.error" title="(in Python v2.6)"><strong>socket.error</strong></a> &#8211; if a socket error occurred while connecting</li>
-</ul>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><a class="reference internal" href="ssh_exception.html#paramiko.ssh_exception.BadHostKeyException" title="paramiko.ssh_exception.BadHostKeyException"><code class="xref py py-obj docutils literal"><span class="pre">BadHostKeyException</span></code></a> &#8211; if the server&#8217;s host key could not be
+verified</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><a class="reference internal" href="ssh_exception.html#paramiko.ssh_exception.AuthenticationException" title="paramiko.ssh_exception.AuthenticationException"><code class="xref py py-obj docutils literal"><span class="pre">AuthenticationException</span></code></a> &#8211; if authentication failed</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><a class="reference internal" href="ssh_exception.html#paramiko.ssh_exception.SSHException" title="paramiko.ssh_exception.SSHException"><code class="xref py py-obj docutils literal"><span class="pre">SSHException</span></code></a> &#8211; if there was any other error connecting or
+establishing an SSH session</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/2.7/library/socket.html#socket.error" title="(in Python v2.7)"><strong>socket.error</strong></a> &#8211; if a socket error occurred while connecting</p>
 </td>
 </tr>
 </tbody>
@@ -262,6 +282,12 @@ establishing an SSH session</li>
 <div class="versionchanged">
 <p><span class="versionmodified">Changed in version 1.15: </span>Added the <code class="docutils literal"><span class="pre">banner_timeout</span></code>, <code class="docutils literal"><span class="pre">gss_auth</span></code>, <code class="docutils literal"><span class="pre">gss_kex</span></code>,
 <code class="docutils literal"><span class="pre">gss_deleg_creds</span></code> and <code class="docutils literal"><span class="pre">gss_host</span></code> arguments.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified">Changed in version 2.3: </span>Added the <code class="docutils literal"><span class="pre">gss_trust_dns</span></code> argument.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified">Changed in version 2.4: </span>Added the <code class="docutils literal"><span class="pre">passphrase</span></code> argument.</p>
 </div>
 </dd></dl>
 
@@ -280,7 +306,7 @@ done using them, instead of relying on garbage collection.</p>
 
 <dl class="method">
 <dt id="paramiko.client.SSHClient.exec_command">
-<code class="descname">exec_command</code><span class="sig-paren">(</span><em>command</em>, <em>bufsize=-1</em>, <em>timeout=None</em>, <em>get_pty=False</em><span class="sig-paren">)</span><a class="headerlink" href="#paramiko.client.SSHClient.exec_command" title="Permalink to this definition">¶</a></dt>
+<code class="descname">exec_command</code><span class="sig-paren">(</span><em>command</em>, <em>bufsize=-1</em>, <em>timeout=None</em>, <em>get_pty=False</em>, <em>environment=None</em><span class="sig-paren">)</span><a class="headerlink" href="#paramiko.client.SSHClient.exec_command" title="Permalink to this definition">¶</a></dt>
 <dd><p>Execute a command on the SSH server.  A new <a class="reference internal" href="channel.html#paramiko.channel.Channel" title="paramiko.channel.Channel"><code class="xref py py-obj docutils literal"><span class="pre">Channel</span></code></a> is opened and
 the requested command is executed.  The command&#8217;s input and output
 streams are returned as Python <code class="docutils literal"><span class="pre">file</span></code>-like objects representing
@@ -290,10 +316,18 @@ stdin, stdout, and stderr.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>command</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; the command to execute</li>
-<li><strong>bufsize</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#int" title="(in Python v2.6)"><em>int</em></a>) &#8211; interpreted the same way as by the built-in <code class="docutils literal"><span class="pre">file()</span></code> function in
+<li><strong>command</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; the command to execute</li>
+<li><strong>bufsize</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; interpreted the same way as by the built-in <code class="docutils literal"><span class="pre">file()</span></code> function in
 Python</li>
-<li><strong>timeout</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#int" title="(in Python v2.6)"><em>int</em></a>) &#8211; set command&#8217;s channel timeout. See <code class="xref py py-obj docutils literal"><span class="pre">Channel.settimeout</span></code>.settimeout</li>
+<li><strong>timeout</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; set command&#8217;s channel timeout. See <a class="reference internal" href="channel.html#paramiko.channel.Channel.settimeout" title="paramiko.channel.Channel.settimeout"><code class="xref py py-obj docutils literal"><span class="pre">Channel.settimeout</span></code></a></li>
+<li><strong>environment</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; <p>a dict of shell environment variables, to be merged into the
+default environment that the remote command executes within.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Servers may silently reject some environment variables; see the
+warning in <a class="reference internal" href="channel.html#paramiko.channel.Channel.set_environment_variable" title="paramiko.channel.Channel.set_environment_variable"><code class="xref py py-obj docutils literal"><span class="pre">Channel.set_environment_variable</span></code></a> for details.</p>
+</div>
+</li>
 </ul>
 </td>
 </tr>
@@ -301,7 +335,7 @@ Python</li>
 3-tuple</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><strong>SSHException</strong> &#8211; if the server fails to execute the command</p>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference internal" href="ssh_exception.html#paramiko.ssh_exception.SSHException" title="paramiko.ssh_exception.SSHException"><code class="xref py py-obj docutils literal"><span class="pre">SSHException</span></code></a> &#8211; if the server fails to execute the command</p>
 </td>
 </tr>
 </tbody>
@@ -310,7 +344,7 @@ Python</li>
 
 <dl class="method">
 <dt id="paramiko.client.SSHClient.invoke_shell">
-<code class="descname">invoke_shell</code><span class="sig-paren">(</span><em>term='vt100'</em>, <em>width=80</em>, <em>height=24</em>, <em>width_pixels=0</em>, <em>height_pixels=0</em><span class="sig-paren">)</span><a class="headerlink" href="#paramiko.client.SSHClient.invoke_shell" title="Permalink to this definition">¶</a></dt>
+<code class="descname">invoke_shell</code><span class="sig-paren">(</span><em>term='vt100'</em>, <em>width=80</em>, <em>height=24</em>, <em>width_pixels=0</em>, <em>height_pixels=0</em>, <em>environment=None</em><span class="sig-paren">)</span><a class="headerlink" href="#paramiko.client.SSHClient.invoke_shell" title="Permalink to this definition">¶</a></dt>
 <dd><p>Start an interactive shell session on the SSH server.  A new <a class="reference internal" href="channel.html#paramiko.channel.Channel" title="paramiko.channel.Channel"><code class="xref py py-obj docutils literal"><span class="pre">Channel</span></code></a>
 is opened and connected to a pseudo-terminal using the requested
 terminal type and size.</p>
@@ -319,18 +353,19 @@ terminal type and size.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>term</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; the terminal type to emulate (for example, <code class="docutils literal"><span class="pre">&quot;vt100&quot;</span></code>)</li>
-<li><strong>width</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#int" title="(in Python v2.6)"><em>int</em></a>) &#8211; the width (in characters) of the terminal window</li>
-<li><strong>height</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#int" title="(in Python v2.6)"><em>int</em></a>) &#8211; the height (in characters) of the terminal window</li>
-<li><strong>width_pixels</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#int" title="(in Python v2.6)"><em>int</em></a>) &#8211; the width (in pixels) of the terminal window</li>
-<li><strong>height_pixels</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#int" title="(in Python v2.6)"><em>int</em></a>) &#8211; the height (in pixels) of the terminal window</li>
+<li><strong>term</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; the terminal type to emulate (for example, <code class="docutils literal"><span class="pre">&quot;vt100&quot;</span></code>)</li>
+<li><strong>width</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; the width (in characters) of the terminal window</li>
+<li><strong>height</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; the height (in characters) of the terminal window</li>
+<li><strong>width_pixels</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; the width (in pixels) of the terminal window</li>
+<li><strong>height_pixels</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; the height (in pixels) of the terminal window</li>
+<li><strong>environment</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; the command&#8217;s environment</li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">a new <a class="reference internal" href="channel.html#paramiko.channel.Channel" title="paramiko.channel.Channel"><code class="xref py py-obj docutils literal"><span class="pre">Channel</span></code></a> connected to the remote shell</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><strong>SSHException</strong> &#8211; if the server fails to invoke a shell</p>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference internal" href="ssh_exception.html#paramiko.ssh_exception.SSHException" title="paramiko.ssh_exception.SSHException"><code class="xref py py-obj docutils literal"><span class="pre">SSHException</span></code></a> &#8211; if the server fails to invoke a shell</p>
 </td>
 </tr>
 </tbody>
@@ -505,11 +540,11 @@ accepting it. This is used by <a class="reference internal" href="#paramiko.clie
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2016 Jeff Forcier.
+      &copy;2017 Jeff Forcier.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.4</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.9</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |
       <a href="../_sources/api/client.txt"

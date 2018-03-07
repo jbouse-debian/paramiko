@@ -27,6 +27,7 @@ from cryptography.hazmat.primitives.asymmetric import rsa, padding
 
 from paramiko.message import Message
 from paramiko.pkey import PKey
+from paramiko.py3compat import PY2
 from paramiko.ssh_exception import SSHException
 
 
@@ -36,8 +37,10 @@ class RSAKey(PKey):
     data.
     """
 
-    def __init__(self, msg=None, data=None, filename=None, password=None, key=None, file_obj=None):
+    def __init__(self, msg=None, data=None, filename=None, password=None,
+                 key=None, file_obj=None):
         self.key = None
+        self.public_blob = None
         if file_obj is not None:
             self._from_private_key(file_obj, password)
             return
@@ -49,10 +52,11 @@ class RSAKey(PKey):
         if key is not None:
             self.key = key
         else:
-            if msg is None:
-                raise SSHException('Key object may not be empty')
-            if msg.get_text() != 'ssh-rsa':
-                raise SSHException('Invalid key')
+            self._check_type_and_load_cert(
+                msg=msg,
+                key_type='ssh-rsa',
+                cert_type='ssh-rsa-cert-v01@openssh.com',
+            )
             self.key = rsa.RSAPublicNumbers(
                 e=msg.get_mpint(), n=msg.get_mpint()
             ).public_key(default_backend())
@@ -76,13 +80,20 @@ class RSAKey(PKey):
         return m.asbytes()
 
     def __str__(self):
-        return self.asbytes()
+        # NOTE: as per inane commentary in #853, this appears to be the least
+        # crummy way to get a representation that prints identical to Python
+        # 2's previous behavior, on both interpreters.
+        # TODO: replace with a nice clean fingerprint display or something
+        if PY2:
+            # Can't just return the .decode below for Py2 because stuff still
+            # tries stuffing it into ASCII for whatever godforsaken reason
+            return self.asbytes()
+        else:
+            return self.asbytes().decode('utf8', errors='ignore')
 
     def __hash__(self):
-        h = hash(self.get_name())
-        h = h * 37 + hash(self.public_numbers.e)
-        h = h * 37 + hash(self.public_numbers.n)
-        return hash(h)
+        return hash((self.get_name(), self.public_numbers.e,
+                     self.public_numbers.n))
 
     def get_name(self):
         return 'ssh-rsa'
@@ -94,12 +105,11 @@ class RSAKey(PKey):
         return isinstance(self.key, rsa.RSAPrivateKey)
 
     def sign_ssh_data(self, data):
-        signer = self.key.signer(
+        sig = self.key.sign(
+            data,
             padding=padding.PKCS1v15(),
             algorithm=hashes.SHA1(),
         )
-        signer.update(data)
-        sig = signer.finalize()
 
         m = Message()
         m.add_string('ssh-rsa')
@@ -113,14 +123,10 @@ class RSAKey(PKey):
         if isinstance(key, rsa.RSAPrivateKey):
             key = key.public_key()
 
-        verifier = key.verifier(
-            signature=msg.get_binary(),
-            padding=padding.PKCS1v15(),
-            algorithm=hashes.SHA1(),
-        )
-        verifier.update(data)
         try:
-            verifier.verify()
+            key.verify(
+                msg.get_binary(), data, padding.PKCS1v15(), hashes.SHA1()
+            )
         except InvalidSignature:
             return False
         else:
@@ -149,7 +155,7 @@ class RSAKey(PKey):
         generate a new host key or authentication key.
 
         :param int bits: number of bits the generated key should be.
-        :param function progress_func: Unused
+        :param progress_func: Unused
         :return: new `.RSAKey` private key
         """
         key = rsa.generate_private_key(
@@ -157,7 +163,7 @@ class RSAKey(PKey):
         )
         return RSAKey(key=key)
 
-    ###  internals...
+    # ...internals...
 
     def _from_private_key_file(self, filename, password):
         data = self._read_private_key_file('RSA', filename, password)

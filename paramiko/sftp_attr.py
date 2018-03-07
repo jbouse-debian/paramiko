@@ -82,9 +82,9 @@ class SFTPAttributes (object):
         return attr
 
     def __repr__(self):
-        return '<SFTPAttributes: %s>' % self._debug_str()
+        return '<SFTPAttributes: {}>'.format(self._debug_str())
 
-    ###  internals...
+    # ...internals...
     @classmethod
     def _from_msg(cls, msg, filename=None, longname=None):
         attr = cls()
@@ -146,15 +146,15 @@ class SFTPAttributes (object):
     def _debug_str(self):
         out = '[ '
         if self.st_size is not None:
-            out += 'size=%d ' % self.st_size
+            out += 'size={} '.format(self.st_size)
         if (self.st_uid is not None) and (self.st_gid is not None):
-            out += 'uid=%d gid=%d ' % (self.st_uid, self.st_gid)
+            out += 'uid={} gid={} '.format(self.st_uid, self.st_gid)
         if self.st_mode is not None:
             out += 'mode=' + oct(self.st_mode) + ' '
         if (self.st_atime is not None) and (self.st_mtime is not None):
-            out += 'atime=%d mtime=%d ' % (self.st_atime, self.st_mtime)
+            out += 'atime={} mtime={} '.format(self.st_atime, self.st_mtime)
         for k, v in self.attr.items():
-            out += '"%s"=%r ' % (str(k), v)
+            out += '"{}"={!r} '.format(str(k), v)
         out += ']'
         return out
 
@@ -189,9 +189,12 @@ class SFTPAttributes (object):
                 ks = 's'
             else:
                 ks = '?'
-            ks += self._rwx((self.st_mode & o700) >> 6, self.st_mode & stat.S_ISUID)
-            ks += self._rwx((self.st_mode & o70) >> 3, self.st_mode & stat.S_ISGID)
-            ks += self._rwx(self.st_mode & 7, self.st_mode & stat.S_ISVTX, True)
+            ks += self._rwx(
+                (self.st_mode & o700) >> 6, self.st_mode & stat.S_ISUID)
+            ks += self._rwx(
+                (self.st_mode & o70) >> 3, self.st_mode & stat.S_ISGID)
+            ks += self._rwx(
+                self.st_mode & 7, self.st_mode & stat.S_ISVTX, True)
         else:
             ks = '?---------'
         # compute display date
@@ -201,9 +204,11 @@ class SFTPAttributes (object):
         else:
             if abs(time.time() - self.st_mtime) > 15552000:
                 # (15552000 = 6 months)
-                datestr = time.strftime('%d %b %Y', time.localtime(self.st_mtime))
+                datestr = time.strftime(
+                    '%d %b %Y', time.localtime(self.st_mtime))
             else:
-                datestr = time.strftime('%d %b %H:%M', time.localtime(self.st_mtime))
+                datestr = time.strftime(
+                    '%d %b %H:%M', time.localtime(self.st_mtime))
         filename = getattr(self, 'filename', '?')
 
         # not all servers support uid/gid
@@ -217,7 +222,12 @@ class SFTPAttributes (object):
         if size is None:
             size = 0
 
-        return '%s   1 %-8d %-8d %8d %-12s %s' % (ks, uid, gid, size, datestr, filename)
+        # TODO: not sure this actually worked as expected beforehand, leaving
+        # it untouched for the time being, re: .format() upgrade, until someone
+        # has time to doublecheck
+        return '%s   1 %-8d %-8d %8d %-12s %s' % (
+            ks, uid, gid, size, datestr, filename,
+        )
 
     def asbytes(self):
         return b(str(self))

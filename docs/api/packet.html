@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Packetizer &mdash; Paramiko  documentation</title>
+    <title>Packetizer &#8212; Paramiko  documentation</title>
     
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -23,6 +23,8 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
     <link rel="top" title="Paramiko  documentation" href="../index.html" />
     <link rel="next" title="Transport" href="transport.html" />
     <link rel="prev" title="Message" href="message.html" />
@@ -44,6 +46,18 @@
   <div class="section" id="module-paramiko.packet">
 <span id="packetizer"></span><h1>Packetizer<a class="headerlink" href="#module-paramiko.packet" title="Permalink to this headline">¶</a></h1>
 <p>Packet handling</p>
+<dl class="exception">
+<dt id="paramiko.packet.NeedRekeyException">
+<em class="property">exception </em><code class="descclassname">paramiko.packet.</code><code class="descname">NeedRekeyException</code><a class="headerlink" href="#paramiko.packet.NeedRekeyException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exception indicating a rekey is needed.</p>
+<dl class="attribute">
+<dt id="paramiko.packet.NeedRekeyException.__weakref__">
+<code class="descname">__weakref__</code><a class="headerlink" href="#paramiko.packet.NeedRekeyException.__weakref__" title="Permalink to this definition">¶</a></dt>
+<dd><p>list of weak references to the object (if defined)</p>
+</dd></dl>
+
+</dd></dl>
+
 <dl class="class">
 <dt id="paramiko.packet.Packetizer">
 <em class="property">class </em><code class="descclassname">paramiko.packet.</code><code class="descname">Packetizer</code><span class="sig-paren">(</span><em>socket</em><span class="sig-paren">)</span><a class="headerlink" href="#paramiko.packet.Packetizer" title="Permalink to this definition">¶</a></dt>
@@ -65,13 +79,13 @@
 <code class="descname">handshake_timed_out</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paramiko.packet.Packetizer.handshake_timed_out" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the handshake has timed out.</p>
 <p>If <a class="reference internal" href="#paramiko.packet.Packetizer.start_handshake" title="paramiko.packet.Packetizer.start_handshake"><code class="xref py py-obj docutils literal"><span class="pre">start_handshake</span></code></a> wasn&#8217;t called before the call to this function,
-the return value will always be <a class="reference external" href="https://docs.python.org/2.6/library/constants.html#False" title="(in Python v2.6)"><code class="xref py py-obj docutils literal"><span class="pre">False</span></code></a>. If the handshake completed
-before a timeout was reached, the return value will be <a class="reference external" href="https://docs.python.org/2.6/library/constants.html#False" title="(in Python v2.6)"><code class="xref py py-obj docutils literal"><span class="pre">False</span></code></a></p>
+the return value will always be <a class="reference external" href="https://docs.python.org/2.7/library/constants.html#False" title="(in Python v2.7)"><code class="xref py py-obj docutils literal"><span class="pre">False</span></code></a>. If the handshake completed
+before a timeout was reached, the return value will be <a class="reference external" href="https://docs.python.org/2.7/library/constants.html#False" title="(in Python v2.7)"><code class="xref py py-obj docutils literal"><span class="pre">False</span></code></a></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">handshake time out status, as a <a class="reference external" href="https://docs.python.org/2.6/library/functions.html#bool" title="(in Python v2.6)"><code class="xref py py-obj docutils literal"><span class="pre">bool</span></code></a></td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">handshake time out status, as a <a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><code class="xref py py-obj docutils literal"><span class="pre">bool</span></code></a></td>
 </tr>
 </tbody>
 </table>
@@ -93,11 +107,12 @@ checked after every read or write, or at least after every few.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>n</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#int" title="(in Python v2.6)"><em>int</em></a>) &#8211; number of bytes to read</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>n</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; number of bytes to read</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the data read, as a <a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><code class="xref py py-obj docutils literal"><span class="pre">str</span></code></a></td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the data read, as a <a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-obj docutils literal"><span class="pre">str</span></code></a></td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><strong>EOFError</strong> &#8211; if the socket was closed before all the bytes could be read</td>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="docutils literal"><span class="pre">EOFError</span></code> &#8211; if the socket was closed before all the bytes could
+be read</td>
 </tr>
 </tbody>
 </table>
@@ -112,11 +127,9 @@ done).</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><strong>SSHException</strong> &#8211; if the packet is mangled</li>
-<li><strong>NeedRekeyException</strong> &#8211; if the transport should rekey</li>
-</ul>
-</td>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><a class="reference internal" href="ssh_exception.html#paramiko.ssh_exception.SSHException" title="paramiko.ssh_exception.SSHException"><code class="xref py py-obj docutils literal"><span class="pre">SSHException</span></code></a> &#8211; if the packet is mangled</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><a class="reference internal" href="#paramiko.packet.NeedRekeyException" title="paramiko.packet.NeedRekeyException"><code class="xref py py-obj docutils literal"><span class="pre">NeedRekeyException</span></code></a> &#8211; if the transport should rekey</td>
 </tr>
 </tbody>
 </table>
@@ -171,7 +184,7 @@ handshake process.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>timeout</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#float" title="(in Python v2.6)"><em>float</em></a>) &#8211; amount of seconds to wait before timing out</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>timeout</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; amount of seconds to wait before timing out</td>
 </tr>
 </tbody>
 </table>
@@ -268,11 +281,11 @@ handshake process.</p>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2016 Jeff Forcier.
+      &copy;2017 Jeff Forcier.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.4</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.9</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |
       <a href="../_sources/api/packet.txt"
