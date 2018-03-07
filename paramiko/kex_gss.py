@@ -40,19 +40,23 @@ This module provides GSS-API / SSPI Key Exchange as defined in :rfc:`4462`.
 import os
 from hashlib import sha1
 
-from paramiko.common import *
+from paramiko.common import DEBUG, max_byte, zero_byte
 from paramiko import util
 from paramiko.message import Message
-from paramiko.py3compat import byte_chr, long, byte_mask, byte_ord
+from paramiko.py3compat import byte_chr, byte_mask, byte_ord
 from paramiko.ssh_exception import SSHException
 
 
 MSG_KEXGSS_INIT, MSG_KEXGSS_CONTINUE, MSG_KEXGSS_COMPLETE, MSG_KEXGSS_HOSTKEY,\
-MSG_KEXGSS_ERROR = range(30, 35)
+    MSG_KEXGSS_ERROR = range(30, 35)
 MSG_KEXGSS_GROUPREQ, MSG_KEXGSS_GROUP = range(40, 42)
 c_MSG_KEXGSS_INIT, c_MSG_KEXGSS_CONTINUE, c_MSG_KEXGSS_COMPLETE,\
-c_MSG_KEXGSS_HOSTKEY, c_MSG_KEXGSS_ERROR = [byte_chr(c) for c in range(30, 35)]
-c_MSG_KEXGSS_GROUPREQ, c_MSG_KEXGSS_GROUP = [byte_chr(c) for c in range(40, 42)]
+    c_MSG_KEXGSS_HOSTKEY, c_MSG_KEXGSS_ERROR = [
+        byte_chr(c) for c in range(30, 35)
+    ]
+c_MSG_KEXGSS_GROUPREQ, c_MSG_KEXGSS_GROUP = [
+    byte_chr(c) for c in range(40, 42)
+]
 
 
 class KexGSSGroup1(object):
@@ -61,10 +65,10 @@ class KexGSSGroup1(object):
     4462 Section 2 <https://tools.ietf.org/html/rfc4462.html#section-2>`_
     """
     # draft-ietf-secsh-transport-09.txt, page 17
-    P = 0xFFFFFFFFFFFFFFFFC90FDAA22168C234C4C6628B80DC1CD129024E088A67CC74020BBEA63B139B22514A08798E3404DDEF9519B3CD3A431B302B0A6DF25F14374FE1356D6D51C245E485B576625E7EC6F44C42E9A637ED6B0BFF5CB6F406B7EDEE386BFB5A899FA5AE9F24117C4B1FE649286651ECE65381FFFFFFFFFFFFFFFF
+    P = 0xFFFFFFFFFFFFFFFFC90FDAA22168C234C4C6628B80DC1CD129024E088A67CC74020BBEA63B139B22514A08798E3404DDEF9519B3CD3A431B302B0A6DF25F14374FE1356D6D51C245E485B576625E7EC6F44C42E9A637ED6B0BFF5CB6F406B7EDEE386BFB5A899FA5AE9F24117C4B1FE649286651ECE65381FFFFFFFFFFFFFFFF  # noqa
     G = 2
-    b7fffffffffffffff = byte_chr(0x7f) + max_byte * 7
-    b0000000000000000 = zero_byte * 8
+    b7fffffffffffffff = byte_chr(0x7f) + max_byte * 7  # noqa
+    b0000000000000000 = zero_byte * 8  # noqa
     NAME = "gss-group1-sha1-toWM5Slw5Ew8Mqkay+al2g=="
 
     def __init__(self, transport):
@@ -79,7 +83,6 @@ class KexGSSGroup1(object):
         """
         Start the GSS-API / SSPI Authenticated Diffie-Hellman Key Exchange.
         """
-        self.transport.gss_kex_used = True
         self._generate_x()
         if self.transport.server_mode:
             # compute f = g^x mod p, but don't send it yet
@@ -104,7 +107,7 @@ class KexGSSGroup1(object):
         """
         Parse the next packet.
 
-        :param char ptype: The type of the incomming packet
+        :param ptype: The (string) type of the incoming packet
         :param `.Message` m: The paket content
         """
         if self.transport.server_mode and (ptype == MSG_KEXGSS_INIT):
@@ -117,8 +120,8 @@ class KexGSSGroup1(object):
             return self._parse_kexgss_complete(m)
         elif ptype == MSG_KEXGSS_ERROR:
             return self._parse_kexgss_error(m)
-        raise SSHException('GSS KexGroup1 asked to handle packet type %d'
-                           % ptype)
+        msg = 'GSS KexGroup1 asked to handle packet type {:d}'
+        raise SSHException(msg.format(ptype))
 
     # ##  internals...
 
@@ -127,14 +130,14 @@ class KexGSSGroup1(object):
         generate an "x" (1 < x < q), where q is (p-1)/2.
         p is a 128-byte (1024-bit) number, where the first 64 bits are 1.
         therefore q can be approximated as a 2^1023.  we drop the subset of
-        potential x where the first 63 bits are 1, because some of those will be
-        larger than q (but this is a tiny tiny subset of potential x).
+        potential x where the first 63 bits are 1, because some of those will
+        be larger than q (but this is a tiny tiny subset of potential x).
         """
         while 1:
             x_bytes = os.urandom(128)
             x_bytes = byte_mask(x_bytes[0], 0x7f) + x_bytes[1:]
-            if (x_bytes[:8] != self.b7fffffffffffffff) and \
-                   (x_bytes[:8] != self.b0000000000000000):
+            first = x_bytes[:8]
+            if first not in (self.b7fffffffffffffff, self.b0000000000000000):
                 break
         self.x = util.inflate_long(x_bytes)
 
@@ -156,18 +159,21 @@ class KexGSSGroup1(object):
         """
         Parse the SSH2_MSG_KEXGSS_CONTINUE message.
 
-        :param `.Message` m: The content of the SSH2_MSG_KEXGSS_CONTINUE message
+        :param `.Message` m: The content of the SSH2_MSG_KEXGSS_CONTINUE
+            message
         """
         if not self.transport.server_mode:
             srv_token = m.get_string()
             m = Message()
             m.add_byte(c_MSG_KEXGSS_CONTINUE)
-            m.add_string(self.kexgss.ssh_init_sec_context(target=self.gss_host,
-                                                        recv_token=srv_token))
+            m.add_string(self.kexgss.ssh_init_sec_context(
+                target=self.gss_host, recv_token=srv_token))
             self.transport.send_message(m)
-            self.transport._expect_packet(MSG_KEXGSS_CONTINUE,
-                                          MSG_KEXGSS_COMPLETE,
-                                          MSG_KEXGSS_ERROR)
+            self.transport._expect_packet(
+                MSG_KEXGSS_CONTINUE,
+                MSG_KEXGSS_COMPLETE,
+                MSG_KEXGSS_ERROR
+            )
         else:
             pass
 
@@ -175,7 +181,8 @@ class KexGSSGroup1(object):
         """
         Parse the SSH2_MSG_KEXGSS_COMPLETE message (client mode).
 
-        :param `.Message` m: The content of the SSH2_MSG_KEXGSS_COMPLETE message
+        :param `.Message` m: The content of the
+            SSH2_MSG_KEXGSS_COMPLETE message
         """
         # client mode
         if self.transport.host_key is None:
@@ -190,7 +197,8 @@ class KexGSSGroup1(object):
         if bool:
             srv_token = m.get_string()
         K = pow(self.f, self.x, self.P)
-        # okay, build up the hash H of (V_C || V_S || I_C || I_S || K_S || e || f || K)
+        # okay, build up the hash H of
+        # (V_C || V_S || I_C || I_S || K_S || e || f || K)
         hm = Message()
         hm.add(self.transport.local_version, self.transport.remote_version,
         self.transport.local_kex_init, self.transport.remote_kex_init)
@@ -198,15 +206,15 @@ class KexGSSGroup1(object):
         hm.add_mpint(self.e)
         hm.add_mpint(self.f)
         hm.add_mpint(K)
-        self.transport._set_K_H(K, sha1(str(hm)).digest())
+        H = sha1(str(hm)).digest()
+        self.transport._set_K_H(K, H)
         if srv_token is not None:
             self.kexgss.ssh_init_sec_context(target=self.gss_host,
                                              recv_token=srv_token)
-            self.kexgss.ssh_check_mic(mic_token,
-                                      self.transport.session_id)
+            self.kexgss.ssh_check_mic(mic_token, H)
         else:
-            self.kexgss.ssh_check_mic(mic_token,
-                                      self.transport.session_id)
+            self.kexgss.ssh_check_mic(mic_token, H)
+        self.transport.gss_kex_used = True
         self.transport._activate_outbound()
 
     def _parse_kexgss_init(self, m):
@@ -223,7 +231,8 @@ class KexGSSGroup1(object):
         K = pow(self.e, self.x, self.P)
         self.transport.host_key = NullHostKey()
         key = self.transport.host_key.__str__()
-        # okay, build up the hash H of (V_C || V_S || I_C || I_S || K_S || e || f || K)
+        # okay, build up the hash H of
+        # (V_C || V_S || I_C || I_S || K_S || e || f || K)
         hm = Message()
         hm.add(self.transport.remote_version, self.transport.local_version,
                self.transport.remote_kex_init, self.transport.local_kex_init)
@@ -248,6 +257,7 @@ class KexGSSGroup1(object):
             else:
                 m.add_boolean(False)
             self.transport._send_message(m)
+            self.transport.gss_kex_used = True
             self.transport._activate_outbound()
         else:
             m.add_byte(c_MSG_KEXGSS_CONTINUE)
@@ -271,11 +281,12 @@ class KexGSSGroup1(object):
         maj_status = m.get_int()
         min_status = m.get_int()
         err_msg = m.get_string()
-        lang_tag = m.get_string()   # we don't care about the language!
-        raise SSHException("GSS-API Error:\nMajor Status: %s\nMinor Status: %s\
-                            \nError Message: %s\n") % (str(maj_status),
-                                                       str(min_status),
-                                                       err_msg)
+        m.get_string()   # we don't care about the language!
+        raise SSHException("""GSS-API Error:
+Major Status: {}
+Minor Status: {}
+Error Message: {}
+""".format(maj_status, min_status, err_msg))
 
 
 class KexGSSGroup14(KexGSSGroup1):
@@ -284,7 +295,7 @@ class KexGSSGroup14(KexGSSGroup1):
     in `RFC 4462 Section 2
     <https://tools.ietf.org/html/rfc4462.html#section-2>`_
     """
-    P = 0xFFFFFFFFFFFFFFFFC90FDAA22168C234C4C6628B80DC1CD129024E088A67CC74020BBEA63B139B22514A08798E3404DDEF9519B3CD3A431B302B0A6DF25F14374FE1356D6D51C245E485B576625E7EC6F44C42E9A637ED6B0BFF5CB6F406B7EDEE386BFB5A899FA5AE9F24117C4B1FE649286651ECE45B3DC2007CB8A163BF0598DA48361C55D39A69163FA8FD24CF5F83655D23DCA3AD961C62F356208552BB9ED529077096966D670C354E4ABC9804F1746C08CA18217C32905E462E36CE3BE39E772C180E86039B2783A2EC07A28FB5C55DF06F4C52C9DE2BCBF6955817183995497CEA956AE515D2261898FA051015728E5A8AACAA68FFFFFFFFFFFFFFFF
+    P = 0xFFFFFFFFFFFFFFFFC90FDAA22168C234C4C6628B80DC1CD129024E088A67CC74020BBEA63B139B22514A08798E3404DDEF9519B3CD3A431B302B0A6DF25F14374FE1356D6D51C245E485B576625E7EC6F44C42E9A637ED6B0BFF5CB6F406B7EDEE386BFB5A899FA5AE9F24117C4B1FE649286651ECE45B3DC2007CB8A163BF0598DA48361C55D39A69163FA8FD24CF5F83655D23DCA3AD961C62F356208552BB9ED529077096966D670C354E4ABC9804F1746C08CA18217C32905E462E36CE3BE39E772C180E86039B2783A2EC07A28FB5C55DF06F4C52C9DE2BCBF6955817183995497CEA956AE515D2261898FA051015728E5A8AACAA68FFFFFFFFFFFFFFFF  # noqa
     G = 2
     NAME = "gss-group14-sha1-toWM5Slw5Ew8Mqkay+al2g=="
 
@@ -315,7 +326,6 @@ class KexGSSGex(object):
         """
         Start the GSS-API / SSPI Authenticated Diffie-Hellman Group Exchange
         """
-        self.transport.gss_kex_used = True
         if self.transport.server_mode:
             self.transport._expect_packet(MSG_KEXGSS_GROUPREQ)
             return
@@ -335,7 +345,7 @@ class KexGSSGex(object):
         """
         Parse the next packet.
 
-        :param char ptype: The type of the incomming packet
+        :param ptype: The (string) type of the incoming packet
         :param `.Message` m: The paket content
         """
         if ptype == MSG_KEXGSS_GROUPREQ:
@@ -352,7 +362,8 @@ class KexGSSGex(object):
             return self._parse_kexgss_complete(m)
         elif ptype == MSG_KEXGSS_ERROR:
             return self._parse_kexgss_error(m)
-        raise SSHException('KexGex asked to handle packet type %d' % ptype)
+        msg = 'KexGex asked to handle packet type {:d}'
+        raise SSHException(msg.format(ptype))
 
     # ##  internals...
 
@@ -378,7 +389,8 @@ class KexGSSGex(object):
         """
         Parse the SSH2_MSG_KEXGSS_GROUPREQ message (server mode).
 
-        :param `.Message` m: The content of the SSH2_MSG_KEXGSS_GROUPREQ message
+        :param `.Message` m: The content of the
+            SSH2_MSG_KEXGSS_GROUPREQ message
         """
         minbits = m.get_int()
         preferredbits = m.get_int()
@@ -402,8 +414,14 @@ class KexGSSGex(object):
         # generate prime
         pack = self.transport._get_modulus_pack()
         if pack is None:
-            raise SSHException('Can\'t do server-side gex with no modulus pack')
-        self.transport._log(DEBUG, 'Picking p (%d <= %d <= %d bits)' % (minbits, preferredbits, maxbits))
+            raise SSHException(
+                'Can\'t do server-side gex with no modulus pack')
+        self.transport._log(
+            DEBUG,  # noqa
+            'Picking p ({} <= {} <= {} bits)'.format(
+                minbits, preferredbits, maxbits,
+            )
+        )
         self.g, self.p = pack.get_modulus(minbits, preferredbits, maxbits)
         m = Message()
         m.add_byte(c_MSG_KEXGSS_GROUP)
@@ -423,8 +441,10 @@ class KexGSSGex(object):
         # reject if p's bit length < 1024 or > 8192
         bitlen = util.bit_length(self.p)
         if (bitlen < 1024) or (bitlen > 8192):
-            raise SSHException('Server-generated gex p (don\'t ask) is out of range (%d bits)' % bitlen)
-        self.transport._log(DEBUG, 'Got server p (%d bits)' % bitlen)
+            raise SSHException(
+                'Server-generated gex p (don\'t ask) is out of range '
+                '({} bits)'.format(bitlen))
+        self.transport._log(DEBUG, 'Got server p ({} bits)'.format(bitlen))  # noqa
         self._generate_x()
         # now compute e = g^x mod p
         self.e = pow(self.g, self.x, self.p)
@@ -453,7 +473,8 @@ class KexGSSGex(object):
         K = pow(self.e, self.x, self.p)
         self.transport.host_key = NullHostKey()
         key = self.transport.host_key.__str__()
-        # okay, build up the hash H of (V_C || V_S || I_C || I_S || K_S || min || n || max || p || g || e || f || K)
+        # okay, build up the hash H of
+        # (V_C || V_S || I_C || I_S || K_S || min || n || max || p || g || e || f || K)  # noqa
         hm = Message()
         hm.add(self.transport.remote_version, self.transport.local_version,
                self.transport.remote_kex_init, self.transport.local_kex_init,
@@ -483,6 +504,7 @@ class KexGSSGex(object):
             else:
                 m.add_boolean(False)
             self.transport._send_message(m)
+            self.transport.gss_kex_used = True
             self.transport._activate_outbound()
         else:
             m.add_byte(c_MSG_KEXGSS_CONTINUE)
@@ -543,7 +565,8 @@ class KexGSSGex(object):
         if (self.f < 1) or (self.f > self.p - 1):
             raise SSHException('Server kex "f" is out of range')
         K = pow(self.f, self.x, self.p)
-        # okay, build up the hash H of (V_C || V_S || I_C || I_S || K_S || min || n || max || p || g || e || f || K)
+        # okay, build up the hash H of
+        # (V_C || V_S || I_C || I_S || K_S || min || n || max || p || g || e || f || K)  # noqa
         hm = Message()
         hm.add(self.transport.local_version, self.transport.remote_version,
                self.transport.local_kex_init, self.transport.remote_kex_init,
@@ -563,11 +586,10 @@ class KexGSSGex(object):
         if srv_token is not None:
             self.kexgss.ssh_init_sec_context(target=self.gss_host,
                                              recv_token=srv_token)
-            self.kexgss.ssh_check_mic(mic_token,
-                                      self.transport.session_id)
+            self.kexgss.ssh_check_mic(mic_token, H)
         else:
-            self.kexgss.ssh_check_mic(mic_token,
-                                      self.transport.session_id)
+            self.kexgss.ssh_check_mic(mic_token, H)
+        self.transport.gss_kex_used = True
         self.transport._activate_outbound()
 
     def _parse_kexgss_error(self, m):
@@ -584,11 +606,12 @@ class KexGSSGex(object):
         maj_status = m.get_int()
         min_status = m.get_int()
         err_msg = m.get_string()
-        lang_tag = m.get_string()   # we don't care about the language!
-        raise SSHException("GSS-API Error:\nMajor Status: %s\nMinor Status: %s\
-                            \nError Message: %s\n") % (str(maj_status),
-                                                       str(min_status),
-                                                       err_msg)
+        m.get_string()   # we don't care about the language (lang_tag)!
+        raise SSHException("""GSS-API Error:
+Major Status: {}
+Minor Status: {}
+Error Message: {}
+""".format(maj_status, min_status, err_msg))
 
 
 class NullHostKey(object):

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Key handling &mdash; Paramiko  documentation</title>
+    <title>Key handling &#8212; Paramiko  documentation</title>
     
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -23,6 +23,8 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
     <link rel="top" title="Paramiko  documentation" href="../index.html" />
     <link rel="next" title="GSS-API authentication" href="ssh_gss.html" />
     <link rel="prev" title="Host keys / known_hosts files" href="hostkeys.html" />
@@ -61,7 +63,7 @@ corresponding private key.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>other</strong> (<em>Pkey</em>) &#8211; key to compare to.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>other</strong> (<a class="reference internal" href="#paramiko.pkey.PKey" title="paramiko.pkey.PKey"><em>PKey</em></a>) &#8211; key to compare to.</td>
 </tr>
 </tbody>
 </table>
@@ -80,11 +82,13 @@ the string.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>msg</strong> (<a class="reference internal" href="message.html#paramiko.message.Message" title="paramiko.message.Message"><em>Message</em></a>) &#8211; an optional SSH <a class="reference internal" href="message.html#paramiko.message.Message" title="paramiko.message.Message"><code class="xref py py-obj docutils literal"><span class="pre">Message</span></code></a> containing a public key of this type.</li>
-<li><strong>data</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; an optional string containing a public key of this type</li>
+<li><strong>data</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; an optional string containing a public key
+of this type</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><strong>SSHException</strong> &#8211; if a key cannot be created from the <code class="docutils literal"><span class="pre">data</span></code> or <code class="docutils literal"><span class="pre">msg</span></code> given, or
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference internal" href="ssh_exception.html#paramiko.ssh_exception.SSHException" title="paramiko.ssh_exception.SSHException"><code class="xref py py-obj docutils literal"><span class="pre">SSHException</span></code></a> &#8211;
+if a key cannot be created from the <code class="docutils literal"><span class="pre">data</span></code> or <code class="docutils literal"><span class="pre">msg</span></code> given, or
 no key was passed in.</p>
 </td>
 </tr>
@@ -126,18 +130,21 @@ object.  If the private key is encrypted and <code class="docutils literal"><spa
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>file_obj</strong> &#8211; the file-like object to read from</li>
-<li><strong>password</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; an optional password to use to decrypt the key, if it&#8217;s encrypted</li>
+<li><strong>password</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; an optional password to use to decrypt the key, if it&#8217;s encrypted</li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">a new <a class="reference internal" href="#paramiko.pkey.PKey" title="paramiko.pkey.PKey"><code class="xref py py-obj docutils literal"><span class="pre">PKey</span></code></a> based on the given private key</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><strong>IOError</strong> &#8211; if there was an error reading the key</li>
-<li><strong>PasswordRequiredException</strong> &#8211; if the private key file is encrypted, and <code class="docutils literal"><span class="pre">password</span></code> is <code class="docutils literal"><span class="pre">None</span></code></li>
-<li><strong>SSHException</strong> &#8211; if the key file is invalid</li>
-</ul>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><code class="docutils literal"><span class="pre">IOError</span></code> &#8211; if there was an error reading the key</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><a class="reference internal" href="ssh_exception.html#paramiko.ssh_exception.PasswordRequiredException" title="paramiko.ssh_exception.PasswordRequiredException"><code class="xref py py-obj docutils literal"><span class="pre">PasswordRequiredException</span></code></a> &#8211;
+if the private key file is encrypted, and <code class="docutils literal"><span class="pre">password</span></code> is <code class="docutils literal"><span class="pre">None</span></code></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference internal" href="ssh_exception.html#paramiko.ssh_exception.SSHException" title="paramiko.ssh_exception.SSHException"><code class="xref py py-obj docutils literal"><span class="pre">SSHException</span></code></a> &#8211; if the key file is invalid</p>
 </td>
 </tr>
 </tbody>
@@ -158,8 +165,8 @@ is useless on the abstract PKey class.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; name of the file to read</li>
-<li><strong>password</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; an optional password to use to decrypt the key file, if it&#8217;s
+<li><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; name of the file to read</li>
+<li><strong>password</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; an optional password to use to decrypt the key file, if it&#8217;s
 encrypted</li>
 </ul>
 </td>
@@ -167,12 +174,14 @@ encrypted</li>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">a new <a class="reference internal" href="#paramiko.pkey.PKey" title="paramiko.pkey.PKey"><code class="xref py py-obj docutils literal"><span class="pre">PKey</span></code></a> based on the given private key</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><strong>IOError</strong> &#8211; if there was an error reading the file</li>
-<li><strong>PasswordRequiredException</strong> &#8211; if the private key file is
-encrypted, and <code class="docutils literal"><span class="pre">password</span></code> is <code class="docutils literal"><span class="pre">None</span></code></li>
-<li><strong>SSHException</strong> &#8211; if the key file is invalid</li>
-</ul>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><code class="docutils literal"><span class="pre">IOError</span></code> &#8211; if there was an error reading the file</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><a class="reference internal" href="ssh_exception.html#paramiko.ssh_exception.PasswordRequiredException" title="paramiko.ssh_exception.PasswordRequiredException"><code class="xref py py-obj docutils literal"><span class="pre">PasswordRequiredException</span></code></a> &#8211; if the private key file is
+encrypted, and <code class="docutils literal"><span class="pre">password</span></code> is <code class="docutils literal"><span class="pre">None</span></code></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference internal" href="ssh_exception.html#paramiko.ssh_exception.SSHException" title="paramiko.ssh_exception.SSHException"><code class="xref py py-obj docutils literal"><span class="pre">SSHException</span></code></a> &#8211; if the key file is invalid</p>
 </td>
 </tr>
 </tbody>
@@ -189,7 +198,7 @@ public key files or recognized host keys.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a base64 <a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><code class="xref py py-obj docutils literal"><span class="pre">string</span></code></a> containing the public part of the key.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a base64 <a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-obj docutils literal"><span class="pre">string</span></code></a> containing the public part of the key.</td>
 </tr>
 </tbody>
 </table>
@@ -204,7 +213,7 @@ for judging the relative security of a key.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">bits in the key (as an <a class="reference external" href="https://docs.python.org/2.6/library/functions.html#int" title="(in Python v2.6)"><code class="xref py py-obj docutils literal"><span class="pre">int</span></code></a>)</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">bits in the key (as an <a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-obj docutils literal"><span class="pre">int</span></code></a>)</td>
 </tr>
 </tbody>
 </table>
@@ -219,7 +228,7 @@ secret is revealed.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a 16-byte <a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><code class="xref py py-obj docutils literal"><span class="pre">string</span></code></a> (binary) of the MD5 fingerprint, in SSH
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a 16-byte <a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-obj docutils literal"><span class="pre">string</span></code></a> (binary) of the MD5 fingerprint, in SSH
 format.</td>
 </tr>
 </tbody>
@@ -234,11 +243,29 @@ format.</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">name of this private key type, in SSH terminology, as a <a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><code class="xref py py-obj docutils literal"><span class="pre">str</span></code></a> (for
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">name of this private key type, in SSH terminology, as a <a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-obj docutils literal"><span class="pre">str</span></code></a> (for
 example, <code class="docutils literal"><span class="pre">&quot;ssh-rsa&quot;</span></code>).</td>
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
+<dl class="method">
+<dt id="paramiko.pkey.PKey.load_certificate">
+<code class="descname">load_certificate</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#paramiko.pkey.PKey.load_certificate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Supplement the private key contents with data loaded from an OpenSSH
+public key (<code class="docutils literal"><span class="pre">.pub</span></code>) or certificate (<code class="docutils literal"><span class="pre">-cert.pub</span></code>) file, a string
+containing such a file, or a <a class="reference internal" href="message.html#paramiko.message.Message" title="paramiko.message.Message"><code class="xref py py-obj docutils literal"><span class="pre">Message</span></code></a> object.</p>
+<p>The .pub contents adds no real value, since the private key
+file includes sufficient information to derive the public
+key info. For certificates, however, this can be used on
+the client side to offer authentication requests to the server
+based on certificate instead of raw public key.</p>
+<p>See:
+<a class="reference external" href="https://github.com/openssh/openssh-portable/blob/master/PROTOCOL.certkeys">https://github.com/openssh/openssh-portable/blob/master/PROTOCOL.certkeys</a></p>
+<p>Note: very little effort is made to validate the certificate contents,
+that is for the server to decide if it is good enough to authenticate
+successfully.</p>
 </dd></dl>
 
 <dl class="method">
@@ -250,7 +277,7 @@ representing an SSH signature message.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; the data to sign.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; the data to sign.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">an SSH signature <a class="reference internal" href="message.html#paramiko.message.Message" title="paramiko.message.Message"><code class="xref py py-obj docutils literal"><span class="pre">message</span></code></a>.</td>
 </tr>
@@ -268,7 +295,7 @@ that data, verify that it was signed with this key.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>data</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; the data that was signed.</li>
+<li><strong>data</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; the data that was signed.</li>
 <li><strong>msg</strong> (<a class="reference internal" href="message.html#paramiko.message.Message" title="paramiko.message.Message"><em>Message</em></a>) &#8211; an SSH signature message</li>
 </ul>
 </td>
@@ -291,14 +318,14 @@ password is not <code class="docutils literal"><span class="pre">None</span></co
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>file_obj</strong> &#8211; the file-like object to write into</li>
-<li><strong>password</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; an optional password to use to encrypt the key</li>
+<li><strong>password</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; an optional password to use to encrypt the key</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><strong>IOError</strong> &#8211; if there was an error writing to the file</li>
-<li><strong>SSHException</strong> &#8211; if the key is invalid</li>
-</ul>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><code class="docutils literal"><span class="pre">IOError</span></code> &#8211; if there was an error writing to the file</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference internal" href="ssh_exception.html#paramiko.ssh_exception.SSHException" title="paramiko.ssh_exception.SSHException"><code class="xref py py-obj docutils literal"><span class="pre">SSHException</span></code></a> &#8211; if the key is invalid</p>
 </td>
 </tr>
 </tbody>
@@ -315,19 +342,78 @@ password is not <code class="docutils literal"><span class="pre">None</span></co
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; name of the file to write</li>
-<li><strong>password</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; an optional password to use to encrypt the key file</li>
+<li><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; name of the file to write</li>
+<li><strong>password</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; an optional password to use to encrypt the key file</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><strong>IOError</strong> &#8211; if there was an error writing the file</li>
-<li><strong>SSHException</strong> &#8211; if the key is invalid</li>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><code class="docutils literal"><span class="pre">IOError</span></code> &#8211; if there was an error writing the file</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference internal" href="ssh_exception.html#paramiko.ssh_exception.SSHException" title="paramiko.ssh_exception.SSHException"><code class="xref py py-obj docutils literal"><span class="pre">SSHException</span></code></a> &#8211; if the key is invalid</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="paramiko.pkey.PublicBlob">
+<em class="property">class </em><code class="descclassname">paramiko.pkey.</code><code class="descname">PublicBlob</code><span class="sig-paren">(</span><em>type_</em>, <em>blob</em>, <em>comment=None</em><span class="sig-paren">)</span><a class="headerlink" href="#paramiko.pkey.PublicBlob" title="Permalink to this definition">¶</a></dt>
+<dd><p>OpenSSH plain public key or OpenSSH signed public key (certificate).</p>
+<p>Tries to be as dumb as possible and barely cares about specific
+per-key-type data.</p>
+<dl class="docutils">
+<dt>..note::</dt>
+<dd>Most of the time you&#8217;ll want to call <a class="reference internal" href="#paramiko.pkey.PublicBlob.from_file" title="paramiko.pkey.PublicBlob.from_file"><code class="xref py py-obj docutils literal"><span class="pre">from_file</span></code></a>, <a class="reference internal" href="#paramiko.pkey.PublicBlob.from_string" title="paramiko.pkey.PublicBlob.from_string"><code class="xref py py-obj docutils literal"><span class="pre">from_string</span></code></a> or
+<a class="reference internal" href="#paramiko.pkey.PublicBlob.from_message" title="paramiko.pkey.PublicBlob.from_message"><code class="xref py py-obj docutils literal"><span class="pre">from_message</span></code></a> for useful instantiation, the main constructor is
+basically &#8220;I should be using <code class="docutils literal"><span class="pre">attrs</span></code> for this.&#8221;</dd>
+</dl>
+<dl class="method">
+<dt id="paramiko.pkey.PublicBlob.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>type_</em>, <em>blob</em>, <em>comment=None</em><span class="sig-paren">)</span><a class="headerlink" href="#paramiko.pkey.PublicBlob.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new public blob of given type and contents.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>type</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; Type indicator, eg <code class="docutils literal"><span class="pre">ssh-rsa</span></code>.</li>
+<li><strong>blob</strong> &#8211; The blob bytes themselves.</li>
+<li><strong>comment</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; A comment, if one was given (e.g. file-based.)</li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="paramiko.pkey.PublicBlob.__weakref__">
+<code class="descname">__weakref__</code><a class="headerlink" href="#paramiko.pkey.PublicBlob.__weakref__" title="Permalink to this definition">¶</a></dt>
+<dd><p>list of weak references to the object (if defined)</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="paramiko.pkey.PublicBlob.from_file">
+<em class="property">classmethod </em><code class="descname">from_file</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="headerlink" href="#paramiko.pkey.PublicBlob.from_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a public blob from a <code class="docutils literal"><span class="pre">-cert.pub</span></code>-style file on disk.</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="paramiko.pkey.PublicBlob.from_message">
+<em class="property">classmethod </em><code class="descname">from_message</code><span class="sig-paren">(</span><em>message</em><span class="sig-paren">)</span><a class="headerlink" href="#paramiko.pkey.PublicBlob.from_message" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a public blob from a network <a class="reference internal" href="message.html#paramiko.message.Message" title="paramiko.message.Message"><code class="xref py py-obj docutils literal"><span class="pre">Message</span></code></a>.</p>
+<p>Specifically, a cert-bearing pubkey auth packet, because by definition
+OpenSSH-style certificates &#8216;are&#8217; their own network representation.&#8221;</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="paramiko.pkey.PublicBlob.from_string">
+<em class="property">classmethod </em><code class="descname">from_string</code><span class="sig-paren">(</span><em>string</em><span class="sig-paren">)</span><a class="headerlink" href="#paramiko.pkey.PublicBlob.from_string" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a public blob from a <code class="docutils literal"><span class="pre">-cert.pub</span></code>-style string.</p>
 </dd></dl>
 
 </dd></dl>
@@ -351,8 +437,8 @@ generate a new host key or authentication key.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>bits</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#int" title="(in Python v2.6)"><em>int</em></a>) &#8211; number of bits the generated key should be.</li>
-<li><strong>progress_func</strong> (<em>function</em>) &#8211; Unused</li>
+<li><strong>bits</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; number of bits the generated key should be.</li>
+<li><strong>progress_func</strong> &#8211; Unused</li>
 </ul>
 </td>
 </tr>
@@ -384,8 +470,8 @@ generate a new host key or authentication key.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>bits</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#int" title="(in Python v2.6)"><em>int</em></a>) &#8211; number of bits the generated key should be.</li>
-<li><strong>progress_func</strong> (<em>function</em>) &#8211; Unused</li>
+<li><strong>bits</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; number of bits the generated key should be.</li>
+<li><strong>progress_func</strong> &#8211; Unused</li>
 </ul>
 </td>
 </tr>
@@ -416,7 +502,7 @@ generate a new host key or authentication key.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>progress_func</strong> (<em>function</em>) &#8211; Not used for this type of key.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>progress_func</strong> &#8211; Not used for this type of key.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A new private key (<a class="reference internal" href="#paramiko.ecdsakey.ECDSAKey" title="paramiko.ecdsakey.ECDSAKey"><code class="xref py py-obj docutils literal"><span class="pre">ECDSAKey</span></code></a>) object</td>
 </tr>
@@ -424,6 +510,25 @@ generate a new host key or authentication key.</p>
 </table>
 </dd></dl>
 
+</dd></dl>
+
+</div>
+<div class="section" id="module-paramiko.ed25519key">
+<span id="ed25519"></span><h2>Ed25519<a class="headerlink" href="#module-paramiko.ed25519key" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="paramiko.ed25519key.Ed25519Key">
+<em class="property">class </em><code class="descclassname">paramiko.ed25519key.</code><code class="descname">Ed25519Key</code><span class="sig-paren">(</span><em>msg=None</em>, <em>data=None</em>, <em>filename=None</em>, <em>password=None</em>, <em>file_obj=None</em><span class="sig-paren">)</span><a class="headerlink" href="#paramiko.ed25519key.Ed25519Key" title="Permalink to this definition">¶</a></dt>
+<dd><p>Representation of an <a class="reference external" href="https://ed25519.cr.yp.to/">Ed25519</a> key.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Ed25519 key support was added to OpenSSH in version 6.5.</p>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 2.2.</span></p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified">Changed in version 2.3: </span>Added a <code class="docutils literal"><span class="pre">file_obj</span></code> parameter to match other key classes.</p>
+</div>
 </dd></dl>
 
 </div>
@@ -481,6 +586,7 @@ generate a new host key or authentication key.</p>
 <li class="toctree-l2"><a class="reference internal" href="#module-paramiko.dsskey">DSA (DSS)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-paramiko.rsakey">RSA</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-paramiko.ecdsakey">ECDSA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-paramiko.ed25519key">Ed25519</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="ssh_gss.html">GSS-API authentication</a></li>
@@ -522,11 +628,11 @@ generate a new host key or authentication key.</p>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2016 Jeff Forcier.
+      &copy;2017 Jeff Forcier.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.4</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.9</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |
       <a href="../_sources/api/keys.txt"

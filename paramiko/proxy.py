@@ -17,11 +17,9 @@
 # 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA.
 
 
-from datetime import datetime
 import os
 from shlex import split as shlsplit
 import signal
-from subprocess import Popen, PIPE
 from select import select
 import socket
 import time
@@ -49,6 +47,9 @@ class ProxyCommand(ClosingContextManager):
         :param str command_line:
             the command that should be executed and used as the proxy.
         """
+        # NOTE: subprocess import done lazily so platforms without it (e.g.
+        # GAE) can still import us during overall Paramiko load.
+        from subprocess import Popen, PIPE
         self.cmd = shlsplit(command_line)
         self.process = Popen(self.cmd, stdin=PIPE, stdout=PIPE, stderr=PIPE,
                              bufsize=0)
@@ -106,6 +107,15 @@ class ProxyCommand(ClosingContextManager):
 
     def close(self):
         os.kill(self.process.pid, signal.SIGTERM)
+
+    @property
+    def closed(self):
+        return self.process.returncode is not None
+
+    @property
+    def _closed(self):
+        # Concession to Python 3 socket-like API
+        return self.closed
 
     def settimeout(self, timeout):
         self.timeout = timeout

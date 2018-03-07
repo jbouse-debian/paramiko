@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Exceptions &mdash; Paramiko  documentation</title>
+    <title>Exceptions &#8212; Paramiko  documentation</title>
     
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -23,6 +23,8 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
     <link rel="top" title="Paramiko  documentation" href="../index.html" />
     <link rel="prev" title="Cross-platform pipe implementations" href="pipe.html" />
    
@@ -59,18 +61,16 @@ specific reasons.)</p>
 <dd><p>Exception raised when an authentication type (like password) is used, but
 the server isn&#8217;t allowing that type.  (It may only allow public-key, for
 example.)</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><strong>allowed_types</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#list" title="(in Python v2.6)"><em>list</em></a>) &#8211; list of allowed authentication types provided by the server (possible
-values are: <code class="docutils literal"><span class="pre">&quot;none&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;password&quot;</span></code>, and <code class="docutils literal"><span class="pre">&quot;publickey&quot;</span></code>).</td>
-</tr>
-</tbody>
-</table>
 <div class="versionadded">
 <p><span class="versionmodified">New in version 1.1.</span></p>
 </div>
+<dl class="attribute">
+<dt id="paramiko.ssh_exception.BadAuthenticationType.allowed_types">
+<code class="descname">allowed_types</code><em class="property"> = []</em><a class="headerlink" href="#paramiko.ssh_exception.BadAuthenticationType.allowed_types" title="Permalink to this definition">¶</a></dt>
+<dd><p>list of allowed authentication types provided by the server (possible
+values are: <code class="docutils literal"><span class="pre">&quot;none&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;password&quot;</span></code>, and <code class="docutils literal"><span class="pre">&quot;publickey&quot;</span></code>).</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="exception">
@@ -81,8 +81,8 @@ values are: <code class="docutils literal"><span class="pre">&quot;none&quot;</s
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
-<li><strong>hostname</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; the hostname of the SSH server</li>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>hostname</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; the hostname of the SSH server</li>
 <li><strong>got_key</strong> (<a class="reference internal" href="keys.html#paramiko.pkey.PKey" title="paramiko.pkey.PKey"><em>PKey</em></a>) &#8211; the host key presented by the server</li>
 <li><strong>expected_key</strong> (<a class="reference internal" href="keys.html#paramiko.pkey.PKey" title="paramiko.pkey.PKey"><em>PKey</em></a>) &#8211; the host key expected</li>
 </ul>
@@ -103,7 +103,7 @@ values are: <code class="docutils literal"><span class="pre">&quot;none&quot;</s
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2.6/library/code.html#module-code" title="(in Python v2.6)"><strong>code</strong></a> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#int" title="(in Python v2.6)"><em>int</em></a>) &#8211; the error code returned by the server</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>code</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; the error code returned by the server</td>
 </tr>
 </tbody>
 </table>
@@ -119,9 +119,9 @@ values are: <code class="docutils literal"><span class="pre">&quot;none&quot;</s
 <p>This exception class wraps multiple &#8220;real&#8221; underlying connection errors,
 all of which represent failed connection attempts. Because these errors are
 not guaranteed to all be of the same error type (i.e. different errno,
-<a class="reference external" href="https://docs.python.org/2.6/library/socket.html#socket.error" title="(in Python v2.6)"><code class="xref py py-obj docutils literal"><span class="pre">socket.error</span></code></a> subclass, message, etc) we expose a single unified error
+<a class="reference external" href="https://docs.python.org/2.7/library/socket.html#socket.error" title="(in Python v2.7)"><code class="xref py py-obj docutils literal"><span class="pre">socket.error</span></code></a> subclass, message, etc) we expose a single unified error
 message and a <code class="docutils literal"><span class="pre">None</span></code> errno so that instances of this class match most
-normal handling of <a class="reference external" href="https://docs.python.org/2.6/library/socket.html#socket.error" title="(in Python v2.6)"><code class="xref py py-obj docutils literal"><span class="pre">socket.error</span></code></a> objects.</p>
+normal handling of <a class="reference external" href="https://docs.python.org/2.7/library/socket.html#socket.error" title="(in Python v2.7)"><code class="xref py py-obj docutils literal"><span class="pre">socket.error</span></code></a> objects.</p>
 <p>To see the wrapped exception objects, access the <code class="docutils literal"><span class="pre">errors</span></code> attribute.
 <code class="docutils literal"><span class="pre">errors</span></code> is a dict whose keys are address tuples (e.g. <code class="docutils literal"><span class="pre">('127.0.0.1',</span>
 <span class="pre">22)</span></code>) and whose values are the exception encountered trying to connect to
@@ -139,7 +139,7 @@ the differences are in the resolution of the hostname - e.g. IPv4 vs v6).</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>errors</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/stdtypes.html#dict" title="(in Python v2.6)"><em>dict</em></a>) &#8211; The errors dict to store, as described by class docstring.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>errors</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; The errors dict to store, as described by class docstring.</td>
 </tr>
 </tbody>
 </table>
@@ -167,9 +167,9 @@ the differences are in the resolution of the hostname - e.g. IPv4 vs v6).</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
-<li><strong>command</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; The command line that is generating this exception.</li>
-<li><strong>error</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; The error captured from the proxy command output.</li>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>command</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The command line that is generating this exception.</li>
+<li><strong>error</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The error captured from the proxy command output.</li>
 </ul>
 </td>
 </tr>
@@ -278,11 +278,11 @@ the differences are in the resolution of the hostname - e.g. IPv4 vs v6).</p>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2016 Jeff Forcier.
+      &copy;2017 Jeff Forcier.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.4</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.9</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |
       <a href="../_sources/api/ssh_exception.txt"
